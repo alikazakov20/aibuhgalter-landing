@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10b981">
+
+    <title>AI-Бухгалтер — нейропомощник по налогам для ИП на УСН</title>
+    <meta name="description" content="Расчёт УСН, голосовые сообщения, OCR чеков и AI-чат с учётом твоих доходов. Дешевле Эльбы, умнее Моего Дела. От 290 ₽/мес — только помесячно.">
+
+    <meta property="og:title" content="AI-Бухгалтер — нейропомощник по налогам для ИП">
+    <meta property="og:description" content="Голосовой ввод, OCR чеков, импорт банка, AI-чат на твоих данных. От 290 ₽/мес.">
+    <meta property="og:url" content="https://aibuhgalter.com">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://aibuhgalter.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧮</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        mint: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards',
+                        'gradient': 'gradient 12s ease infinite',
+                        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(24px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
+                        },
+                        pulseSoft: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.6' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #ffffff;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+        }
+
+        /* === ТИПОГРАФИЧЕСКАЯ СИСТЕМА === */
+
+        /* Все цифры выравниваются по сетке (профессиональная вёрстка) */
+        .tabular-nums, .price-large, [data-count],
+        section .text-3xl.font-black, section .text-4xl.font-black,
+        section .text-5xl.font-black, section .text-6xl.font-black,
+        section .text-7xl.font-black, section .text-8xl.font-black,
+        table td, table th {
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: 'tnum' 1;
+        }
+
+        /* Подзаголовок Hero — контрастнее, лучше line-height */
+        .hero-subtitle {
+            color: #334155; /* slate-700 для контраста и читаемости */
+            line-height: 1.45;
+            letter-spacing: -0.005em;
+        }
+
+        /* Body-текст в карточках — оптический размер 15px дает идеальную читаемость */
+        .body-card {
+            color: #475569; /* slate-600 */
+            line-height: 1.65;
+            font-size: 15px;
+        }
+
+        /* Заголовки карточек — поджатые, контрастные */
+        .card-title {
+            color: #0f172a; /* slate-900 */
+            letter-spacing: -0.015em;
+            font-weight: 700;
+        }
+
+        /* Eyebrow секций — премиум tracking */
+        .section-eyebrow {
+            letter-spacing: 0.18em;
+            font-weight: 800;
+        }
+
+        /* FAQ — комфортное чтение длинных ответов */
+        details summary {
+            color: #0f172a;
+            letter-spacing: -0.01em;
+        }
+        details > div, details > p {
+            line-height: 1.7;
+            color: #475569;
+        }
+
+        /* Жирные слова в bullet-листах — выраженный контраст */
+        .bullet-list strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .bullet-list span:not(strong) {
+            color: #334155; /* slate-700 — читаемый body */
+        }
+
+        /* Зелёный градиент в заголовках — насыщенный.
+           Без обводки на H2 (создаёт артефакты), обводка только на Hero (8xl). */
+        .gradient-text {
+            background: linear-gradient(120deg, #047857 0%, #059669 30%, #10b981 50%, #059669 70%, #047857 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% 200%;
+            animation: gradient 12s ease infinite;
+        }
+        /* Hero — крупный шрифт, обводка работает корректно, добавляет импакт */
+        .hero-heading .gradient-text {
+            -webkit-text-stroke: 1.5px #0f172a;
+            paint-order: stroke fill;
+        }
+
+        /* Нейро-сетка на фоне */
+        .neural-bg {
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(16, 185, 129, 0.12) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+
+        /* Мягкое зелёное свечение */
+        .soft-glow {
+            background: radial-gradient(ellipse 60% 50% at 50% 20%, rgba(110, 231, 183, 0.25), transparent 60%);
+        }
+
+        /* Кнопки */
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.25);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -4px rgba(16, 185, 129, 0.4);
+        }
+        .btn-secondary {
+            background: white;
+            border: 1.5px solid #d1fae5;
+            color: #064e3b;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-secondary:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        /* Карточки */
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card:hover {
+            border-color: #6ee7b7;
+            box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.15);
+            transform: translateY(-4px);
+        }
+
+        /* FAQ-аккордеон */
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] .faq-arrow { transform: rotate(180deg); }
+        .faq-arrow { transition: transform 0.3s; }
+
+        /* Декоративная нейросетка SVG */
+        .neural-decoration {
+            position: absolute;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* === SCROLL REVEAL === */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        [data-reveal].in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        [data-reveal-delay="100"] { transition-delay: 0.1s; }
+        [data-reveal-delay="200"] { transition-delay: 0.2s; }
+        [data-reveal-delay="300"] { transition-delay: 0.3s; }
+        [data-reveal-delay="400"] { transition-delay: 0.4s; }
+
+        /* === CURSOR FOLLOWER === */
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, rgba(16, 185, 129, 0) 70%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, opacity 0.3s;
+            opacity: 0;
+            mix-blend-mode: multiply;
+        }
+        .cursor-dot.active { opacity: 1; }
+        .cursor-dot.hover-mode {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, rgba(16, 185, 129, 0) 70%);
+        }
+        @media (hover: none) { .cursor-dot { display: none; } }
+
+        /* === MAGNETIC BUTTONS === */
+        .magnetic { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        /* === RIPPLE === */
+        .ripple-container { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            transform: scale(0);
+            animation: rippleAnim 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* === SLOW DRIFT для blob === */
+        @keyframes slowDrift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+        }
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+            50% { transform: translateY(-30px) translateX(15px); opacity: 0.6; }
+        }
+
+        /* === ПЛАВАЮЩИЕ ЧАСТИЦЫ === */
+        .particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #10b981;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: particleFloat 8s ease-in-out infinite;
+        }
+
+        /* === MUTE TOGGLE === */
+        .sound-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: white;
+            border: 1.5px solid #d1fae5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 22px;
+            box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.25);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sound-toggle:hover {
+            transform: scale(1.08);
+            border-color: #10b981;
+            box-shadow: 0 12px 32px -4px rgba(16, 185, 129, 0.4);
+        }
+        .sound-toggle.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: transparent;
+            color: white;
+        }
+        .sound-toggle .pulse-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid #10b981;
+            animation: pulseRing 1.6s ease-out infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .sound-toggle.active .pulse-ring { opacity: 1; }
+        @keyframes pulseRing {
+            0% { transform: scale(0.85); opacity: 0.6; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+
+        /* === SMOOTH SCROLL === */
+        html { scroll-behavior: smooth; }
+
+        /* Анимация blob элементов */
+        .blob-anim { animation: slowDrift 12s ease-in-out infinite; }
+
+        /* === ПРОФЕССИОНАЛЬНАЯ ТИПОГРАФИКА === */
+
+        /* Главный H1 — Hero. Чёрный текст с зелёной тенью */
+        .hero-heading {
+            letter-spacing: -0.04em;
+            text-wrap: balance;
+            text-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.8),
+                0 3px 8px rgba(16, 185, 129, 0.35),
+                0 6px 16px rgba(16, 185, 129, 0.18);
+        }
+
+        /* Заголовки секций H2 — чёрный текст, зелёная тень помягче */
+        .section-heading {
+            letter-spacing: -0.03em;
+            text-wrap: balance;
+            text-shadow:
+                0 2px 4px rgba(16, 185, 129, 0.3),
+                0 4px 10px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Hero gradient-text — у него крупный шрифт и filter работает чисто.
+           Для H2 убираем filter — он создаёт двойной рендер и артефакты на ободке. */
+        .hero-heading .gradient-text {
+            filter: drop-shadow(0 2px 4px rgba(6, 78, 59, 0.3));
+        }
+
+        /* Сбрасываем общий filter для gradient-text (не нужен везде) */
+        .gradient-text {
+            filter: none;
+        }
+
+
+        /* Особый случай — белый текст на изумрудном фоне (финальный CTA).
+           Здесь нужна ТЁМНО-ЗЕЛЁНАЯ тень для отделения белого от зелёного */
+        .bg-gradient-to-br.from-emerald-500 .section-heading,
+        .bg-gradient-to-br.from-emerald-600 .section-heading {
+            text-shadow:
+                0 2px 4px rgba(6, 78, 59, 0.5),
+                0 4px 10px rgba(6, 78, 59, 0.3);
+        }
+
+        /* Цены в тарифах — крупный шрифт, лёгкая тень */
+        .price-large {
+            text-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Glow-ореол за главным H1 (стало мягче) */
+        .hero-heading-wrap {
+            position: relative;
+            display: inline-block;
+        }
+        .hero-heading-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -30% -20%;
+            background: radial-gradient(ellipse 60% 50% at 50% 50%,
+                rgba(110, 231, 183, 0.25) 0%,
+                rgba(16, 185, 129, 0.1) 35%,
+                transparent 70%);
+            z-index: -1;
+            filter: blur(48px);
+            pointer-events: none;
+            animation: heroGlow 8s ease-in-out infinite;
+        }
+        @keyframes heroGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50%      { opacity: 0.85; transform: scale(1.05); }
+        }
+
+        /* Тонкая декоративная линия под секционными бейджами */
+        .section-eyebrow {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+        .section-eyebrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            border-radius: 2px;
+        }
+
+        /* Лёгкий backdrop эффект на заголовках в plain-секциях */
+        @media (min-width: 768px) {
+            .section-heading {
+                line-height: 1.1;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Фон с тонкой нейросеткой -->
+    <div class="fixed inset-0 neural-bg pointer-events-none opacity-60"></div>
+    <div class="fixed inset-0 soft-glow pointer-events-none"></div>
+
+    <!-- Cursor follower (только desktop) -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+
+    <!-- Плавающие частицы (декоративно) -->
+    <div id="particles" class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true"></div>
+
+    <!-- Sound toggle button -->
+    <button class="sound-toggle" id="sound-toggle" aria-label="Включить звуки интерфейса" title="Звуки интерфейса (выключены)">
+        <span id="sound-icon">🔇</span>
+        <span class="pulse-ring"></span>
+    </button>
+
+    <!-- Шапка -->
+    <header class="relative z-10 px-4 sm:px-6 py-5">
+        <nav class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xl shadow-lg shadow-emerald-500/20">
+                    🧮
+                </div>
+                <span class="text-lg font-bold tracking-tight text-slate-900">AI-Бухгалтер</span>
+            </div>
+            <a href="https://t.me/AI_Buxgalter_USN_bot" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-emerald-700 hover:bg-emerald-50 transition">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.643.135-.953l11.566-4.458c.538-.196 1.006.128.832.941z"/></svg>
+                Telegram-бот
+            </a>
+        </nav>
+    </header>
+
+    <!-- ============== HERO ============== -->
+    <section class="relative z-10 px-4 sm:px-6 pt-12 sm:pt-20 pb-24">
+        <div class="max-w-5xl mx-auto text-center">
+            <!-- Бейдж -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-emerald-50 border border-emerald-200 animate-fade-up">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-soft"></span>
+                <span class="text-sm font-semibold text-emerald-800">Сейчас идёт фокус-группа · Запуск через 4 недели</span>
+            </div>
+
+            <!-- H1 -->
+            <h1 class="hero-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-7 text-slate-900 animate-fade-up" style="animation-delay: 0.05s;">
+                Налоги ИП на УСН —<br>
+                <span class="gradient-text">просто, как чат</span>
+            </h1>
+
+            <!-- Подзаголовок -->
+            <p class="hero-subtitle text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto mb-10 font-medium animate-fade-up" style="animation-delay: 0.1s;">
+                Нейропомощник, который рассчитает налог за тебя, напомнит о сроках и ответит голосом на любой вопрос по бухгалтерии.<br><br><span class="text-slate-900 font-semibold">Без таблиц. Без бумажек. Без бухгалтера.</span>
+            </p>
+
+            <!-- CTA -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center items-center animate-fade-up" style="animation-delay: 0.15s;">
+                <a href="https://t.me/AI_Buxgalter_USN_bot" target="_blank" rel="noopener" class="btn-primary px-8 py-4 rounded-xl font-bold text-white text-base flex items-center gap-2.5 w-full sm:w-auto justify-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.643.135-.953l11.566-4.458c.538-.196 1.006.128.832.941z"/></svg>
+                    Попробовать бесплатно
+                </a>
+                <a href="#features" class="btn-secondary px-8 py-4 rounded-xl font-bold text-base w-full sm:w-auto text-center">
+                    Что умеет бот
+                </a>
+            </div>
+
+            <p class="mt-5 text-sm text-slate-500 animate-fade-up" style="animation-delay: 0.2s;">
+                🆓 Бесплатный тариф навсегда · 💚 От 290 ₽/мес · ⚡ Без оплаты за год
+            </p>
+
+            <!-- Stat-bar (доверие) -->
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto animate-fade-up" style="animation-delay: 0.25s;">
+                <div class="p-5 rounded-2xl bg-white border border-slate-100" data-reveal>
+                    <div class="text-3xl font-black text-emerald-600 mb-1"><span data-count="4.74" data-decimals="2">0</span><span class="text-lg align-top">млн</span></div>
+                    <div class="text-xs text-slate-500 leading-tight">ИП в России — наша аудитория</div>
+                </div>
+                <div class="p-5 rounded-2xl bg-white border border-slate-100" data-reveal data-reveal-delay="100">
+                    <div class="text-3xl font-black text-emerald-600 mb-1"><span data-count="3">0</span><span class="text-lg align-top">сек</span></div>
+                    <div class="text-xs text-slate-500 leading-tight">среднее время ответа AI</div>
+                </div>
+                <div class="p-5 rounded-2xl bg-white border border-slate-100" data-reveal data-reveal-delay="200">
+                    <div class="text-3xl font-black text-emerald-600 mb-1"><span data-count="100">0</span>%</div>
+                    <div class="text-xs text-slate-500 leading-tight">актуальность по НК&nbsp;РФ&nbsp;2026</div>
+                </div>
+                <div class="p-5 rounded-2xl bg-white border border-slate-100" data-reveal data-reveal-delay="300">
+                    <div class="text-3xl font-black text-emerald-600 mb-1">24/7</div>
+                    <div class="text-xs text-slate-500 leading-tight">консультации без выходных</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== БОЛЬ / РЕШЕНИЕ ============== -->
+    <section class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-white via-emerald-50/30 to-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14">
+                <p class="section-eyebrow text-sm font-bold text-emerald-600 uppercase tracking-widest mb-3">Знакомо?</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight">
+                    Если ты ИП — налоги тебя <span class="gradient-text">раздражают</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 lg:gap-8 relative">
+                <!-- БОЛЬ -->
+                <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-rose-50 to-orange-50/40 border-2 border-rose-100 shadow-xl shadow-rose-200/40 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-32 h-32 bg-rose-200/30 rounded-full -translate-y-12 -translate-x-12 blur-3xl"></div>
+
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 mb-6 rounded-full bg-rose-500 text-white text-xs font-black uppercase tracking-wider relative">
+                        <span>😩</span>
+                        <span>Сейчас</span>
+                    </div>
+
+                    <ul class="bullet-list space-y-4 relative">
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 text-rose-600 font-bold flex items-center justify-center text-sm mt-0.5">✗</span>
+                            <span><strong class="text-slate-900">Никогда не помнишь</strong> сколько и когда платить — каждый раз ищешь в интернете</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 text-rose-600 font-bold flex items-center justify-center text-sm mt-0.5">✗</span>
+                            <span><strong class="text-slate-900">Эльба и Моё Дело</strong> требуют 5–20 тысяч в год вперёд — а ты на УСН только начинаешь</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 text-rose-600 font-bold flex items-center justify-center text-sm mt-0.5">✗</span>
+                            <span><strong class="text-slate-900">Бухгалтер</strong> отвечает раз в неделю и берёт от 3 000 ₽ за каждый вопрос</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 text-rose-600 font-bold flex items-center justify-center text-sm mt-0.5">✗</span>
+                            <span><strong class="text-slate-900">Пропускаешь сроки</strong> — потом штрафы, пени и страх перед налоговой</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 text-rose-600 font-bold flex items-center justify-center text-sm mt-0.5">✗</span>
+                            <span><strong class="text-slate-900">Считаешь налог в Excel</strong> и не уверен правильно ли — в декларации легко ошибиться</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- РЕШЕНИЕ -->
+                <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-100 via-emerald-50 to-mint-100 border-2 border-emerald-300 shadow-2xl shadow-emerald-300/40 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-emerald-300/30 rounded-full -translate-y-16 translate-x-16 blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-mint-300/30 rounded-full translate-y-12 -translate-x-12 blur-3xl"></div>
+
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 mb-6 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs font-black uppercase tracking-wider relative shadow-lg shadow-emerald-500/30">
+                        <span>💚</span>
+                        <span>С AI-Бухгалтером</span>
+                    </div>
+
+                    <ul class="bullet-list space-y-4 relative">
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-sm mt-0.5 shadow-md shadow-emerald-500/40">✓</span>
+                            <span><strong class="text-slate-900">Знаешь точную сумму</strong> к уплате — за любой период, в любой момент. По одному вопросу в чат.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-sm mt-0.5 shadow-md shadow-emerald-500/40">✓</span>
+                            <span><span class="px-2 py-0.5 rounded-md bg-emerald-200/60 font-black text-emerald-900">290 ₽ в месяц</span>. Помесячная оплата. Бесплатный тариф если просто хочешь спросить.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-sm mt-0.5 shadow-md shadow-emerald-500/40">✓</span>
+                            <span><strong class="text-slate-900">Ответ через 3 секунды</strong> — голосом, текстом или фоткой чека. Доступно круглосуточно.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-sm mt-0.5 shadow-md shadow-emerald-500/40">✓</span>
+                            <span><strong class="text-slate-900">Напоминания за 14/7/3/1 день</strong> до каждого срока. Никаких пропусков и штрафов.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-sm mt-0.5 shadow-md shadow-emerald-500/40">✓</span>
+                            <span><strong class="text-slate-900">Декларация и КУДиР</strong> заполняются автоматически из твоих доходов. Просто скачай PDF.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== ФИЧИ ============== -->
+    <section id="features" class="relative z-10 px-4 sm:px-6 py-20">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14">
+                <p class="section-eyebrow text-sm font-bold text-emerald-600 uppercase tracking-widest mb-3">Что умеет нейропомощник</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight">
+                    Бот уже работает. <span class="gradient-text">Вот его суперсилы</span>
+                </h2>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🎙️</div>
+                    <h3 class="card-title text-lg mb-2">Голосовой ввод</h3>
+                    <p class="body-card">
+                        Скажи в микрофон: «получил 50 тысяч от ООО Ромашка» — бот разберёт и запишет. Локальное распознавание, голос остаётся у тебя.
+                    </p>
+                </div>
+
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📸</div>
+                    <h3 class="card-title text-lg mb-2">OCR чеков и счетов</h3>
+                    <p class="body-card">
+                        Сфотографировал чек — AI распознал сумму, дату, продавца. Подсказывает категорию для УСН «Доходы минус Расходы».
+                    </p>
+                </div>
+
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🏦</div>
+                    <h3 class="card-title text-lg mb-2">Импорт из любого банка</h3>
+                    <p class="body-card">
+                        Выписка из Т-Банк, Сбер, Альфа — операции автоматически разбиваются на доходы и расходы. Без ручного ввода.
+                    </p>
+                </div>
+
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🧠</div>
+                    <h3 class="card-title text-lg mb-2">AI-чат на твоих данных</h3>
+                    <p class="body-card">
+                        «Сколько мне платить за Q2?» — AI знает твой режим, регион, доходы и считает прямо для тебя. По НК РФ 2026.
+                    </p>
+                </div>
+
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📅</div>
+                    <h3 class="card-title text-lg mb-2">Налоговый календарь</h3>
+                    <p class="body-card">
+                        Все ключевые даты 2026 — авансы, взносы, декларация. Напомним за 14/7/3/1 день до каждой.
+                    </p>
+                </div>
+
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📄</div>
+                    <h3 class="card-title text-lg mb-2">Декларация и КУДиР</h3>
+                    <p class="body-card">
+                        Автозаполнение формы КНД 1152017 и книги учёта. Экспорт в PDF и Excel. Подаёшь сам через ЛК ФНС.
+                    </p>
+                </div>
+
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🧾</div>
+                    <h3 class="card-title text-lg mb-2">ЕНП-уведомления</h3>
+                    <p class="body-card">
+                        Сформируем XML-уведомление по ЕНС. Просто загружаешь в ЛК ФНС — налог распределится правильно.
+                    </p>
+                </div>
+
+                <div class="card p-6 rounded-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🛡️</div>
+                    <h3 class="card-title text-lg mb-2">Никаких чужих банков</h3>
+                    <p class="body-card">
+                        Работаем с любым банком через CSV. Не привязываем к Сберу или Контуру — твои данные у тебя.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== СРАВНЕНИЕ С КОНКУРЕНТАМИ ============== -->
+    <section class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-emerald-50/40 to-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-14">
+                <p class="section-eyebrow text-sm font-bold text-emerald-600 uppercase tracking-widest mb-3">Честное сравнение</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight">
+                    Чем мы лучше<br><span class="gradient-text">Эльбы и Моего Дела</span>
+                </h2>
+            </div>
+
+            <div class="rounded-2xl border border-emerald-100 bg-white overflow-hidden">
+                <table class="w-full text-xs sm:text-base table-fixed">
+                    <thead class="bg-emerald-50">
+                        <tr>
+                            <th class="text-left py-3 sm:py-4 px-2 sm:px-6 font-bold text-slate-700 w-[40%] sm:w-auto">Что важно</th>
+                            <th class="py-3 sm:py-4 px-1 sm:px-4 font-bold text-emerald-700"><span class="hidden sm:inline">AI-Бухгалтер</span><span class="sm:hidden">Мы</span></th>
+                            <th class="py-3 sm:py-4 px-1 sm:px-4 font-medium text-slate-500">Эльба</th>
+                            <th class="py-3 sm:py-4 px-1 sm:px-4 font-medium text-slate-500"><span class="hidden sm:inline">Моё Дело</span><span class="sm:hidden">Моё&nbsp;Дело</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="py-3 sm:py-4 px-2 sm:px-6 font-semibold text-slate-700">AI-чат с твоими данными</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-emerald-500 font-bold text-base sm:text-xl">✓</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-300 text-base sm:text-xl">✗</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-300 text-base sm:text-xl">✗</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 sm:py-4 px-2 sm:px-6 font-semibold text-slate-700">Голосовые сообщения</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-emerald-500 font-bold text-base sm:text-xl">✓</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-300 text-base sm:text-xl">✗</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-300 text-base sm:text-xl">✗</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 sm:py-4 px-2 sm:px-6 font-semibold text-slate-700">Минимальная цена</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="font-bold text-emerald-700 whitespace-nowrap">290&nbsp;₽</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-500 whitespace-nowrap">от 272&nbsp;₽</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-500 whitespace-nowrap">от 5000&nbsp;₽</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 sm:py-4 px-2 sm:px-6 font-semibold text-slate-700">Помесячная оплата</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-emerald-500 font-bold text-base sm:text-xl">✓</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-rose-400 font-bold text-base sm:text-xl">✗</span><span class="hidden sm:block text-xs text-slate-400 mt-1">только за год</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-rose-400 font-bold text-base sm:text-xl">✗</span><span class="hidden sm:block text-xs text-slate-400 mt-1">только за год</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 sm:py-4 px-2 sm:px-6 font-semibold text-slate-700">Любой банк</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-emerald-500 font-bold text-base sm:text-xl">✓</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-amber-400 font-bold text-base sm:hidden">~</span><span class="hidden sm:inline text-amber-400 text-xs font-medium">только Контур</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-amber-400 font-bold text-base sm:hidden">~</span><span class="hidden sm:inline text-amber-400 text-xs font-medium">через интегр.</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 sm:py-4 px-2 sm:px-6 font-semibold text-slate-700">Бесплатный тариф навсегда</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-emerald-500 font-bold text-base sm:text-xl">✓</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-rose-400 font-bold text-base sm:text-xl">✗</span><span class="hidden sm:block text-xs text-slate-400 mt-1">30 дней триала</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-rose-400 font-bold text-base sm:text-xl">✗</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 sm:py-4 px-2 sm:px-6 font-semibold text-slate-700">Работает в Telegram</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center"><span class="text-emerald-500 font-bold text-base sm:text-xl">✓</span></td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-300 text-base sm:text-xl">✗</td>
+                            <td class="py-3 sm:py-4 px-1 sm:px-4 text-center text-slate-300 text-base sm:text-xl">✗</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="sm:hidden px-3 py-2 text-[10px] text-slate-400 border-t border-slate-100 leading-relaxed">~ — частично доступно с ограничениями (см. полную таблицу на десктопе)</p>
+            </div>
+
+            <p class="text-center text-sm text-slate-500 mt-6">Данные на май 2026, по официальным сайтам конкурентов</p>
+        </div>
+    </section>
+
+    <!-- ============== ТАРИФЫ ============== -->
+    <section class="relative z-10 px-4 sm:px-6 py-20">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14">
+                <p class="section-eyebrow text-sm font-bold text-emerald-600 uppercase tracking-widest mb-3">Тарифы</p>
+                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                    Без подвохов. <span class="gradient-text">Ежемесячно.</span>
+                </h2>
+                <p class="text-base sm:text-lg text-slate-600 mt-5 max-w-2xl mx-auto">Никаких годовых обязательств. Никаких скрытых лимитов. Сменить или отменить тариф можно в любой момент.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-5">
+                <!-- PRO -->
+                <div class="card p-7 rounded-3xl">
+                    <div class="text-3xl mb-4">💎</div>
+                    <div class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-2">PRO для ИП</div>
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="price-large text-5xl font-black text-slate-900">290</span>
+                        <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+                    </div>
+                    <p class="text-slate-500 text-sm mb-6">Для самостоятельных ИП на УСН</p>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Безлимит AI-чата</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Импорт банка без лимитов</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> OCR чеков и счетов</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Декларация УСН в PDF</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> КУДиР автоматически</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Умные напоминания</li>
+                    </ul>
+                </div>
+
+                <!-- PRO+ -->
+                <div class="p-7 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white relative shadow-2xl shadow-emerald-500/30 transform md:-translate-y-3">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-400 text-slate-900 text-xs font-black uppercase tracking-wider whitespace-nowrap">⭐ Популярный</div>
+                    <div class="text-3xl mb-4">👑</div>
+                    <div class="text-sm font-bold text-emerald-100 uppercase tracking-wider mb-2">PRO для бухгалтерии</div>
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="price-large text-5xl font-black">990</span>
+                        <span class="text-lg text-emerald-200 font-medium">₽/мес</span>
+                    </div>
+                    <p class="text-emerald-100 text-sm mb-6">Для бухгалтеров с несколькими ИП</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex gap-2"><span class="font-bold">✓</span> До 30 клиентов в одном аккаунте</li>
+                        <li class="flex gap-2"><span class="font-bold">✓</span> Всё из тарифа PRO</li>
+                        <li class="flex gap-2"><span class="font-bold">✓</span> Брендинг (имя/логотип)</li>
+                        <li class="flex gap-2"><span class="font-bold">✓</span> Реферальная программа</li>
+                        <li class="flex gap-2"><span class="font-bold">✓</span> Premium поддержка</li>
+                    </ul>
+                </div>
+
+                <!-- MAX -->
+                <div class="card p-7 rounded-3xl">
+                    <div class="text-3xl mb-4">🚀</div>
+                    <div class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-2">MAX</div>
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="price-large text-5xl font-black text-slate-900">1990</span>
+                        <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+                    </div>
+                    <p class="text-slate-500 text-sm mb-6">Для бухгалтерских команд</p>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Безлимит клиентов</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Всё из PRO+</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Ранний доступ к новым фичам</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Приоритет в очереди AI</li>
+                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Индивидуальный менеджер</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center mt-10">
+                <p class="text-slate-600 text-sm">🆓 Также есть <strong class="text-emerald-600">бесплатный тариф навсегда</strong> — 5 AI-вопросов в день, базовый расчёт УСН, налоговый календарь</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== FAQ ============== -->
+    <section class="relative z-10 px-4 sm:px-6 py-20 bg-slate-50/40">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-14">
+                <p class="section-eyebrow text-sm font-bold text-emerald-600 uppercase tracking-widest mb-3">Частые вопросы</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                    Сначала <span class="gradient-text">сомневаешься?</span>
+                </h2>
+            </div>
+
+            <div class="space-y-3">
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>А не накосячит ли AI с моими налогами?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">AI считает по чётким формулам из НК РФ — это не «угадайка». Все цифры ты видишь до уплаты и можешь пересчитать. Дисклеймер: для юридически значимых решений мы рекомендуем подтвердить у бухгалтера. Но для рутины — AI справляется как опытный спец.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Чем вы отличаетесь от Эльбы и Моего Дела?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">У нас есть AI-чат — спрашиваешь голосом или текстом, получаешь ответ за 3 секунды с твоими цифрами. У них только формы и таблицы. Плюс мы дешевле в 5–17 раз и без обязательств платить за год вперёд.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Что если я открыл ИП недавно и ничего не понимаю?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Это твой кейс на 100%. Бот проведёт по 3-минутной настройке, объяснит что такое УСН простым языком, покажет какие сроки тебя касаются и сколько платить в этом квартале. Никакой подготовки и налоговых знаний не требуется.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Безопасно ли делиться доходами с ботом?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Данные хранятся на наших серверах (РФ), в зашифрованном виде. Голосовые сообщения распознаются локально и не передаются в облако. Мы не делимся данными ни с банками, ни с налоговой — только ты решаешь что и куда выгружать.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Я бухгалтер, веду 10 ИП. Подходит ли мне?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Тариф «PRO для бухгалтерии» за 990 ₽ — до 30 клиентов в одном аккаунте, плюс брендинг твоего имени/логотипа и реферальная программа. AI помогает быстрее реагировать на клиентские вопросы. Если клиентов больше 30 — есть тариф MAX без лимита.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Когда полный сайт и приложение?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Веб-сайт с полноценным дашбордом — через 4 недели. Telegram-бот уже работает. Мобильное приложение (iOS+Android) — Q3 2026. Подпишись на бота — пришлём личное уведомление как только запустимся.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== ФИНАЛЬНЫЙ CTA ============== -->
+    <section id="notify" class="relative z-10 px-4 sm:px-6 py-20">
+        <div class="max-w-4xl mx-auto">
+            <div class="rounded-3xl p-8 sm:p-12 lg:p-16 bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 text-center text-white relative overflow-hidden shadow-2xl shadow-emerald-500/20">
+
+                <!-- Декорация -->
+                <div class="absolute top-0 left-0 w-72 h-72 bg-white/5 rounded-full -translate-x-32 -translate-y-32 blur-3xl"></div>
+                <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-300/10 rounded-full translate-x-32 translate-y-32 blur-3xl"></div>
+
+                <div class="relative">
+                    <div class="inline-block px-4 py-2 mb-6 rounded-full bg-white/15 backdrop-blur border border-white/20">
+                        <span class="text-sm font-bold">⚡ Бонус для первых 100</span>
+                    </div>
+
+                    <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black mb-5 leading-tight">
+                        Будь первым —<br>получи <span class="text-amber-300">месяц PRO бесплатно</span>
+                    </h2>
+                    <p class="text-lg sm:text-xl text-emerald-50 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        Подпишись на канал бота. Когда сайт откроется через 4 недели — пришлём личное уведомление. Первые 100 пользователей получат месяц PRO в подарок.
+                    </p>
+
+                    <a href="https://t.me/AI_Buxgalter_USN_bot?start=notify_launch" target="_blank" rel="noopener" class="inline-flex items-center gap-3 px-10 py-5 rounded-xl font-black text-emerald-700 bg-white text-lg hover:bg-amber-50 transition shadow-2xl">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.643.135-.953l11.566-4.458c.538-.196 1.006.128.832.941z"/></svg>
+                        Подписаться в Telegram
+                    </a>
+
+                    <p class="mt-6 text-sm text-emerald-100/80">
+                        Бот пришлёт одно сообщение, когда сайт откроется. Без спама.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== FOOTER ============== -->
+    <footer class="relative z-10 px-4 sm:px-6 py-12 border-t border-slate-100">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-lg">🧮</div>
+                    <span class="text-base font-bold text-slate-900">AI-Бухгалтер</span>
+                    <span class="text-sm text-slate-400 ml-2">© 2026</span>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-6 text-sm">
+                    <a href="https://t.me/AI_Buxgalter_USN_bot" target="_blank" rel="noopener" class="text-slate-600 hover:text-emerald-600 transition flex items-center gap-2 font-medium">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.643.135-.953l11.566-4.458c.538-.196 1.006.128.832.941z"/></svg>
+                        @AI_Buxgalter_USN_bot
+                    </a>
+                    <a href="mailto:alikazakov9@gmail.com" class="text-slate-600 hover:text-emerald-600 transition font-medium">
+                        alikazakov9@gmail.com
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 text-xs text-slate-500 text-center max-w-3xl mx-auto leading-relaxed">
+                AI-Бухгалтер не заменяет профессионального бухгалтера. Сервис носит справочный характер. Для юридически значимых решений рекомендуем проконсультироваться с квалифицированным специалистом. Все расчёты соответствуют Налоговому кодексу РФ на 2026 год.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============== ЭФФЕКТЫ ИЗ БУДУЩЕГО ============== -->
+    <script>
+    (function() {
+        'use strict';
+
+        // ===== АВТО-РАЗМЕТКА REVEAL для секций =====
+        // Чтобы не править HTML — автоматически навешиваем reveal на ключевые элементы
+        const autoRevealSelectors = [
+            'section h2',
+            'section > div > p.text-base, section > div > p.text-lg',
+            '.card',
+            'tbody tr',
+            'details',
+            '#features .grid > div',
+            'section .grid > .card, section .grid > .p-7'
+        ];
+        autoRevealSelectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach((el, i) => {
+                if (!el.hasAttribute('data-reveal')) {
+                    el.setAttribute('data-reveal', '');
+                    if (i % 4 === 1) el.setAttribute('data-reveal-delay', '100');
+                    else if (i % 4 === 2) el.setAttribute('data-reveal-delay', '200');
+                    else if (i % 4 === 3) el.setAttribute('data-reveal-delay', '300');
+                }
+            });
+        });
+
+        // ===== INTERSECTION OBSERVER для reveal =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    // Запуск анимации счётчика если есть data-count
+                    entry.target.querySelectorAll('[data-count]').forEach(animateCount);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+        // ===== АНИМАЦИЯ СЧЁТЧИКОВ =====
+        function animateCount(el) {
+            const target = parseFloat(el.dataset.count);
+            const decimals = parseInt(el.dataset.decimals || '0', 10);
+            const duration = 1600;
+            const startTime = performance.now();
+
+            function tick(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                // ease-out cubic
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = (target * eased).toFixed(decimals);
+                el.textContent = decimals > 0 ? value.replace('.', ',') : Math.round(value);
+                if (progress < 1) requestAnimationFrame(tick);
+                else el.textContent = decimals > 0 ? target.toFixed(decimals).replace('.', ',') : target;
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // ===== ПЛАВАЮЩИЕ ЧАСТИЦЫ =====
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = window.innerWidth < 768 ? 12 : 28;
+        for (let i = 0; i < particleCount; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            p.style.animationDuration = (6 + Math.random() * 6) + 's';
+            p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+            particlesContainer.appendChild(p);
+        }
+
+        // ===== CURSOR FOLLOWER (только desktop) =====
+        const cursorDot = document.getElementById('cursor-dot');
+        const isTouch = matchMedia('(hover: none)').matches;
+        let cursorX = 0, cursorY = 0, dotX = 0, dotY = 0;
+
+        if (!isTouch) {
+            document.addEventListener('mousemove', (e) => {
+                cursorX = e.clientX;
+                cursorY = e.clientY;
+                cursorDot.classList.add('active');
+            });
+            document.addEventListener('mouseleave', () => cursorDot.classList.remove('active'));
+
+            // Hover-mode при наведении на интерактивные элементы
+            document.querySelectorAll('a, button, summary, .card').forEach(el => {
+                el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-mode'));
+                el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-mode'));
+            });
+
+            function lerp() {
+                dotX += (cursorX - dotX) * 0.18;
+                dotY += (cursorY - dotY) * 0.18;
+                cursorDot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(lerp);
+            }
+            lerp();
+        }
+
+        // ===== MAGNETIC BUTTONS =====
+        if (!isTouch) {
+            document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+                btn.classList.add('magnetic');
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    btn.style.transform = `translate(${x * 0.15}px, ${y * 0.25}px)`;
+                });
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = '';
+                });
+            });
+        }
+
+        // ===== RIPPLE EFFECT на клик =====
+        document.querySelectorAll('a, button').forEach(el => {
+            el.classList.add('ripple-container');
+            el.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 700);
+            });
+        });
+
+        // ===== ЗВУКОВАЯ СИСТЕМА (Web Audio API) =====
+        let audioCtx = null;
+        let soundEnabled = false;
+        const soundToggle = document.getElementById('sound-toggle');
+        const soundIcon = document.getElementById('sound-icon');
+
+        function getCtx() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function tone(freq, duration, type = 'sine', vol = 0.05, freqEnd = null) {
+            if (!soundEnabled) return;
+            const ctx = getCtx();
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 3500;
+            o.type = type;
+            o.frequency.setValueAtTime(freq, ctx.currentTime);
+            if (freqEnd !== null) {
+                o.frequency.exponentialRampToValueAtTime(freqEnd, ctx.currentTime + duration);
+            }
+            g.gain.setValueAtTime(vol, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+            o.connect(filter).connect(g).connect(ctx.destination);
+            o.start();
+            o.stop(ctx.currentTime + duration);
+        }
+
+        function playHover() { tone(880, 0.06, 'sine', 0.025, 1320); }
+        function playClick() { tone(660, 0.12, 'triangle', 0.06, 220); }
+        function playFAQ()   { tone(440, 0.15, 'sine', 0.04, 660); }
+        function playCTA()   {
+            tone(523, 0.18, 'sine', 0.05, 784);
+            setTimeout(() => tone(784, 0.22, 'sine', 0.05, 1046), 80);
+        }
+
+        // Toggle кнопки звука
+        soundToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            soundEnabled = !soundEnabled;
+            soundToggle.classList.toggle('active', soundEnabled);
+            soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+            soundToggle.title = soundEnabled ? 'Звуки включены' : 'Звуки выключены';
+            soundToggle.setAttribute('aria-label', soundEnabled ? 'Выключить звуки' : 'Включить звуки');
+            if (soundEnabled) {
+                getCtx();
+                tone(523, 0.1, 'sine', 0.04, 1046); // confirm beep
+            }
+        });
+
+        // Навешиваем звуки
+        document.querySelectorAll('.btn-primary').forEach(el => {
+            el.addEventListener('mouseenter', playHover);
+            el.addEventListener('click', playCTA);
+        });
+        document.querySelectorAll('.btn-secondary, header a, footer a').forEach(el => {
+            el.addEventListener('mouseenter', playHover);
+            el.addEventListener('click', playClick);
+        });
+        document.querySelectorAll('details summary').forEach(el => {
+            el.addEventListener('click', playFAQ);
+        });
+        document.querySelectorAll('.card').forEach(el => {
+            el.addEventListener('mouseenter', playHover);
+        });
+
+    })();
+    </script>
+
+</body>
+</html>
