@@ -487,6 +487,18 @@
                 line-height: 1.1;
             }
         }
+
+        /* Калькулятор УСН — активный таб */
+        .calc-tab[aria-selected="true"] {
+            background: #ffffff;
+            color: #047857;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.18), 0 1px 3px rgba(15, 23, 42, 0.06);
+        }
+        .calc-tab[aria-selected="false"]:hover {
+            color: #047857;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .calc-input::placeholder { color: #94a3b8; font-weight: 500; }
     </style>
 
     <!-- ============== JSON-LD: Organization + WebSite ============== -->
@@ -875,6 +887,114 @@
                     </p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- ============== БЕСПЛАТНЫЙ КАЛЬКУЛЯТОР УСН ============== -->
+    <section id="calculator" class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-white to-emerald-50/30">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-12">
+                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Попробуй прямо сейчас</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                    Бесплатный<br><span class="gradient-text">калькулятор УСН 2026</span>
+                </h2>
+                <p class="text-lg text-slate-600 mt-5 max-w-xl mx-auto">
+                    Прикинь налог за квартал. Без регистрации. По формулам НК РФ.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-xl shadow-emerald-500/5">
+                <!-- Tabs: режим УСН -->
+                <div role="tablist" aria-label="Режим УСН" class="grid grid-cols-2 gap-2 p-1.5 bg-slate-100 rounded-2xl mb-7">
+                    <button type="button" role="tab" aria-selected="true" data-calc-mode="income" class="calc-tab px-4 py-3 rounded-xl font-bold text-sm sm:text-base text-slate-700 transition">
+                        Доходы — 6%
+                    </button>
+                    <button type="button" role="tab" aria-selected="false" data-calc-mode="income_expense" class="calc-tab px-4 py-3 rounded-xl font-bold text-sm sm:text-base text-slate-700 transition">
+                        Доходы − Расходы — 15%
+                    </button>
+                </div>
+
+                <!-- Поля ввода -->
+                <div class="space-y-5">
+                    <div>
+                        <label for="calc-income" class="block text-sm font-bold text-slate-700 mb-2">
+                            Доход за квартал, ₽
+                        </label>
+                        <input type="text" inputmode="numeric" id="calc-income" placeholder="500 000"
+                               class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
+                    </div>
+
+                    <div id="calc-expense-wrap" class="hidden">
+                        <label for="calc-expense" class="block text-sm font-bold text-slate-700 mb-2">
+                            Расходы за квартал, ₽
+                        </label>
+                        <input type="text" inputmode="numeric" id="calc-expense" placeholder="200 000"
+                               class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
+                    </div>
+
+                    <div>
+                        <label for="calc-contrib" class="block text-sm font-bold text-slate-700 mb-2">
+                            Уплачено взносов за квартал, ₽
+                            <span class="font-normal text-slate-500">(фикс/4 ≈ 14 348)</span>
+                        </label>
+                        <input type="text" inputmode="numeric" id="calc-contrib" placeholder="14 348" value="14 348"
+                               class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
+                    </div>
+
+                    <label class="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 border-slate-200 hover:border-emerald-200 transition has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/40">
+                        <input type="checkbox" id="calc-no-employees" checked class="mt-0.5 w-5 h-5 accent-emerald-600 cursor-pointer">
+                        <span class="text-sm sm:text-base text-slate-700 leading-relaxed">
+                            <span class="font-bold text-slate-900">Я ИП без сотрудников</span>
+                            <span class="block text-slate-500 text-xs sm:text-sm mt-0.5">Вычет на взносы — до 100% (с сотрудниками — до 50%)</span>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Результат -->
+                <div id="calc-result" class="mt-8 p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/40 border border-emerald-200 hidden" role="status" aria-live="polite">
+                    <div class="space-y-3 text-sm sm:text-base">
+                        <div class="flex justify-between items-baseline">
+                            <span class="text-slate-600">Налог по ставке</span>
+                            <span class="font-bold text-slate-900 tabular-nums" data-calc-out="tax">— ₽</span>
+                        </div>
+                        <div class="flex justify-between items-baseline" data-calc-row="deduction">
+                            <span class="text-slate-600">Вычет на взносы</span>
+                            <span class="font-bold text-emerald-700 tabular-nums" data-calc-out="deduction">— ₽</span>
+                        </div>
+                        <div class="border-t border-emerald-200 pt-3 mt-3 flex justify-between items-baseline">
+                            <span class="text-base sm:text-lg font-bold text-slate-900">К доплате за квартал</span>
+                            <span class="text-2xl sm:text-3xl font-black text-emerald-700 tabular-nums" data-calc-out="payable">— ₽</span>
+                        </div>
+                        <div class="flex justify-between items-baseline pt-1">
+                            <span class="text-xs text-slate-500">Прогноз за год (× 4)</span>
+                            <span class="text-sm font-bold text-slate-700 tabular-nums" data-calc-out="yearly">— ₽</span>
+                        </div>
+                    </div>
+
+                    <!-- Светофор по нагрузке -->
+                    <div class="mt-5 pt-5 border-t border-emerald-200" data-calc-out="traffic-wrap">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl flex-shrink-0" data-calc-out="traffic-emoji">🟢</span>
+                            <p class="text-sm text-slate-700 leading-relaxed" data-calc-out="traffic-text">
+                                Нагрузка низкая — пока всё ок.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Доп. предупреждения -->
+                    <div class="mt-4 space-y-2 text-xs text-slate-600 leading-relaxed" data-calc-out="warnings"></div>
+
+                    <p class="mt-5 pt-4 border-t border-emerald-200 text-xs text-slate-500 leading-relaxed">
+                        Расчёт упрощённый: квартал, без учёта переноса убытков, ОС и НДС.
+                        Точный расчёт с учётом твоих чеков, банка, авансов и регионального тарифа —
+                        в <a href="https://t.me/AI_Buxgalter_USN_bot?start=calc_landing" target="_blank" rel="noopener" class="font-bold text-emerald-700 hover:text-emerald-800 underline">Telegram-боте</a>.
+                    </p>
+                </div>
+            </div>
+
+            <p class="text-center text-sm text-slate-500 mt-6">
+                💡 Калькулятор работает локально в браузере — твои цифры никуда не отправляются.
+            </p>
         </div>
     </section>
 
@@ -1435,6 +1555,160 @@
             if (window.va) window.va('event', { name: 'notify_email_subscribed' });
             if (window.ym) window.ym(window.YM_COUNTER_ID || 0, 'reachGoal', 'notify_email');
         });
+    })();
+    </script>
+
+    <!-- ============== Калькулятор УСН ============== -->
+    <script>
+    (function() {
+        'use strict';
+
+        // ─── Константы НК РФ 2026 (источник: bot/tax_config.py) ───────────────
+        const TAX = {
+            usnIncomeRate: 0.06,
+            usnIncomeExpenseRate: 0.15,
+            extraContribBase: 300_000,        // порог 1% доп. взноса (за год)
+            vatThreshold: 20_000_000,         // обязанность по НДС (за год)
+            usnLimit: 490_500_000,            // лимит УСН (за год)
+            fixedContrib: 57_390,             // фикс. взнос ИП за год
+        };
+
+        // ─── DOM ──────────────────────────────────────────────────────────────
+        const $ = (sel) => document.querySelector(sel);
+        const tabs = document.querySelectorAll('.calc-tab');
+        const incomeInput = $('#calc-income');
+        const expenseInput = $('#calc-expense');
+        const expenseWrap = $('#calc-expense-wrap');
+        const contribInput = $('#calc-contrib');
+        const noEmployeesCb = $('#calc-no-employees');
+        const result = $('#calc-result');
+        if (!incomeInput) return;
+
+        let mode = 'income';
+
+        // ─── Парс/формат чисел ─────────────────────────────────────────────────
+        const fmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+        function parseNum(s) {
+            if (!s) return 0;
+            const cleaned = String(s).replace(/[^\d]/g, '');
+            return cleaned ? parseInt(cleaned, 10) : 0;
+        }
+        function formatRub(n) { return fmt.format(Math.round(n)) + ' ₽'; }
+
+        // Авто-форматирование при вводе: "500000" → "500 000"
+        function attachLiveFormat(input) {
+            input.addEventListener('input', function(e) {
+                const raw = parseNum(e.target.value);
+                e.target.value = raw ? fmt.format(raw) : '';
+                recalc();
+            });
+        }
+        [incomeInput, expenseInput, contribInput].forEach(attachLiveFormat);
+        noEmployeesCb.addEventListener('change', recalc);
+
+        // ─── Tabs ─────────────────────────────────────────────────────────────
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                mode = tab.dataset.calcMode;
+                tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+                expenseWrap.classList.toggle('hidden', mode !== 'income_expense');
+                recalc();
+            });
+        });
+        // Инициализация: первый таб активен
+        tabs[0].setAttribute('aria-selected', 'true');
+        tabs[1].setAttribute('aria-selected', 'false');
+
+        // ─── Светофор ─────────────────────────────────────────────────────────
+        function trafficLight(yearlyIncome) {
+            if (yearlyIncome >= TAX.vatThreshold * 0.9) {
+                return { emoji: '🟠', text: 'Близко к порогу НДС (20 млн ₽/год). В следующем году появится обязанность по НДС — выбирай ставку 5/7/22% заранее.' };
+            }
+            if (yearlyIncome >= TAX.extraContribBase) {
+                return { emoji: '🔴', text: 'Доход превысил 300 000 ₽ — доп. взнос 1% начисляется на превышение. Заплати его до 1 июля следующего года.' };
+            }
+            if (yearlyIncome >= 100_000) {
+                return { emoji: '🟡', text: 'Приближаешься к порогу 300 000 ₽ — после него начнёт начисляться доп. взнос 1%.' };
+            }
+            return { emoji: '🟢', text: 'Налоговая нагрузка минимальна. Не забудь заплатить квартальный аванс до 28 числа следующего за кварталом месяца.' };
+        }
+
+        // ─── Расчёт ───────────────────────────────────────────────────────────
+        function recalc() {
+            const income = parseNum(incomeInput.value);
+            const expense = parseNum(expenseInput.value);
+            const contrib = parseNum(contribInput.value);
+            const noEmployees = noEmployeesCb.checked;
+
+            if (income <= 0) {
+                result.classList.add('hidden');
+                return;
+            }
+
+            let tax = 0, deduction = 0, payable = 0;
+            const warnings = [];
+
+            if (mode === 'income') {
+                tax = income * TAX.usnIncomeRate;
+                if (noEmployees) {
+                    deduction = Math.min(contrib, tax);
+                } else {
+                    deduction = Math.min(contrib, tax * 0.5);
+                }
+                payable = Math.max(0, tax - deduction);
+            } else {
+                // Доходы − Расходы: взносы — часть расходов, не отдельный вычет
+                const profit = Math.max(0, income - expense - contrib);
+                tax = profit * TAX.usnIncomeExpenseRate;
+                deduction = 0;
+                payable = tax;
+                if (expense >= income) {
+                    warnings.push('Расходы ≥ доходов: налог 0 ₽. Помни — на «Доходы−Расходы» в годовом расчёте есть минимальный налог 1% от доходов.');
+                }
+            }
+
+            const yearly = payable * 4;
+            const yearlyIncome = income * 4;
+
+            // Записываем в DOM
+            result.querySelector('[data-calc-out="tax"]').textContent = formatRub(tax);
+            result.querySelector('[data-calc-out="deduction"]').textContent = formatRub(deduction);
+            result.querySelector('[data-calc-out="payable"]').textContent = formatRub(payable);
+            result.querySelector('[data-calc-out="yearly"]').textContent = formatRub(yearly);
+
+            // Скрываем строку вычета для Д−Р (там вычет = 0 всегда)
+            const dedRow = result.querySelector('[data-calc-row="deduction"]');
+            dedRow.classList.toggle('hidden', mode === 'income_expense');
+
+            // Светофор
+            const light = trafficLight(yearlyIncome);
+            result.querySelector('[data-calc-out="traffic-emoji"]').textContent = light.emoji;
+            result.querySelector('[data-calc-out="traffic-text"]').textContent = light.text;
+
+            // Доп. предупреждения
+            const warningsBox = result.querySelector('[data-calc-out="warnings"]');
+            warningsBox.innerHTML = '';
+            if (yearlyIncome > TAX.usnLimit) {
+                warnings.push('⚠️ Прогноз годового дохода превышает лимит УСН (490,5 млн ₽). При фактическом превышении — потеря права на УСН с этого квартала.');
+            }
+            if (mode === 'income' && contrib > tax && noEmployees) {
+                warnings.push('💡 Уплачено взносов больше начисленного налога. Остаток можно перенести на следующие кварталы того же года.');
+            }
+            warnings.forEach((w) => {
+                const p = document.createElement('p');
+                p.textContent = w;
+                warningsBox.appendChild(p);
+            });
+
+            result.classList.remove('hidden');
+
+            // Tracking
+            if (window.va) window.va('event', { name: 'calc_used', data: { mode, income, payable } });
+            if (window.ym) window.ym(window.YM_COUNTER_ID || 0, 'reachGoal', 'calc_used');
+        }
+
+        // Первый расчёт если поля заполнены (например 14 348 в contrib по умолчанию)
+        recalc();
     })();
     </script>
 
