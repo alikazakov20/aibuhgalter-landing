@@ -554,10 +554,51 @@
         .swipe-hint-left  { animation: swipeArrowLeft  1.4s ease-in-out infinite; display: inline-block; }
         .swipe-hint-right { animation: swipeArrowRight 1.4s ease-in-out infinite; display: inline-block; animation-delay: 0.2s; }
 
+        /* Fade-маска справа на каруселях (только mobile <768px).
+           Контент плавно затухает у правого края — намёк что есть ещё. */
+        @media (max-width: 767px) {
+            .carousel-scroll-mask {
+                -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
+                mask-image: linear-gradient(to right, black 88%, transparent 100%);
+            }
+        }
+
+        /* Анимированный chevron «›» справа на каруселях — кликабельный визуальный индикатор */
+        .carousel-chevron {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 900;
+            line-height: 1;
+            pointer-events: none;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45), 0 0 0 4px rgba(255, 255, 255, 0.6);
+            animation: chevronNudge 1.6s ease-in-out infinite;
+            z-index: 5;
+            user-select: none;
+        }
+        @keyframes chevronNudge {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50%      { transform: translateY(-50%) translateX(5px); }
+        }
+        @media (min-width: 768px) {
+            .carousel-chevron { display: none; }
+        }
+
         /* Отключаем анимацию для пользователей с prefers-reduced-motion */
         @media (prefers-reduced-motion: reduce) {
             .ann-highlight { animation: none; }
             .swipe-hint-left, .swipe-hint-right { animation: none; opacity: 1; }
+            .carousel-chevron { animation: none; }
         }
 
         .ann-icon {
@@ -1083,8 +1124,10 @@
                 </p>
             </div>
 
-            <!-- Mobile: горизонтальная карусель со scroll-snap. Desktop: grid 4 колонки -->
-            <div class="-mx-4 sm:mx-0 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <!-- Mobile: горизонтальная карусель со scroll-snap + fade-маска + chevron-намёк.
+                 Desktop: grid 4 колонки (chevron и маска скрываются через CSS @media). -->
+            <div class="relative">
+            <div class="carousel-scroll-mask -mx-4 sm:mx-0 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div class="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 px-4 sm:px-0 pr-8 sm:pr-0">
                     <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
                         <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🎙️</div>
@@ -1150,6 +1193,9 @@
                         </p>
                     </div>
                 </div>
+            </div>
+            <!-- Анимированный chevron — намёк «свайпни вправо», скрыт на desktop через @media -->
+            <span class="carousel-chevron" aria-hidden="true">›</span>
             </div>
         </div>
     </section>
@@ -1777,8 +1823,9 @@
                 </p>
             </div>
 
-            <!-- Mobile: горизонтальная карусель. Desktop: grid 2-3 колонки -->
-            <div class="-mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <!-- Mobile: горизонтальная карусель + fade-маска + chevron-намёк. Desktop: grid 2-3 колонки -->
+            <div class="relative">
+            <div class="carousel-scroll-mask -mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div class="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 px-4 sm:px-0 pr-8 sm:pr-0">
 
                 <!-- Кейс 1 -->
@@ -1890,6 +1937,9 @@
                 </article>
                 </div>
             </div>
+            <!-- Анимированный chevron — намёк «свайпни вправо» -->
+            <span class="carousel-chevron" aria-hidden="true">›</span>
+            </div>
 
             <p class="text-center text-xs text-slate-400 mt-6 sm:mt-8 leading-relaxed max-w-2xl mx-auto">
                 💚 Имена и истории согласованы с авторами. Цифры округлены, цитаты приводятся в авторской редакции.
@@ -1986,9 +2036,10 @@
                 </p>
             </div>
 
-            <!-- Mobile: горизонтальная карусель. Desktop: grid 3 колонки -->
+            <!-- Mobile: горизонтальная карусель + fade-маска + chevron-намёк. Desktop: grid 3 колонки -->
             <!-- pt-6 нужен на mobile чтобы бейдж "Популярный" (-top-3) не обрезался overflow-x:auto -->
-            <div class="-mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div class="relative">
+            <div class="carousel-scroll-mask -mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div class="flex md:grid md:grid-cols-3 gap-4 md:gap-5 px-4 sm:px-0 pr-8 sm:pr-0 pt-6 md:pt-3">
                     <!-- PRO -->
                     <div class="card p-6 sm:p-7 rounded-3xl shrink-0 w-[95%] md:w-auto snap-center">
@@ -2046,6 +2097,9 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+            <!-- Анимированный chevron — намёк «свайпни вправо» -->
+            <span class="carousel-chevron" aria-hidden="true">›</span>
             </div>
 
             <div class="text-center mt-8 sm:mt-10 space-y-3">
