@@ -513,6 +513,28 @@
         }
         .calc-input::placeholder { color: #94a3b8; font-weight: 500; }
 
+        /* Print-стили — печатаем только калькулятор + результат */
+        @media print {
+            body * { visibility: hidden; }
+            #calculator, #calculator * { visibility: visible; }
+            #calculator { position: absolute; left: 0; top: 0; width: 100%; padding: 0; background: #ffffff; }
+            #calculator .section-eyebrow,
+            #calculator .calc-tab[aria-selected="false"],
+            #calc-compare-btn,
+            #calc-compare-result,
+            #calc-email-btn,
+            #calc-print-btn,
+            #ann-bar,
+            .cursor-dot { display: none !important; }
+            #calc-result {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+            .ann-bar { display: none !important; }
+        }
+
         /* ============== Announcement Bar (промо-плашка) ============== */
         .ann-bar {
             position: relative;
@@ -1122,7 +1144,7 @@
                     Бесплатный<br><span class="gradient-text">калькулятор УСН 2026</span>
                 </h2>
                 <p class="text-lg text-slate-600 mt-5 max-w-xl mx-auto">
-                    Прикинь налог за квартал. Без регистрации. По формулам НК РФ.
+                    Точный расчёт с учётом региона, авансов, ОС, переноса убытков и минимального налога. Без регистрации. По формулам НК РФ.
                 </p>
             </div>
 
@@ -1137,11 +1159,50 @@
                     </button>
                 </div>
 
+                <!-- Регион + период (rаздел ставок) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                    <label class="block">
+                        <span class="block text-sm font-bold text-slate-700 mb-2">Регион</span>
+                        <select id="calc-region" class="calc-input w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-medium text-slate-900 bg-white">
+                            <option value="standard">🌍 Стандартные ставки (6% / 15%)</option>
+                            <option value="moscow">🏛️ Москва (6% / 15%)</option>
+                            <option value="spb">🌉 Санкт-Петербург (6% / 7%)</option>
+                            <option value="tatarstan">🕌 Татарстан (5% / 5%)</option>
+                            <option value="udmurtia">🌲 Удмуртия (1% / 5%) — для новых ИП</option>
+                            <option value="chechnya">🏔️ Чеченская Республика (1% / 5%)</option>
+                            <option value="kaluga">🏞️ Калужская область (5% / 7%)</option>
+                            <option value="hmao">🛢️ ХМАО (5% / 5%)</option>
+                            <option value="custom">⚙️ Своя ставка</option>
+                        </select>
+                    </label>
+                    <label class="block">
+                        <span class="block text-sm font-bold text-slate-700 mb-2">Период</span>
+                        <select id="calc-period" class="calc-input w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-medium text-slate-900 bg-white">
+                            <option value="q1">1-й квартал (январь–март)</option>
+                            <option value="h1">Полугодие (январь–июнь)</option>
+                            <option value="9m">9 месяцев (январь–сентябрь)</option>
+                            <option value="year">Год (итоговый расчёт)</option>
+                        </select>
+                    </label>
+                </div>
+
+                <!-- Кастомная ставка (показывается только при region=custom) -->
+                <div id="calc-custom-rate-wrap" class="hidden mb-5">
+                    <label class="block">
+                        <span class="block text-sm font-bold text-slate-700 mb-2">
+                            Своя ставка УСН, % <span class="font-normal text-slate-500" id="calc-rate-hint">(стандарт 6%)</span>
+                        </span>
+                        <input type="number" id="calc-custom-rate" min="0" max="20" step="0.5" placeholder="6"
+                               class="calc-input w-full px-5 py-3.5 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
+                    </label>
+                </div>
+
                 <!-- Поля ввода -->
                 <div class="space-y-5">
                     <div>
                         <label for="calc-income" class="block text-sm font-bold text-slate-700 mb-2">
-                            Доход за квартал, ₽
+                            <span id="calc-income-label">Доход за период, ₽</span>
+                            <span class="font-normal text-slate-500" id="calc-income-hint">(нарастающим итогом с начала года)</span>
                         </label>
                         <input type="text" inputmode="numeric" id="calc-income" placeholder="500 000"
                                class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
@@ -1149,7 +1210,7 @@
 
                     <div id="calc-expense-wrap" class="hidden">
                         <label for="calc-expense" class="block text-sm font-bold text-slate-700 mb-2">
-                            Расходы за квартал, ₽
+                            Расходы за период, ₽ <span class="font-normal text-slate-500">(нарастающим итогом)</span>
                         </label>
                         <input type="text" inputmode="numeric" id="calc-expense" placeholder="200 000"
                                class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
@@ -1157,10 +1218,37 @@
 
                     <div>
                         <label for="calc-contrib" class="block text-sm font-bold text-slate-700 mb-2">
-                            Уплачено взносов за квартал, ₽
-                            <span class="font-normal text-slate-500">(фикс/4 ≈ 14 348)</span>
+                            Уплачено взносов за период, ₽
+                            <span class="font-normal text-slate-500" id="calc-contrib-hint">(фикс ИП за 2026 = 57 390 ₽)</span>
                         </label>
                         <input type="text" inputmode="numeric" id="calc-contrib" placeholder="14 348" value="14 348"
+                               class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
+                    </div>
+
+                    <!-- Уплаченные авансы (для всех периодов кроме Q1) -->
+                    <div id="calc-advances-wrap" class="hidden">
+                        <label for="calc-advances" class="block text-sm font-bold text-slate-700 mb-2">
+                            Уплачено авансов за предыдущие кварталы, ₽
+                        </label>
+                        <input type="text" inputmode="numeric" id="calc-advances" placeholder="0"
+                               class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
+                    </div>
+
+                    <!-- ОС-списание (только Д-Р) -->
+                    <div id="calc-fa-wrap" class="hidden">
+                        <label for="calc-fa" class="block text-sm font-bold text-slate-700 mb-2">
+                            ОС-списание за период, ₽ <span class="font-normal text-slate-500">(только для Д-Р)</span>
+                        </label>
+                        <input type="text" inputmode="numeric" id="calc-fa" placeholder="0"
+                               class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
+                    </div>
+
+                    <!-- Перенос убытков (только Д-Р + год) -->
+                    <div id="calc-loss-wrap" class="hidden">
+                        <label for="calc-loss" class="block text-sm font-bold text-slate-700 mb-2">
+                            Перенос убытков прошлых лет, ₽ <span class="font-normal text-slate-500">(только в годовом расчёте Д-Р)</span>
+                        </label>
+                        <input type="text" inputmode="numeric" id="calc-loss" placeholder="0"
                                class="calc-input w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 text-lg font-semibold text-slate-900 transition tabular-nums">
                     </div>
 
@@ -1177,20 +1265,36 @@
                 <div id="calc-result" class="mt-8 p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/40 border border-emerald-200 hidden" role="status" aria-live="polite">
                     <div class="space-y-3 text-sm sm:text-base">
                         <div class="flex justify-between items-baseline">
-                            <span class="text-slate-600">Налог по ставке</span>
+                            <span class="text-slate-600">Применённая ставка</span>
+                            <span class="font-bold text-slate-900 tabular-nums" data-calc-out="rate">—</span>
+                        </div>
+                        <div class="flex justify-between items-baseline" data-calc-row="base">
+                            <span class="text-slate-600">Налоговая база</span>
+                            <span class="font-bold text-slate-900 tabular-nums" data-calc-out="base">— ₽</span>
+                        </div>
+                        <div class="flex justify-between items-baseline">
+                            <span class="text-slate-600">Налог начислен</span>
                             <span class="font-bold text-slate-900 tabular-nums" data-calc-out="tax">— ₽</span>
                         </div>
                         <div class="flex justify-between items-baseline" data-calc-row="deduction">
                             <span class="text-slate-600">Вычет на взносы</span>
                             <span class="font-bold text-emerald-700 tabular-nums" data-calc-out="deduction">— ₽</span>
                         </div>
+                        <div class="flex justify-between items-baseline" data-calc-row="advances">
+                            <span class="text-slate-600">Минус уплаченные авансы</span>
+                            <span class="font-bold text-emerald-700 tabular-nums" data-calc-out="advances-display">— ₽</span>
+                        </div>
                         <div class="border-t border-emerald-200 pt-3 mt-3 flex justify-between items-baseline">
-                            <span class="text-base sm:text-lg font-bold text-slate-900">К доплате за квартал</span>
+                            <span class="text-base sm:text-lg font-bold text-slate-900">К доплате за период</span>
                             <span class="text-2xl sm:text-3xl font-black text-emerald-700 tabular-nums" data-calc-out="payable">— ₽</span>
                         </div>
-                        <div class="flex justify-between items-baseline pt-1">
-                            <span class="text-xs text-slate-500">Прогноз за год (× 4)</span>
+                        <div class="flex justify-between items-baseline pt-1" data-calc-row="yearly">
+                            <span class="text-xs text-slate-500" data-calc-out="yearly-label">Прогноз за год</span>
                             <span class="text-sm font-bold text-slate-700 tabular-nums" data-calc-out="yearly">— ₽</span>
+                        </div>
+                        <div class="flex justify-between items-baseline" data-calc-row="due-date">
+                            <span class="text-xs text-slate-500">Срок уплаты</span>
+                            <span class="text-sm font-bold text-slate-900 tabular-nums" data-calc-out="due-date">—</span>
                         </div>
                     </div>
 
@@ -1207,9 +1311,47 @@
                     <!-- Доп. предупреждения -->
                     <div class="mt-4 space-y-2 text-xs text-slate-600 leading-relaxed" data-calc-out="warnings"></div>
 
+                    <!-- Сравнение режимов -->
+                    <div class="mt-5 pt-5 border-t border-emerald-200">
+                        <button type="button" id="calc-compare-btn"
+                                class="w-full flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-white hover:bg-emerald-50 border-2 border-emerald-200 transition text-sm font-bold text-emerald-700 group">
+                            <span class="flex items-center gap-2">
+                                <span>🔄</span>
+                                <span data-calc-out="compare-btn-label">Сравнить с УСН Доходы−Расходы</span>
+                            </span>
+                            <span class="text-xs font-normal text-slate-500 group-hover:text-emerald-700">показать ↓</span>
+                        </button>
+                        <div id="calc-compare-result" class="hidden mt-3 p-4 rounded-xl bg-white border border-slate-200 text-sm">
+                            <div class="space-y-1.5 mb-3">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-slate-600" data-calc-out="compare-current-label">Текущий режим</span>
+                                    <span class="font-bold text-slate-700 tabular-nums" data-calc-out="compare-current-value">— ₽</span>
+                                </div>
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-slate-600" data-calc-out="compare-alt-label">Альтернатива</span>
+                                    <span class="font-bold text-slate-700 tabular-nums" data-calc-out="compare-alt-value">— ₽</span>
+                                </div>
+                            </div>
+                            <div class="p-3 rounded-lg" data-calc-out="compare-verdict-wrap">
+                                <p class="text-sm font-bold leading-relaxed" data-calc-out="compare-verdict">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Действия с результатом -->
+                    <div class="mt-5 pt-5 border-t border-emerald-200 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <button type="button" id="calc-email-btn"
+                                class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-emerald-50 border-2 border-emerald-200 transition text-sm font-bold text-emerald-700">
+                            ✉️ Прислать на email
+                        </button>
+                        <button type="button" id="calc-print-btn"
+                                class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-emerald-50 border-2 border-emerald-200 transition text-sm font-bold text-emerald-700">
+                            🖨️ Распечатать / PDF
+                        </button>
+                    </div>
+
                     <p class="mt-5 pt-4 border-t border-emerald-200 text-xs text-slate-500 leading-relaxed">
-                        Расчёт упрощённый: квартал, без учёта переноса убытков, ОС и НДС.
-                        Точный расчёт с учётом твоих чеков, банка, авансов и регионального тарифа —
+                        Расчёт справочный — учитывает базу, ставку, период, взносы, авансы, ОС и перенос убытков. Не учитывает: НДС при доходе >20 млн, торговый сбор Москвы, патентные надбавки. Точный расчёт с автоимпортом банка и чеков —
                         в <a href="https://t.me/AI_Buxgalter_USN_bot?start=calc_landing" target="_blank" rel="noopener" class="font-bold text-emerald-700 hover:text-emerald-800 underline">Telegram-боте</a>.
                     </p>
                 </div>
@@ -1220,6 +1362,17 @@
             </p>
         </div>
     </section>
+
+    <!-- ============== Email-форма для отправки расчёта (скрыта по умолчанию) ============== -->
+    <iframe name="calc-email-iframe" id="calc-email-iframe" style="display:none" aria-hidden="true" tabindex="-1" title="Скрытый submit"></iframe>
+    <form action="https://formsubmit.co/alikazakov9@gmail.com" method="POST" target="calc-email-iframe" id="calc-email-form" style="display:none">
+        <input type="hidden" name="_subject" value="📊 Калькулятор УСН — расчёт пользователя">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="source" value="calc-email">
+        <input type="hidden" name="email" id="calc-email-to">
+        <input type="hidden" name="расчёт" id="calc-email-body">
+    </form>
 
     <!-- ============== ROI — СКОЛЬКО ТЫ СЭКОНОМИШЬ ============== -->
     <section id="roi" class="relative z-10 px-4 sm:px-6 py-20 bg-white">
@@ -2001,7 +2154,7 @@
     })();
     </script>
 
-    <!-- ============== Калькулятор УСН ============== -->
+    <!-- ============== Калькулятор УСН (расширенный) ============== -->
     <script>
     (function() {
         'use strict';
@@ -2010,10 +2163,31 @@
         const TAX = {
             usnIncomeRate: 0.06,
             usnIncomeExpenseRate: 0.15,
-            extraContribBase: 300_000,        // порог 1% доп. взноса (за год)
-            vatThreshold: 20_000_000,         // обязанность по НДС (за год)
-            usnLimit: 490_500_000,            // лимит УСН (за год)
-            fixedContrib: 57_390,             // фикс. взнос ИП за год
+            minTaxRate: 0.01,                 // мин. налог 1% от доходов (Д-Р, год)
+            extraContribBase: 300_000,
+            vatThreshold: 20_000_000,
+            usnLimit: 490_500_000,
+            fixedContrib: 57_390,
+        };
+
+        // ─── Региональные пресеты (упрощённо: типичные ставки, не учитывают вид деятельности) ──
+        const REGIONS = {
+            standard:  { incomeRate: 0.06, ieRate: 0.15, label: 'Стандартные ставки' },
+            moscow:    { incomeRate: 0.06, ieRate: 0.15, label: 'Москва' },
+            spb:       { incomeRate: 0.06, ieRate: 0.07, label: 'Санкт-Петербург (соц. значимые виды)' },
+            tatarstan: { incomeRate: 0.05, ieRate: 0.05, label: 'Татарстан' },
+            udmurtia:  { incomeRate: 0.01, ieRate: 0.05, label: 'Удмуртия (для новых ИП)' },
+            chechnya:  { incomeRate: 0.01, ieRate: 0.05, label: 'Чеченская Республика' },
+            kaluga:    { incomeRate: 0.05, ieRate: 0.07, label: 'Калужская область' },
+            hmao:      { incomeRate: 0.05, ieRate: 0.05, label: 'ХМАО' },
+        };
+
+        // ─── Период → доля года ──────────────────────────────────────────────
+        const PERIOD = {
+            q1:   { fraction: 0.25, label: '1-й квартал', dueDate: '28 апреля 2026' },
+            h1:   { fraction: 0.50, label: 'Полугодие',  dueDate: '28 июля 2026' },
+            '9m': { fraction: 0.75, label: '9 месяцев',  dueDate: '28 октября 2026' },
+            year: { fraction: 1.00, label: 'Год',         dueDate: '28 апреля 2027' },
         };
 
         // ─── DOM ──────────────────────────────────────────────────────────────
@@ -2023,31 +2197,56 @@
         const expenseInput = $('#calc-expense');
         const expenseWrap = $('#calc-expense-wrap');
         const contribInput = $('#calc-contrib');
+        const advancesInput = $('#calc-advances');
+        const advancesWrap = $('#calc-advances-wrap');
+        const faInput = $('#calc-fa');
+        const faWrap = $('#calc-fa-wrap');
+        const lossInput = $('#calc-loss');
+        const lossWrap = $('#calc-loss-wrap');
+        const regionSelect = $('#calc-region');
+        const periodSelect = $('#calc-period');
+        const customRateWrap = $('#calc-custom-rate-wrap');
+        const customRateInput = $('#calc-custom-rate');
         const noEmployeesCb = $('#calc-no-employees');
         const result = $('#calc-result');
+        const compareBtn = $('#calc-compare-btn');
+        const compareResult = $('#calc-compare-result');
+        const emailBtn = $('#calc-email-btn');
+        const printBtn = $('#calc-print-btn');
         if (!incomeInput) return;
 
         let mode = 'income';
 
         // ─── Парс/формат чисел ─────────────────────────────────────────────────
         const fmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+        const fmtRate = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 1 });
         function parseNum(s) {
             if (!s) return 0;
             const cleaned = String(s).replace(/[^\d]/g, '');
             return cleaned ? parseInt(cleaned, 10) : 0;
         }
         function formatRub(n) { return fmt.format(Math.round(n)) + ' ₽'; }
+        function formatPct(n) { return fmtRate.format(n * 100) + '%'; }
 
-        // Авто-форматирование при вводе: "500000" → "500 000"
         function attachLiveFormat(input) {
+            if (!input) return;
             input.addEventListener('input', function(e) {
                 const raw = parseNum(e.target.value);
                 e.target.value = raw ? fmt.format(raw) : '';
                 recalc();
             });
         }
-        [incomeInput, expenseInput, contribInput].forEach(attachLiveFormat);
+        [incomeInput, expenseInput, contribInput, advancesInput, faInput, lossInput].forEach(attachLiveFormat);
         noEmployeesCb.addEventListener('change', recalc);
+        regionSelect.addEventListener('change', () => {
+            customRateWrap.classList.toggle('hidden', regionSelect.value !== 'custom');
+            recalc();
+        });
+        periodSelect.addEventListener('change', () => {
+            updateConditionalFields();
+            recalc();
+        });
+        if (customRateInput) customRateInput.addEventListener('input', recalc);
 
         // ─── Tabs ─────────────────────────────────────────────────────────────
         tabs.forEach((tab) => {
@@ -2055,14 +2254,43 @@
                 mode = tab.dataset.calcMode;
                 tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
                 expenseWrap.classList.toggle('hidden', mode !== 'income_expense');
+                updateConditionalFields();
                 recalc();
             });
         });
-        // Инициализация: первый таб активен
         tabs[0].setAttribute('aria-selected', 'true');
         tabs[1].setAttribute('aria-selected', 'false');
 
-        // ─── Светофор ─────────────────────────────────────────────────────────
+        // ─── Условный показ полей ────────────────────────────────────────────
+        function updateConditionalFields() {
+            const period = periodSelect.value;
+            // Авансы — для всех периодов кроме Q1
+            advancesWrap.classList.toggle('hidden', period === 'q1');
+            // ОС-списание — только Д-Р
+            faWrap.classList.toggle('hidden', mode !== 'income_expense');
+            // Перенос убытков — только Д-Р + год
+            lossWrap.classList.toggle('hidden', !(mode === 'income_expense' && period === 'year'));
+            // Hint для подзаголовка дохода
+            const hint = document.getElementById('calc-income-hint');
+            if (hint) {
+                hint.textContent = period === 'q1'
+                    ? '(за январь–март)'
+                    : '(нарастающим итогом с начала года)';
+            }
+        }
+
+        // ─── Получить ставку для текущего режима ─────────────────────────────
+        function getRate() {
+            const region = regionSelect.value;
+            if (region === 'custom') {
+                const r = parseFloat(customRateInput.value) || 0;
+                return Math.max(0, Math.min(20, r)) / 100;
+            }
+            const preset = REGIONS[region] || REGIONS.standard;
+            return mode === 'income' ? preset.incomeRate : preset.ieRate;
+        }
+
+        // ─── Светофор по годовому доходу ─────────────────────────────────────
         function trafficLight(yearlyIncome) {
             if (yearlyIncome >= TAX.vatThreshold * 0.9) {
                 return { emoji: '🟠', text: 'Близко к порогу НДС (20 млн ₽/год). В следующем году появится обязанность по НДС — выбирай ставку 5/7/22% заранее.' };
@@ -2073,69 +2301,125 @@
             if (yearlyIncome >= 100_000) {
                 return { emoji: '🟡', text: 'Приближаешься к порогу 300 000 ₽ — после него начнёт начисляться доп. взнос 1%.' };
             }
-            return { emoji: '🟢', text: 'Налоговая нагрузка минимальна. Не забудь заплатить квартальный аванс до 28 числа следующего за кварталом месяца.' };
+            return { emoji: '🟢', text: 'Налоговая нагрузка минимальна. Не забудь заплатить квартальный аванс в срок.' };
         }
 
-        // ─── Расчёт ───────────────────────────────────────────────────────────
-        function recalc() {
+        // ─── Чистый расчёт (для текущего и для сравнения) ────────────────────
+        function calculate(modeArg) {
             const income = parseNum(incomeInput.value);
             const expense = parseNum(expenseInput.value);
             const contrib = parseNum(contribInput.value);
+            const advances = parseNum(advancesInput.value);
+            const fixedAssets = parseNum(faInput.value);
+            const lossCarry = parseNum(lossInput.value);
             const noEmployees = noEmployeesCb.checked;
+            const period = periodSelect.value;
+            const isYear = period === 'year';
+            const region = regionSelect.value;
 
-            if (income <= 0) {
-                result.classList.add('hidden');
-                return;
+            // Ставка с учётом mode для сравнения
+            let rate;
+            if (region === 'custom') {
+                rate = (parseFloat(customRateInput.value) || 0) / 100;
+            } else {
+                const preset = REGIONS[region] || REGIONS.standard;
+                rate = modeArg === 'income' ? preset.incomeRate : preset.ieRate;
             }
 
-            let tax = 0, deduction = 0, payable = 0;
-            const warnings = [];
+            let tax = 0, base = 0, deduction = 0, payable = 0, isMinTax = false;
+            const notes = [];
 
-            if (mode === 'income') {
-                tax = income * TAX.usnIncomeRate;
+            if (modeArg === 'income') {
+                base = income;
+                tax = income * rate;
                 if (noEmployees) {
                     deduction = Math.min(contrib, tax);
                 } else {
                     deduction = Math.min(contrib, tax * 0.5);
                 }
-                payable = Math.max(0, tax - deduction);
+                const taxAfterDed = Math.max(0, tax - deduction);
+                payable = Math.max(0, taxAfterDed - advances);
             } else {
-                // Доходы − Расходы: взносы — часть расходов, не отдельный вычет
-                const profit = Math.max(0, income - expense - contrib);
-                tax = profit * TAX.usnIncomeExpenseRate;
-                deduction = 0;
-                payable = tax;
-                if (expense >= income) {
-                    warnings.push('Расходы ≥ доходов: налог 0 ₽. Помни — на «Доходы−Расходы» в годовом расчёте есть минимальный налог 1% от доходов.');
+                let totalExpense = expense + contrib + fixedAssets;
+                if (isYear) totalExpense += lossCarry;
+                base = Math.max(0, income - totalExpense);
+                tax = base * rate;
+                const minTax = income * TAX.minTaxRate;
+                if (isYear && tax < minTax && income > 0) {
+                    tax = minTax;
+                    isMinTax = true;
+                    notes.push(`Применён минимальный налог 1% от дохода (${formatRub(minTax)}), так как расчётный налог оказался меньше.`);
                 }
+                deduction = 0;
+                payable = Math.max(0, tax - advances);
             }
 
-            const yearly = payable * 4;
-            const yearlyIncome = income * 4;
+            // Прогноз на год через долю периода
+            const fraction = PERIOD[period].fraction;
+            const yearlyIncome = fraction > 0 ? income / fraction : income;
+            const yearlyTax = isYear ? payable + advances : (payable + advances) / fraction;
 
-            // Записываем в DOM
-            result.querySelector('[data-calc-out="tax"]').textContent = formatRub(tax);
-            result.querySelector('[data-calc-out="deduction"]').textContent = formatRub(deduction);
-            result.querySelector('[data-calc-out="payable"]').textContent = formatRub(payable);
-            result.querySelector('[data-calc-out="yearly"]').textContent = formatRub(yearly);
+            return { income, expense, contrib, advances, fixedAssets, lossCarry, noEmployees, period, region, rate, mode: modeArg, base, tax, deduction, payable, isMinTax, isYear, yearlyIncome, yearlyTax, notes };
+        }
 
-            // Скрываем строку вычета для Д−Р (там вычет = 0 всегда)
-            const dedRow = result.querySelector('[data-calc-row="deduction"]');
-            dedRow.classList.toggle('hidden', mode === 'income_expense');
+        // ─── Главный recalc — отрисовка результата ───────────────────────────
+        function recalc() {
+            const r = calculate(mode);
+
+            if (r.income <= 0) {
+                result.classList.add('hidden');
+                compareResult.classList.add('hidden');
+                return;
+            }
+
+            // ─── DOM updates ─────────────
+            const set = (key, val) => {
+                const el = result.querySelector(`[data-calc-out="${key}"]`);
+                if (el) el.textContent = val;
+            };
+            const showRow = (key, show) => {
+                const row = result.querySelector(`[data-calc-row="${key}"]`);
+                if (row) row.classList.toggle('hidden', !show);
+            };
+
+            const periodInfo = PERIOD[r.period];
+
+            set('rate', formatPct(r.rate) + (r.region !== 'standard' && r.region !== 'custom' ? ` (${REGIONS[r.region].label})` : ''));
+            set('base', formatRub(r.base));
+            set('tax', formatRub(r.tax));
+            set('deduction', formatRub(r.deduction));
+            set('advances-display', '−' + formatRub(r.advances));
+            set('payable', formatRub(r.payable));
+            set('yearly', formatRub(r.yearlyTax));
+            set('yearly-label', r.isYear ? 'Налог за весь год' : 'Прогноз годового налога');
+            set('due-date', periodInfo.dueDate);
+
+            // Скрываем строки которые не релевантны
+            showRow('base', r.mode === 'income_expense');
+            showRow('deduction', r.mode === 'income');
+            showRow('advances', r.advances > 0);
+            showRow('yearly', !r.isYear);
 
             // Светофор
-            const light = trafficLight(yearlyIncome);
+            const light = trafficLight(r.yearlyIncome);
             result.querySelector('[data-calc-out="traffic-emoji"]').textContent = light.emoji;
             result.querySelector('[data-calc-out="traffic-text"]').textContent = light.text;
 
-            // Доп. предупреждения
+            // Предупреждения
             const warningsBox = result.querySelector('[data-calc-out="warnings"]');
             warningsBox.innerHTML = '';
-            if (yearlyIncome > TAX.usnLimit) {
-                warnings.push('⚠️ Прогноз годового дохода превышает лимит УСН (490,5 млн ₽). При фактическом превышении — потеря права на УСН с этого квартала.');
+            const warnings = [...r.notes];
+            if (r.yearlyIncome > TAX.usnLimit) {
+                warnings.push('⚠️ Прогноз годового дохода превышает лимит УСН (490,5 млн ₽). При фактическом превышении — потеря права на УСН.');
             }
-            if (mode === 'income' && contrib > tax && noEmployees) {
-                warnings.push('💡 Уплачено взносов больше начисленного налога. Остаток можно перенести на следующие кварталы того же года.');
+            if (r.mode === 'income' && r.contrib > r.tax && r.noEmployees) {
+                warnings.push('💡 Уплачено взносов больше начисленного налога. Остаток можно перенести на следующие периоды того же года.');
+            }
+            if (r.mode === 'income_expense' && r.expense >= r.income && !r.isYear) {
+                warnings.push('Расходы ≥ доходов: налог 0 ₽. Помни — в годовом расчёте применится мин. налог 1% от доходов.');
+            }
+            if (r.yearlyIncome > TAX.vatThreshold) {
+                warnings.push('🧾 Доход выше 20 млн ₽/год — со следующего года появится обязанность по НДС. Команда /nds в боте сравнит ставки 5/7/22%.');
             }
             warnings.forEach((w) => {
                 const p = document.createElement('p');
@@ -2143,14 +2427,132 @@
                 warningsBox.appendChild(p);
             });
 
+            // Кнопка сравнения — лейбл
+            const altMode = r.mode === 'income' ? 'income_expense' : 'income';
+            const altLabel = altMode === 'income' ? 'УСН Доходы' : 'УСН Доходы−Расходы';
+            const compareBtnLabel = result.querySelector('[data-calc-out="compare-btn-label"]');
+            if (compareBtnLabel) compareBtnLabel.textContent = `Сравнить с ${altLabel}`;
+
+            // Сбрасываем сравнение при пересчёте
+            compareResult.classList.add('hidden');
+
             result.classList.remove('hidden');
 
             // Tracking
-            if (window.va) window.va('event', { name: 'calc_used', data: { mode, income, payable } });
-            if (window.ym) window.ym(window.YM_COUNTER_ID || 0, 'reachGoal', 'calc_used');
+            if (window.aibuhTrack) {
+                window.aibuhTrack('calc_used', {
+                    mode: r.mode, period: r.period, region: r.region, income: r.income, payable: r.payable,
+                });
+            } else if (window.va) {
+                window.va('event', { name: 'calc_used' });
+            }
         }
 
-        // Первый расчёт если поля заполнены (например 14 348 в contrib по умолчанию)
+        // ─── Сравнение режимов ───────────────────────────────────────────────
+        compareBtn.addEventListener('click', () => {
+            const isHidden = compareResult.classList.contains('hidden');
+            if (!isHidden) {
+                compareResult.classList.add('hidden');
+                return;
+            }
+            const current = calculate(mode);
+            const altMode = mode === 'income' ? 'income_expense' : 'income';
+            const alt = calculate(altMode);
+
+            const set = (key, val) => {
+                const el = result.querySelector(`[data-calc-out="${key}"]`);
+                if (el) el.textContent = val;
+            };
+
+            const currentLabel = mode === 'income' ? 'УСН Доходы (' + formatPct(current.rate) + ')' : 'УСН Д−Р (' + formatPct(current.rate) + ')';
+            const altLabel     = altMode === 'income' ? 'УСН Доходы (' + formatPct(alt.rate) + ')' : 'УСН Д−Р (' + formatPct(alt.rate) + ')';
+
+            set('compare-current-label', currentLabel);
+            set('compare-current-value', formatRub(current.payable));
+            set('compare-alt-label', altLabel);
+            set('compare-alt-value', formatRub(alt.payable));
+
+            const verdictWrap = result.querySelector('[data-calc-out="compare-verdict-wrap"]');
+            const verdict = result.querySelector('[data-calc-out="compare-verdict"]');
+            const diff = current.payable - alt.payable;
+
+            if (Math.abs(diff) < 100) {
+                verdictWrap.className = 'p-3 rounded-lg bg-slate-100';
+                verdict.className = 'text-sm font-bold leading-relaxed text-slate-700';
+                verdict.textContent = '⚖️ Разница незначительна — режимы примерно равны для твоих цифр.';
+            } else if (diff > 0) {
+                verdictWrap.className = 'p-3 rounded-lg bg-amber-100/70 border border-amber-200';
+                verdict.className = 'text-sm font-bold leading-relaxed text-amber-900';
+                verdict.innerHTML = `💡 На ${altLabel} ты бы заплатил <strong class="tabular-nums">${formatRub(Math.abs(diff))}</strong> меньше. Если расходы стабильно высокие — рассмотри переход с 1 января.`;
+            } else {
+                verdictWrap.className = 'p-3 rounded-lg bg-emerald-100/70 border border-emerald-200';
+                verdict.className = 'text-sm font-bold leading-relaxed text-emerald-900';
+                verdict.innerHTML = `✅ Текущий режим выгоднее на <strong class="tabular-nums">${formatRub(Math.abs(diff))}</strong> по сравнению с ${altLabel}.`;
+            }
+
+            compareResult.classList.remove('hidden');
+            if (window.aibuhTrack) window.aibuhTrack('calc_compared', { from: mode, diff });
+        });
+
+        // ─── Email — отправка расчёта ────────────────────────────────────────
+        let emailSubmitted = false;
+        emailBtn.addEventListener('click', () => {
+            const r = calculate(mode);
+            if (r.income <= 0) return;
+
+            const email = prompt('На какой email прислать расчёт?');
+            if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+                if (email !== null) alert('Введи корректный email.');
+                return;
+            }
+
+            const lines = [
+                'Расчёт УСН ' + (r.mode === 'income' ? 'Доходы' : 'Доходы−Расходы'),
+                'Регион: ' + (REGIONS[r.region]?.label || 'своя ставка'),
+                'Период: ' + PERIOD[r.period].label,
+                'Ставка: ' + formatPct(r.rate),
+                '',
+                'Доход за период: ' + formatRub(r.income),
+                ...(r.mode === 'income_expense' ? ['Расходы: ' + formatRub(r.expense)] : []),
+                'Уплачено взносов: ' + formatRub(r.contrib),
+                ...(r.advances > 0 ? ['Уплачено авансов: ' + formatRub(r.advances)] : []),
+                ...(r.fixedAssets > 0 ? ['ОС-списание: ' + formatRub(r.fixedAssets)] : []),
+                ...(r.lossCarry > 0 ? ['Перенос убытков: ' + formatRub(r.lossCarry)] : []),
+                'ИП ' + (r.noEmployees ? 'без сотрудников' : 'с сотрудниками'),
+                '',
+                'РЕЗУЛЬТАТ:',
+                'Налоговая база: ' + formatRub(r.base),
+                'Налог начислен: ' + formatRub(r.tax),
+                ...(r.deduction > 0 ? ['Вычет на взносы: ' + formatRub(r.deduction)] : []),
+                'К доплате: ' + formatRub(r.payable),
+                ...(r.isMinTax ? ['(применён минимальный налог 1%)'] : []),
+                'Срок уплаты: ' + PERIOD[r.period].dueDate,
+                '',
+                'Расчёт справочный, по формулам НК РФ 2026.',
+                'Точный расчёт с автоимпортом банка и чеков — в Telegram-боте: https://t.me/AI_Buxgalter_USN_bot',
+            ];
+
+            $('#calc-email-to').value = email;
+            $('#calc-email-body').value = lines.join('\n');
+            $('#calc-email-form').submit();
+
+            const orig = emailBtn.textContent;
+            emailBtn.textContent = '✅ Отправлено';
+            emailBtn.disabled = true;
+            setTimeout(() => { emailBtn.textContent = orig; emailBtn.disabled = false; }, 4000);
+
+            if (window.aibuhTrack) window.aibuhTrack('calc_emailed', { mode: r.mode });
+            emailSubmitted = true;
+        });
+
+        // ─── Print / PDF ─────────────────────────────────────────────────────
+        printBtn.addEventListener('click', () => {
+            if (window.aibuhTrack) window.aibuhTrack('calc_printed');
+            window.print();
+        });
+
+        // Инициализация — показываем условные поля
+        updateConditionalFields();
         recalc();
     })();
     </script>
