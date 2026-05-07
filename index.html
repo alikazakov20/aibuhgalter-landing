@@ -1388,45 +1388,88 @@
             </div>
 
             <!-- Сравнительная таблица -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                <!-- Бухгалтер -->
-                <div class="rounded-3xl bg-gradient-to-br from-rose-50 to-white border border-rose-200/60 p-7 sm:p-8 relative">
-                    <div class="absolute top-4 right-4 text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-100 px-3 py-1 rounded-full">Старый способ</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 items-stretch">
+                <!-- Бухгалтер на аутсорсе -->
+                <div class="rounded-3xl bg-gradient-to-br from-rose-50 to-white border border-rose-200/60 p-7 sm:p-8 pt-12 sm:pt-12 relative flex flex-col">
+                    <div class="absolute top-4 right-4 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-100 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap">Старый способ</div>
                     <div class="text-4xl mb-4">👨‍💼</div>
                     <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-1">Бухгалтер на аутсорсе</h3>
-                    <p class="text-slate-500 text-sm mb-5">Средний рынок РФ для одного ИП на УСН</p>
-                    <div class="flex items-baseline gap-2 mb-6">
-                        <span class="text-4xl sm:text-5xl font-black text-slate-900 tabular-nums">5 000</span>
-                        <span class="text-lg text-slate-500 font-medium">–</span>
-                        <span class="text-4xl sm:text-5xl font-black text-slate-900 tabular-nums">8 000</span>
-                        <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+                    <p class="text-slate-500 text-sm mb-5 min-h-[2.5rem]">Средний рынок РФ для одного ИП на УСН</p>
+
+                    <!-- Цена в одну строку, размер совпадает с правой карточкой -->
+                    <div class="flex items-baseline gap-2 mb-6 min-h-[4rem] sm:min-h-[5rem]">
+                        <span class="text-5xl sm:text-6xl font-black text-slate-900 tabular-nums leading-none whitespace-nowrap">5–8</span>
+                        <span class="text-base sm:text-lg text-slate-500 font-bold whitespace-nowrap">тыс&nbsp;₽/мес</span>
                     </div>
-                    <ul class="space-y-2.5 text-sm text-slate-700">
+
+                    <ul class="space-y-2.5 text-sm text-slate-700 flex-1">
                         <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Ответ через 1–3 дня (или вообще через неделю)</li>
-                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Передавать чеки руками или email-ом</li>
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Передавать чеки руками или по email</li>
                         <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Часто только за год вперёд (60–100 тыс ₽)</li>
                         <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Зависишь от расписания и отпусков</li>
                         <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Не подскажет «что если я открою ещё один ОКВЭД»</li>
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Не работает по выходным и в праздники</li>
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Доплата за каждую «нестандартную» консультацию</li>
                     </ul>
                 </div>
 
-                <!-- AI-Бухгалтер -->
-                <div class="rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-7 sm:p-8 relative shadow-2xl shadow-emerald-500/20 text-white">
-                    <div class="absolute top-4 right-4 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-amber-300 px-3 py-1 rounded-full">Новый способ</div>
-                    <div class="text-4xl mb-4">🧮</div>
-                    <h3 class="text-xl sm:text-2xl font-black text-white mb-1">AI-Бухгалтер</h3>
-                    <p class="text-emerald-100/90 text-sm mb-5">PRO для одного ИП — всё включено</p>
-                    <div class="flex items-baseline gap-2 mb-6">
-                        <span class="text-5xl sm:text-6xl font-black text-white tabular-nums">290</span>
-                        <span class="text-lg text-emerald-100 font-medium">₽/мес</span>
+                <!-- AI-Бухгалтер — усиленная версия -->
+                <div class="rounded-3xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 p-7 sm:p-8 pt-12 sm:pt-12 relative shadow-2xl shadow-emerald-500/30 text-white flex flex-col overflow-hidden">
+                    <!-- Декоративные пятна -->
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-amber-300/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div class="absolute top-4 right-4 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-emerald-700 bg-amber-300 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-lg shadow-amber-300/30">Новый способ</div>
+
+                    <div class="relative">
+                        <div class="text-4xl mb-4">🧮</div>
+                        <h3 class="text-xl sm:text-2xl font-black text-white mb-1">AI-Бухгалтер</h3>
+                        <p class="text-emerald-100/90 text-sm mb-5 min-h-[2.5rem]">PRO для одного ИП — всё включено</p>
+
+                        <!-- Цена выровнена по высоте с левой карточкой -->
+                        <div class="flex items-baseline gap-2 mb-1 min-h-[4rem] sm:min-h-[5rem]">
+                            <span class="text-5xl sm:text-6xl font-black text-white tabular-nums leading-none whitespace-nowrap">290</span>
+                            <span class="text-base sm:text-lg text-emerald-100 font-bold">₽/мес</span>
+                        </div>
+                        <!-- Зачёркнутая старая цена -->
+                        <p class="text-xs text-emerald-100/80 mb-6">
+                            <span class="line-through decoration-rose-300/70 decoration-2">5 000 ₽</span>
+                            <span class="ml-1">— раньше платил бы бухгалтеру</span>
+                        </p>
+
+                        <!-- Список фишек: 9 пунктов -->
+                        <ul class="space-y-2.5 text-sm text-emerald-50 flex-1 mb-6">
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Ответ за 3 секунды — голосом, текстом или фотой чека</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Чеки и счета распознаются с фото — категории сами</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Импорт банка из CSV (Т-Банк, Сбер, Альфа, Тинькофф)</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Помесячная оплата — отменить можно в 1 клик в любой день</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Декларация и КУДиР генерятся автоматически за 5 секунд</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Напоминания за 14/7/3/1 день до каждого срока — не пропустишь</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Доступен 24/7 — в выходные, в отпуске, в 3 ночи</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Объясняет любые «а что если…» — без доплат за консультации</li>
+                            <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Обновляется автоматически при изменениях НК РФ</li>
+                        </ul>
+
+                        <!-- Бонус-плашка -->
+                        <div class="mb-5 p-3.5 rounded-xl bg-amber-300/15 backdrop-blur border border-amber-300/30">
+                            <p class="text-xs sm:text-sm font-bold text-amber-100 leading-relaxed flex items-start gap-2">
+                                <span class="text-base flex-shrink-0">🎁</span>
+                                <span>
+                                    <strong class="text-white">Возврат 14 дней без вопросов.</strong>
+                                    Если не подошло — вернём деньги за пару кликов.
+                                </span>
+                            </p>
+                        </div>
+
+                        <!-- CTA -->
+                        <a href="https://t.me/AI_Buxgalter_USN_bot?start=roi_card" target="_blank" rel="noopener"
+                           class="block w-full text-center px-6 py-4 rounded-xl font-black text-emerald-700 bg-white hover:bg-amber-50 hover:shadow-2xl hover:shadow-amber-300/40 hover:-translate-y-0.5 transition-all duration-200 text-base shadow-xl">
+                            🚀 Попробовать бесплатно
+                        </a>
+                        <p class="text-center text-xs text-emerald-100/70 mt-3">
+                            Без карты на старте · Telegram-бот · 5 AI-вопросов в день навсегда
+                        </p>
                     </div>
-                    <ul class="space-y-2.5 text-sm text-emerald-50">
-                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Ответ за 3 секунды, голосом или текстом</li>
-                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Чеки распознаются с фото</li>
-                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Помесячная оплата, отказаться можно в любой день</li>
-                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Доступен 24/7, в отпуске тоже</li>
-                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Объясняет любую тему по запросу — за тарификацию не возьмёт</li>
-                    </ul>
                 </div>
             </div>
 
