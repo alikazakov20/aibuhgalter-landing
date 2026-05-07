@@ -258,23 +258,16 @@
     'use strict';
 
     // ============== Login Gate ==============
-    // Простая клиентская проверка PIN. Хеш SHA-256 — НЕ надёжная защита,
-    // только защита от случайных глаз. Реальная защита: server-side в след. итерации.
-    // PIN по умолчанию: 4747 (поменяй в коде или в localStorage 'aibuh_admin_pin_hash')
-    const DEFAULT_PIN_HASH = '34b2f1964e2b4a27899af5992119458f243adcfa89be29ee5908d1a58395e647'; // SHA-256("532318") — текущий PIN
-    const SESSION_KEY = 'aibuh_admin_session';
+    // Server-side auth через POST /api/admin/login → HttpOnly JWT cookie.
+    // PIN хранится в env var ADMIN_PIN_HASH на Vercel (не в HTML).
+    // ВАЖНО: для работы нужно настроить ADMIN_PIN_HASH и ADMIN_JWT_SECRET в Vercel Dashboard.
     const ANN_DRAFT_KEY = 'aibuh_admin_ann_draft';
 
-    async function sha256(str) {
-        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    function isLoggedIn() {
-        const s = sessionStorage.getItem(SESSION_KEY);
-        if (!s) return false;
-        const expires = parseInt(s, 10);
-        return Date.now() < expires;
+    async function isLoggedIn() {
+        try {
+            const res = await fetch('/api/admin/me', { credentials: 'same-origin' });
+            return res.ok;
+        } catch { return false; }
     }
 
     function showAdminPanel() {
@@ -291,27 +284,54 @@
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const pin = document.getElementById('login-pin').value.trim();
-        const hash = await sha256(pin);
-        const storedHash = localStorage.getItem('aibuh_admin_pin_hash') || DEFAULT_PIN_HASH;
+        const btn = document.querySelector('#login-form button[type=submit]');
+        const origText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Проверяю...';
 
-        if (hash === storedHash) {
-            // Сессия 24 часа
-            sessionStorage.setItem(SESSION_KEY, String(Date.now() + 24 * 60 * 60 * 1000));
-            showAdminPanel();
-        } else {
+        try {
+            const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ pin }),
+            });
+            if (res.ok) {
+                showAdminPanel();
+                document.getElementById('login-pin').value = '';
+            } else {
+                let errCode = 'invalid_pin';
+                try { errCode = (await res.json()).error || errCode; } catch {}
+                const errEl = document.getElementById('login-error');
+                errEl.textContent = errCode === 'config_missing'
+                    ? '⚙️ Auth не настроен: добавь ADMIN_PIN_HASH и ADMIN_JWT_SECRET в Vercel'
+                    : 'Неверный PIN';
+                errEl.classList.remove('hidden');
+                document.getElementById('login-pin').value = '';
+                setTimeout(() => errEl.classList.add('hidden'), 4000);
+            }
+        } catch (err) {
             const errEl = document.getElementById('login-error');
+            errEl.textContent = 'Сеть недоступна';
             errEl.classList.remove('hidden');
-            document.getElementById('login-pin').value = '';
-            setTimeout(() => errEl.classList.add('hidden'), 3000);
+            setTimeout(() => errEl.classList.add('hidden'), 4000);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = origText;
         }
     });
 
-    document.getElementById('logout-btn').addEventListener('click', () => {
-        sessionStorage.removeItem(SESSION_KEY);
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        try {
+            await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+        } catch {}
         showLoginGate();
     });
 
-    if (isLoggedIn()) showAdminPanel();
+    // Инициализация: проверяем cookie через GET /api/admin/me
+    isLoggedIn().then((loggedIn) => {
+        if (loggedIn) showAdminPanel();
+    });
 
     // ============== Tabs ==============
     document.querySelectorAll('.admin-tab').forEach(tab => {
