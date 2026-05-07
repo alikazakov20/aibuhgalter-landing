@@ -654,6 +654,78 @@
                     "@type": "Answer",
                     "text": "Веб-сайт с полноценным дашбордом — через 4 недели. Telegram-бот уже работает. Мобильное приложение (iOS+Android) — Q3 2026. Подпишись на бота — пришлём личное уведомление как только запустимся."
                 }
+            },
+            {
+                "@type": "Question",
+                "name": "А если бот ошибётся в расчёте — кто заплатит штраф?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Сервис носит справочный характер — итоговая ответственность за поданную декларацию на пользователе. Бот считает по формулам НК РФ, точность 99,9%+. Перед подачей крупных сумм рекомендуем перепроверить у бухгалтера."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Можно ли вернуть деньги если не подойдёт?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Да. В первые 14 дней с первой оплаты — полный возврат, если сделано не больше 5 запросов в боте. После — пропорциональный возврат за неоплаченные дни месяца."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Что с НДС если у меня доход больше 20 млн в год?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "С 2025 года ИП на УСН с годовым доходом свыше 20 млн ₽ обязаны платить НДС. Бот поддерживает выбор ставки 5%, 7% или 22% и подскажет какая выгоднее именно вам с учётом доли закупок с НДС."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Как переключиться с «Доходы» на «Доходы−Расходы»?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Смена объекта налогообложения возможна только с 1 января следующего года. Заявление по форме 26.2-6 подаётся до 31 декабря. Бот в декабре напомнит, посчитает что выгоднее и сгенерирует готовое заявление."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "А если у меня патент или самозанятость — поддерживается?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Самозанятость (НПД) поддерживается базово: расчёт 4%/6%, чеки в «Мой Налог». Патент — на этапе beta. ОСНО пока не планируется. Комбинации (УСН+патент или УСН+НПД) — обрабатываются корректно."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Кто видит мои данные? Передаются ли банкам или ФНС?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Никому. Серверы в РФ, данные шифруются. Голосовые сообщения распознаются локально (whisper.cpp), не в облако. В ФНС, банк или налоговую ничего не уходит автоматически — пользователь сам решает когда выгрузить декларацию."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Можно ли оплатить по безналу для нескольких ИП?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Да. Для тарифов PRO для бухгалтерии (990 ₽/мес) и MAX (1990 ₽/мес) принимаем оплату по реквизитам. Договор + счёт + закрывающие документы — на запрос по email."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Как связаться с поддержкой?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Команда /help в боте (ответ в минуты), email alikazakov9@gmail.com (24 часа), или приоритетная поддержка на тарифе MAX (1 час в рабочее время МСК)."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Поддерживается ли ОФД и онлайн-касса?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Прямой интеграции с ОФД пока нет, но можно экспортировать чеки CSV/Excel из онлайн-кассы и загрузить в бот. Поддерживаются форматы АТОЛ, Эвотор, Штрих-М, МойСклад."
+                }
             }
         ]
     }
@@ -1023,6 +1095,115 @@
         </div>
     </section>
 
+    <!-- ============== ROI — СКОЛЬКО ТЫ СЭКОНОМИШЬ ============== -->
+    <section id="roi" class="relative z-10 px-4 sm:px-6 py-20 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Сколько ты сэкономишь</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                    Бухгалтер на аутсорсе vs <span class="gradient-text">AI-Бухгалтер</span>
+                </h2>
+                <p class="text-lg text-slate-600 mt-5 max-w-2xl mx-auto">
+                    Прикинь экономию за год по своим цифрам. По данным <a href="https://hh.ru" target="_blank" rel="noopener" class="text-emerald-700 hover:underline">hh.ru</a> и опросов: средний бухгалтер для одного ИП — 5 000–8 000 ₽/мес.
+                </p>
+            </div>
+
+            <!-- Сравнительная таблица -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                <!-- Бухгалтер -->
+                <div class="rounded-3xl bg-gradient-to-br from-rose-50 to-white border border-rose-200/60 p-7 sm:p-8 relative">
+                    <div class="absolute top-4 right-4 text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-100 px-3 py-1 rounded-full">Старый способ</div>
+                    <div class="text-4xl mb-4">👨‍💼</div>
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-1">Бухгалтер на аутсорсе</h3>
+                    <p class="text-slate-500 text-sm mb-5">Средний рынок РФ для одного ИП на УСН</p>
+                    <div class="flex items-baseline gap-2 mb-6">
+                        <span class="text-4xl sm:text-5xl font-black text-slate-900 tabular-nums">5 000</span>
+                        <span class="text-lg text-slate-500 font-medium">–</span>
+                        <span class="text-4xl sm:text-5xl font-black text-slate-900 tabular-nums">8 000</span>
+                        <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+                    </div>
+                    <ul class="space-y-2.5 text-sm text-slate-700">
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Ответ через 1–3 дня (или вообще через неделю)</li>
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Передавать чеки руками или email-ом</li>
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Часто только за год вперёд (60–100 тыс ₽)</li>
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Зависишь от расписания и отпусков</li>
+                        <li class="flex gap-2"><span class="text-rose-500 font-bold flex-shrink-0">✗</span> Не подскажет «что если я открою ещё один ОКВЭД»</li>
+                    </ul>
+                </div>
+
+                <!-- AI-Бухгалтер -->
+                <div class="rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-7 sm:p-8 relative shadow-2xl shadow-emerald-500/20 text-white">
+                    <div class="absolute top-4 right-4 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-amber-300 px-3 py-1 rounded-full">Новый способ</div>
+                    <div class="text-4xl mb-4">🧮</div>
+                    <h3 class="text-xl sm:text-2xl font-black text-white mb-1">AI-Бухгалтер</h3>
+                    <p class="text-emerald-100/90 text-sm mb-5">PRO для одного ИП — всё включено</p>
+                    <div class="flex items-baseline gap-2 mb-6">
+                        <span class="text-5xl sm:text-6xl font-black text-white tabular-nums">290</span>
+                        <span class="text-lg text-emerald-100 font-medium">₽/мес</span>
+                    </div>
+                    <ul class="space-y-2.5 text-sm text-emerald-50">
+                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Ответ за 3 секунды, голосом или текстом</li>
+                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Чеки распознаются с фото</li>
+                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Помесячная оплата, отказаться можно в любой день</li>
+                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Доступен 24/7, в отпуске тоже</li>
+                        <li class="flex gap-2"><span class="text-amber-300 font-bold flex-shrink-0">✓</span> Объясняет любую тему по запросу — за тарификацию не возьмёт</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Интерактивный калькулятор экономии -->
+            <div class="rounded-3xl bg-emerald-50 border border-emerald-200 p-7 sm:p-9">
+                <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-2 text-center">Твоя экономия за год</h3>
+                <p class="text-slate-600 text-sm text-center mb-7">Двигай ползунок — увидишь свою экономию</p>
+
+                <label class="block">
+                    <div class="flex justify-between items-baseline mb-2">
+                        <span class="text-sm font-bold text-slate-700">Сколько сейчас платишь бухгалтеру за месяц</span>
+                        <span class="text-sm font-black text-emerald-700 tabular-nums" id="roi-buh-out">5 000 ₽</span>
+                    </div>
+                    <input type="range" id="roi-buh-input" min="0" max="20000" step="500" value="5000"
+                           class="w-full h-2 bg-emerald-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                    <div class="flex justify-between text-xs text-slate-400 mt-1 tabular-nums">
+                        <span>0 ₽</span>
+                        <span>10 000 ₽</span>
+                        <span>20 000 ₽</span>
+                    </div>
+                </label>
+
+                <!-- Результат -->
+                <div class="mt-7 grid grid-cols-3 gap-3 sm:gap-4 text-center">
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white border border-rose-200/60">
+                        <p class="text-xs text-slate-500 mb-1">Платил бы за год</p>
+                        <p class="text-lg sm:text-2xl font-black text-slate-900 tabular-nums" id="roi-old">60 000 ₽</p>
+                    </div>
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white border border-emerald-200">
+                        <p class="text-xs text-slate-500 mb-1">AI-Бухгалтер за год</p>
+                        <p class="text-lg sm:text-2xl font-black text-emerald-700 tabular-nums">3 480 ₽</p>
+                    </div>
+                    <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white">
+                        <p class="text-xs text-emerald-100 mb-1">Сэкономишь</p>
+                        <p class="text-lg sm:text-2xl font-black tabular-nums" id="roi-save">56 520 ₽</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-500 text-center mt-5" id="roi-pct">
+                    Это <strong class="text-emerald-700" id="roi-pct-num">94%</strong> экономии — почти полная стоимость PRO-подписки на 16 лет вперёд.
+                </p>
+
+                <div class="text-center mt-6">
+                    <a href="https://t.me/AI_Buxgalter_USN_bot?start=roi_landing" target="_blank" rel="noopener"
+                       class="btn-primary inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white text-base">
+                        Начать экономить →
+                    </a>
+                </div>
+            </div>
+
+            <p class="text-center text-xs text-slate-400 mt-6 leading-relaxed max-w-2xl mx-auto">
+                Цены бухгалтеров рассчитаны по средним прайсам на hh.ru, freelance-биржах и опросам сообщества «Подслушано бухгалтеры» (Telegram, 47k участников). Реальные цифры могут отличаться в зависимости от региона и сложности учёта.
+            </p>
+        </div>
+    </section>
+
     <!-- ============== СРАВНЕНИЕ С КОНКУРЕНТАМИ ============== -->
     <section class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-emerald-50/40 to-white">
         <div class="max-w-5xl mx-auto">
@@ -1164,8 +1345,14 @@
                 </div>
             </div>
 
-            <div class="text-center mt-10">
+            <div class="text-center mt-10 space-y-3">
                 <p class="text-slate-600 text-sm">🆓 Также есть <strong class="text-emerald-700">бесплатный тариф навсегда</strong> — 5 AI-вопросов в день, базовый расчёт УСН, налоговый календарь</p>
+                <p class="text-xs text-slate-500 leading-relaxed max-w-2xl mx-auto">
+                    💚 <strong>Возврат 14 дней:</strong> если в первые 2 недели сделал не больше 5 запросов — вернём деньги полностью. После — пропорциональный возврат за неоплаченные дни. Подробности в <a href="/legal#offer" class="text-emerald-700 hover:underline font-medium">Публичной Оферте</a>.
+                </p>
+                <p class="text-xs text-slate-400">
+                    Подписка автоматически продлевается каждый месяц. Отменить можно в любой момент через бота — без штрафов и звонков в поддержку.
+                </p>
             </div>
         </div>
     </section>
@@ -1227,6 +1414,81 @@
                         <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <p class="mt-4 text-slate-600 leading-relaxed">Веб-сайт с полноценным дашбордом — через 4 недели. Telegram-бот уже работает. Мобильное приложение (iOS+Android) — Q3 2026. Подпишись на бота — пришлём личное уведомление как только запустимся.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>А если бот ошибётся в расчёте — кто заплатит штраф?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">По <a href="/legal#terms" class="text-emerald-700 hover:underline font-medium">условиям использования</a> сервис носит справочный характер — итоговая ответственность за поданную декларацию на тебе. Но бот считает по чётким формулам НК РФ, и все цифры ты видишь до уплаты. На практике точность 99,9%+. Перед подачей крупных сумм (от 100к) рекомендуем перепроверить у бухгалтера за 500–1000 ₽.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Можно ли вернуть деньги если не подойдёт?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Да. В первые <strong>14 дней</strong> с первой оплаты — полный возврат, если ты сделал не больше 5 запросов в боте. После — пропорциональный возврат за неоплаченные дни месяца. Подробности в <a href="/legal#offer" class="text-emerald-700 hover:underline font-medium">Публичной Оферте</a>.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Что с НДС если у меня доход больше 20 млн в год?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">С 2025 года ИП на УСН с годовым доходом >20 млн ₽ в предыдущем году обязаны платить НДС. Бот поддерживает выбор ставки: 5% / 7% (без вычета входного НДС) или 22% (с вычетом). Команда <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">/nds</code> покажет какая выгоднее именно тебе с учётом доли закупок с НДС.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Как переключиться с «Доходы» на «Доходы−Расходы» и наоборот?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Смена объекта налогообложения возможна только с 1 января следующего года. Подаётся заявление по форме 26.2-6 до 31 декабря текущего. Бот в декабре сам напомнит, посчитает что выгоднее на основе твоих данных за год и сгенерирует заявление готовое к подаче в ЛК ФНС.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>А если у меня патент / самозанятость / ОСНО — поддерживается?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Сейчас фокус — УСН (95% наших клиентов). <strong>Самозанятость (НПД)</strong> — поддерживаем базово: расчёт НПД 4%/6%, чеки в «Мой Налог». <strong>Патент</strong> — на этапе beta. <strong>ОСНО</strong> — пока не планируем (там нужен отдельный бухгалтер). Если у тебя комбинация (УСН+патент или УСН+самозанятость) — бот корректно разделит доходы.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Кто видит мои данные? Передаёте ли вы их банкам или ФНС?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Никому. Серверы в РФ, данные шифруются. Голосовые сообщения распознаются локально (whisper.cpp на сервере, не в облаке Google/OpenAI). В ФНС, банк или налоговую <strong>ничего не уходит автоматически</strong> — ты сам решаешь когда выгрузить декларацию или ЕНП-уведомление и сам грузишь в ЛК ФНС. Подробности — в <a href="/legal#privacy" class="text-emerald-700 hover:underline font-medium">Политике конфиденциальности</a>.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Можно ли оплатить юр-лицом / по безналу / для нескольких ИП?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Да. Для бухгалтерских компаний (тариф 990 ₽/мес — до 30 клиентов) и MAX (1990 ₽/мес — безлимит) принимаем оплату по реквизитам. Договор + счёт + закрывающие документы — на запрос. Просто напиши на <a href="mailto:alikazakov9@gmail.com" class="text-emerald-700 hover:underline font-medium">alikazakov9@gmail.com</a> с темой «Безнал» и количеством клиентов.</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Как связаться с поддержкой если что-то сломалось?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">3 способа:<br>
+                    1️⃣ В боте — команда <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">/help</code>, ответ за минуты в рабочее время<br>
+                    2️⃣ Email <a href="mailto:alikazakov9@gmail.com" class="text-emerald-700 hover:underline font-medium">alikazakov9@gmail.com</a> — ответ в течение 24 часов<br>
+                    3️⃣ Тариф MAX — приоритетная поддержка с гарантией 1 час в рабочее время МСК</p>
+                </details>
+
+                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                        <span>Что насчёт ОФД и онлайн-кассы?</span>
+                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-slate-600 leading-relaxed">Прямой интеграции с ОФД пока нет — но если у тебя онлайн-касса, ты можешь экспортировать чеки CSV/Excel и загрузить в бот. Бот распознает суммы, даты, контрагентов и автоматически разнесёт по доходам. Поддерживаем форматы: АТОЛ, Эвотор, Штрих-М, МойСклад. Если касса не поддерживается — пришли пример CSV, добавим.</p>
                 </details>
             </div>
         </div>
@@ -1767,6 +2029,55 @@
     })();
     </script>
 
+    <!-- ============== ROI-слайдер ============== -->
+    <script>
+    (function() {
+        'use strict';
+        const input = document.getElementById('roi-buh-input');
+        if (!input) return;
+        const fmt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+        const out = (id) => document.getElementById(id);
+        const elBuh = out('roi-buh-out');
+        const elOld = out('roi-old');
+        const elSave = out('roi-save');
+        const elPctNum = out('roi-pct-num');
+        const elPct = out('roi-pct');
+        const AI_YEAR = 290 * 12; // 3 480 ₽
+
+        function update() {
+            const perMonth = parseInt(input.value, 10) || 0;
+            const perYear = perMonth * 12;
+            const save = Math.max(0, perYear - AI_YEAR);
+            const pct = perYear > 0 ? Math.round(save / perYear * 100) : 0;
+
+            elBuh.textContent = fmt.format(perMonth) + ' ₽';
+            elOld.textContent = fmt.format(perYear) + ' ₽';
+            elSave.textContent = fmt.format(save) + ' ₽';
+            elPctNum.textContent = pct + '%';
+
+            if (perYear === 0) {
+                elPct.innerHTML = 'Если сейчас платишь 0 ₽ — самое время начать с AI вместо «потом разберусь». Цена ошибки в декларации = 5 000 ₽ штрафа.';
+            } else if (perYear < AI_YEAR) {
+                elPct.innerHTML = 'AI стоит чуть дороже — но даёт ответ за 3 секунды и не уходит в отпуск.';
+            } else {
+                const monthsPaidBack = Math.round(perYear / 290);
+                elPct.innerHTML = `Это <strong class="text-emerald-700">${pct}%</strong> экономии — почти полная стоимость PRO-подписки на ${Math.round(monthsPaidBack/12)} лет вперёд.`;
+            }
+        }
+        input.addEventListener('input', update);
+        update();
+
+        // Tracking
+        let interactedOnce = false;
+        input.addEventListener('change', () => {
+            if (!interactedOnce && window.aibuhTrack) {
+                window.aibuhTrack('roi_slider_used', { value: input.value });
+                interactedOnce = true;
+            }
+        });
+    })();
+    </script>
+
     <!-- ============== Расширенный tracking событий (Vercel Analytics + Я.Метрика) ============== -->
     <script>
     (function() {
@@ -1787,6 +2098,7 @@
         const sectionMap = {
             'calculator': 'view_calculator',
             'features': 'view_features',
+            'roi': 'view_roi',
             'notify': 'view_notify',
         };
         const seenSections = new Set();
