@@ -57,8 +57,8 @@
           href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459W1hyyTh89ZNpQ.woff2"
           crossorigin>
 
-    <!-- Preload Tailwind CDN — браузер начинает качать параллельно вместо ожидания HTML-парсера -->
-    <link rel="preload" as="script" href="https://cdn.tailwindcss.com">
+    <!-- Tailwind: статический pre-built CSS (~40 КБ vs 124 КБ JIT-runtime) -->
+    <link rel="stylesheet" href="/dist/tailwind.css">
 
     <!-- Google Fonts CSS — non-blocking через media-trick, fallback в <noscript> -->
     <link rel="stylesheet"
@@ -82,56 +82,6 @@
         ym(YOUR_COUNTER_ID, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/YOUR_COUNTER_ID" style="position:absolute; left:-9999px;" alt="" /></div></noscript> -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Montserrat', 'system-ui', 'sans-serif'] },
-                    colors: {
-                        mint: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            300: '#86efac',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d',
-                            950: '#052e16',
-                        }
-                    },
-                    animation: {
-                        'fade-up': 'fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards',
-                        'gradient': 'gradient 12s ease infinite',
-                        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeUp: {
-                            '0%': { opacity: '0', transform: 'translateY(24px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        gradient: {
-                            '0%, 100%': { 'background-position': '0% 50%' },
-                            '50%': { 'background-position': '100% 50%' },
-                        },
-                        pulseSoft: {
-                            '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '0.6' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-12px)' },
-                        },
-                    }
-                }
-            }
-        }
-    </script>
 
     <style>
         body {

@@ -1,0 +1,15 @@
+{
+  "name": "aibuhgalter-landing",
+  "version": "1.0.0",
+  "description": "AI-Бухгалтер landing page",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./dist/tailwind.css --minify",
+    "build": "npm run build:css",
+    "watch": "tailwindcss -i ./src/input.css -o ./dist/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "@tailwindcss/typography": "^0.5.15"
+  }
+}

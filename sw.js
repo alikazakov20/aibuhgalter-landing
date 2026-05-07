@@ -2,7 +2,7 @@
 // Стратегии: cache-first для статики, network-first для документа
 // Версия меняется при деплое — старые кеши автоматически чистятся
 
-const CACHE_VERSION = 'v2-2026-05-07';
+const CACHE_VERSION = 'v3-2026-05-07';
 const STATIC_CACHE = `aibuh-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `aibuh-runtime-${CACHE_VERSION}`;
 
@@ -12,6 +12,7 @@ const PRECACHE_ASSETS = [
     '/index.html',
     '/legal',
     '/legal.html',
+    '/dist/tailwind.css',
     '/manifest.json',
     '/favicon.svg',
     '/favicon-32.png',

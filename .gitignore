@@ -18,3 +18,8 @@
 
 # Vercel
 .vercel
+
+# Node (Tailwind билд)
+node_modules/
+package-lock.json
+# dist/tailwind.css коммитится в git — Vercel отдаёт как статику
