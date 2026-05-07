@@ -1064,9 +1064,12 @@
                 </h2>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-6 lg:gap-8 relative">
+            <!-- Mobile: карусель из 2 плашек со scroll-snap. Desktop: grid 2 колонки -->
+            <div class="relative">
+            <div class="carousel-scroll-mask -mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div class="flex md:grid md:grid-cols-2 gap-6 lg:gap-8 px-4 sm:px-0 pr-8 sm:pr-0">
                 <!-- БОЛЬ -->
-                <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-rose-50 to-orange-50/40 border-2 border-rose-100 shadow-xl shadow-rose-200/40 relative overflow-hidden">
+                <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-rose-50 to-orange-50/40 border-2 border-rose-100 shadow-xl shadow-rose-200/40 relative overflow-hidden shrink-0 w-[95%] md:w-auto snap-center">
                     <div class="absolute top-0 left-0 w-32 h-32 bg-rose-200/30 rounded-full -translate-y-12 -translate-x-12 blur-3xl"></div>
 
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 mb-6 rounded-full bg-rose-700 text-white text-xs font-black uppercase tracking-wider relative">
@@ -1099,7 +1102,7 @@
                 </div>
 
                 <!-- РЕШЕНИЕ -->
-                <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-100 via-emerald-50 to-mint-100 border-2 border-emerald-300 shadow-2xl shadow-emerald-300/40 relative overflow-hidden">
+                <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-100 via-emerald-50 to-mint-100 border-2 border-emerald-300 shadow-2xl shadow-emerald-300/40 relative overflow-hidden shrink-0 w-[95%] md:w-auto snap-center">
                     <div class="absolute top-0 right-0 w-40 h-40 bg-emerald-300/30 rounded-full -translate-y-16 translate-x-16 blur-3xl"></div>
                     <div class="absolute bottom-0 left-0 w-32 h-32 bg-mint-300/30 rounded-full translate-y-12 -translate-x-12 blur-3xl"></div>
 
@@ -1132,6 +1135,10 @@
                     </ul>
                 </div>
             </div>
+            </div>
+            <!-- Анимированный chevron — намёк «свайпни вправо» -->
+            <button type="button" class="carousel-chevron" aria-label="Прокрутить к следующим карточкам"></button>
+            </div>
         </div>
     </section>
 
@@ -1155,66 +1162,66 @@
             <div class="relative">
             <div class="carousel-scroll-mask -mx-4 sm:mx-0 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div class="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 px-4 sm:px-0 pr-8 sm:pr-0">
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🎙️</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Голосовой ввод</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🎙️</div>
+                        <h3 class="card-title text-lg mb-2">Голосовой ввод</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             «Получил 50 тыс от Ромашки» — бот сам разберёт и запишет. Голос остаётся у тебя.
                         </p>
                     </div>
 
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">📸</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">OCR чеков и счетов</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📸</div>
+                        <h3 class="card-title text-lg mb-2">OCR чеков и счетов</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             Фото чека → AI узнаёт сумму, дату, продавца. Подскажет категорию для Д−Р.
                         </p>
                     </div>
 
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🏦</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Импорт из любого банка</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🏦</div>
+                        <h3 class="card-title text-lg mb-2">Импорт из любого банка</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             Т-Банк, Сбер, Альфа — выписка автоматом разбивается на доходы и расходы.
                         </p>
                     </div>
 
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🧠</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">AI-чат на твоих данных</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🧠</div>
+                        <h3 class="card-title text-lg mb-2">AI-чат на твоих данных</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             «Сколько платить за Q2?» — AI знает режим, регион, цифры. Считает по НК РФ 2026.
                         </p>
                     </div>
 
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">📅</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Налоговый календарь</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📅</div>
+                        <h3 class="card-title text-lg mb-2">Налоговый календарь</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             Авансы, взносы, декларация — напомним за 14/7/3/1 день до каждой даты.
                         </p>
                     </div>
 
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">📄</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Декларация и КУДиР</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📄</div>
+                        <h3 class="card-title text-lg mb-2">Декларация и КУДиР</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             Автозаполнение КНД 1152017 + книги учёта. Экспорт PDF/Excel. Подаёшь сам.
                         </p>
                     </div>
 
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🧾</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">ЕНП-уведомления</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🧾</div>
+                        <h3 class="card-title text-lg mb-2">ЕНП-уведомления</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             Готовый XML для ЕНС. Загружаешь в ЛК ФНС — налог распределится правильно.
                         </p>
                     </div>
 
-                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🛡️</div>
-                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Любой банк через CSV</h3>
-                        <p class="body-card text-sm">
+                    <div class="card p-6 rounded-2xl shrink-0 w-[95%] sm:w-auto snap-center min-h-[15rem] sm:min-h-0">
+                        <div class="w-14 h-14 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🛡️</div>
+                        <h3 class="card-title text-lg mb-2">Любой банк через CSV</h3>
+                        <p class="body-card text-[15px] leading-relaxed">
                             Не привязываем к Сберу/Контуру. Твои данные — только у тебя.
                         </p>
                     </div>
@@ -1689,10 +1696,12 @@
                 </p>
             </div>
 
-            <!-- Сравнительная таблица -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 items-stretch">
+            <!-- Сравнительная таблица — на mobile карусель из 2-х карточек, на desktop grid 2 колонки -->
+            <div class="relative mb-10">
+            <div class="carousel-scroll-mask -mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div class="flex md:grid md:grid-cols-2 gap-4 px-4 sm:px-0 pr-8 sm:pr-0 md:items-stretch">
                 <!-- Бухгалтер на аутсорсе -->
-                <div class="rounded-3xl bg-gradient-to-br from-rose-50 to-white border border-rose-200/60 p-7 sm:p-8 pt-12 sm:pt-12 relative flex flex-col">
+                <div class="rounded-3xl bg-gradient-to-br from-rose-50 to-white border border-rose-200/60 p-7 sm:p-8 pt-12 sm:pt-12 relative flex flex-col shrink-0 w-[95%] md:w-auto snap-center">
                     <div class="absolute top-4 right-4 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-100 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap">Старый способ</div>
                     <div class="text-4xl mb-4">👨‍💼</div>
                     <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-1">Бухгалтер на аутсорсе</h3>
@@ -1716,7 +1725,7 @@
                 </div>
 
                 <!-- AI-Бухгалтер — усиленная версия -->
-                <div class="rounded-3xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 p-7 sm:p-8 pt-12 sm:pt-12 relative shadow-2xl shadow-emerald-500/30 text-white flex flex-col overflow-hidden">
+                <div class="rounded-3xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 p-7 sm:p-8 pt-12 sm:pt-12 relative shadow-2xl shadow-emerald-500/30 text-white flex flex-col overflow-hidden shrink-0 w-[95%] md:w-auto snap-center">
                     <!-- Декоративные пятна -->
                     <div class="absolute top-0 right-0 w-48 h-48 bg-amber-300/10 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
@@ -1773,6 +1782,10 @@
                         </p>
                     </div>
                 </div>
+            </div>
+            </div>
+            <!-- Анимированный chevron — намёк «свайпни вправо» -->
+            <button type="button" class="carousel-chevron" aria-label="Прокрутить к следующим карточкам"></button>
             </div>
 
             <!-- Интерактивный калькулятор экономии -->
