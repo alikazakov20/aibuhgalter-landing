@@ -3291,5 +3291,82 @@
     }
     </script>
 
+    <!-- ============== Cookie Banner (152-ФЗ + GDPR) ============== -->
+    <!-- Показываем при первом визите. Сохраняем выбор в localStorage. -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-[60] hidden px-3 sm:px-4 pb-3 sm:pb-4">
+        <div class="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-2xl p-4 sm:p-5 animate-fade-up">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div class="flex-1 text-sm text-gray-700">
+                    <p class="font-semibold text-gray-900 mb-1 flex items-center gap-2">
+                        <span aria-hidden="true">🍪</span>
+                        <span>Мы используем cookies</span>
+                    </p>
+                    <p class="leading-relaxed">
+                        Технические — для работы сайта, аналитические — для улучшения сервиса.
+                        Подробнее в <a href="/legal#cookie" class="text-mint-600 hover:underline font-medium">Политике cookies</a>.
+                    </p>
+                </div>
+                <div class="flex gap-2 flex-shrink-0 w-full sm:w-auto">
+                    <button id="cookie-decline" type="button"
+                            class="flex-1 sm:flex-none px-4 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium">
+                        Только нужные
+                    </button>
+                    <button id="cookie-accept" type="button"
+                            class="flex-1 sm:flex-none px-5 py-2 text-sm bg-mint-500 text-white rounded-lg hover:bg-mint-600 transition font-semibold shadow-sm">
+                        Принять все
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ============== Cookie Consent Logic ==============
+    // 152-ФЗ: согласие на обработку cookies требуется для аналитики/трекеров.
+    // Технические cookies (сессия, безопасность) работают без согласия.
+    (function () {
+        var KEY = 'aibuh_cookie_consent';
+        var KEY_DATE = 'aibuh_cookie_consent_date';
+        var banner = document.getElementById('cookie-banner');
+        if (!banner) return;
+
+        // Прочитать предыдущий выбор
+        var choice = null;
+        try { choice = localStorage.getItem(KEY); } catch (e) { /* приватный режим */ }
+
+        if (!choice) {
+            // Показываем плашку с задержкой 1.5 сек чтобы не отвлекать сразу
+            setTimeout(function () { banner.classList.remove('hidden'); }, 1500);
+        } else {
+            applyConsent(choice);
+        }
+
+        // Привязка кнопок
+        var btnAccept = document.getElementById('cookie-accept');
+        var btnDecline = document.getElementById('cookie-decline');
+        if (btnAccept) btnAccept.addEventListener('click', function () { save('accepted'); });
+        if (btnDecline) btnDecline.addEventListener('click', function () { save('declined'); });
+
+        function save(value) {
+            try {
+                localStorage.setItem(KEY, value);
+                localStorage.setItem(KEY_DATE, new Date().toISOString());
+            } catch (e) { /* localStorage недоступен — продолжаем без сохранения */ }
+            banner.classList.add('hidden');
+            applyConsent(value);
+            // Трекинг согласия (если аналитика разрешена)
+            if (value === 'accepted' && window.va && typeof window.va === 'function') {
+                window.va('event', { name: 'cookie_consent', data: { choice: 'accepted' } });
+            }
+        }
+
+        function applyConsent(value) {
+            // Глобальный флаг для остального трекинга — если 'declined',
+            // другие скрипты должны проверять window.__noAnalytics и не отправлять данные.
+            window.__noAnalytics = (value === 'declined');
+        }
+    })();
+    </script>
+
 </body>
 </html>
