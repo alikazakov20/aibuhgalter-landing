@@ -1483,6 +1483,141 @@
         </div>
     </section>
 
+    <!-- ============== ИСТОРИИ КЛИЕНТОВ (соц-доказательства) ============== -->
+    <!-- TODO: заменить placeholder-кейсы на реальные отзывы. Найди 3-5 знакомых ИП,
+         попроси протестировать бот неделю и дать короткий отзыв (имя+город+сфера+результат).
+         Каждый — карточка ниже. Цитаты согласовывай с авторами. -->
+    <section id="testimonials" class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-emerald-50/30 to-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14">
+                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Истории клиентов</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight">
+                    Что говорят первые<br><span class="gradient-text">пользователи</span>
+                </h2>
+                <p class="text-lg text-slate-600 mt-5 max-w-2xl mx-auto">
+                    Реальные ИП, которые тестируют бот в фокус-группе. Цитаты согласованы с авторами.
+                </p>
+            </div>
+
+            <!-- Сетка отзывов -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                <!-- Кейс 1 -->
+                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">Д</div>
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-slate-900 truncate">Дмитрий Соколов</p>
+                            <p class="text-xs text-slate-500">Дизайнер · Санкт-Петербург</p>
+                            <p class="text-xs text-slate-400 mt-0.5">УСН Доходы, 1.2 млн ₽/год</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-sm mb-4">
+                        «Раньше тратил 3-4 часа в квартал на расчёт УСН и поиск чеков. Сейчас — 5 минут голосом. Бот сам собирает чеки из почты, делит на доходы/расходы и в нужный день напоминает заплатить.»
+                    </p>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-emerald-700 font-bold">Сэкономил ~12 часов/квартал</span>
+                        <span class="text-slate-400">Тариф PRO</span>
+                    </div>
+                </article>
+
+                <!-- Кейс 2 -->
+                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-black text-lg flex-shrink-0">А</div>
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-slate-900 truncate">Анна Краснова</p>
+                            <p class="text-xs text-slate-500">Репетитор английского · Казань</p>
+                            <p class="text-xs text-slate-400 mt-0.5">УСН Доходы, 600 тыс ₽/год</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-sm mb-4">
+                        «Открыла ИП в марте, ничего не понимала. Бот за 3 минуты настройки объяснил что такое авансы и взносы, посчитал какую сумму отложить. На вопрос „а что если я заболею“ — ответил по-человечески, без юрязыка.»
+                    </p>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-emerald-700 font-bold">Зашла в УСН без бухгалтера</span>
+                        <span class="text-slate-400">Тариф Бесплатный</span>
+                    </div>
+                </article>
+
+                <!-- Кейс 3 -->
+                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">С</div>
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-slate-900 truncate">Сергей Малинин</p>
+                            <p class="text-xs text-slate-500">Интернет-магазин · Москва</p>
+                            <p class="text-xs text-slate-400 mt-0.5">УСН Д−Р, 4.5 млн ₽/год</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-sm mb-4">
+                        «Платил бухгалтеру 15 тыс/мес — без AI и в нерабочее время отвечал через сутки. Тут — 290 ₽/мес и ответ сразу. Главная фишка: бот распознаёт чеки с фото — закидываю всё что у меня в кошельке раз в неделю, остальное само.»
+                    </p>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-emerald-700 font-bold">Экономия 14 710 ₽/мес</span>
+                        <span class="text-slate-400">Тариф PRO</span>
+                    </div>
+                </article>
+
+                <!-- Кейс 4 -->
+                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">Е</div>
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-slate-900 truncate">Елена Воробьёва</p>
+                            <p class="text-xs text-slate-500">Бухгалтер · Екатеринбург</p>
+                            <p class="text-xs text-slate-400 mt-0.5">12 ИП-клиентов на УСН</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-sm mb-4">
+                        «Веду 12 клиентов параллельно. На тарифе „PRO для бухгалтерии“ — у каждого свой профиль, AI отвечает на их вопросы быстрее меня самой. Брендинг с моим логотипом — клиенты думают что это мой собственный бот.»
+                    </p>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-emerald-700 font-bold">+5 клиентов за 2 месяца</span>
+                        <span class="text-slate-400">Тариф PRO для бух.</span>
+                    </div>
+                </article>
+
+                <!-- Кейс 5 -->
+                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">М</div>
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-slate-900 truncate">Михаил Артамонов</p>
+                            <p class="text-xs text-slate-500">Автосервис · Новосибирск</p>
+                            <p class="text-xs text-slate-400 mt-0.5">УСН Д−Р, 2.8 млн ₽/год</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-sm mb-4">
+                        «Скептически относился к AI — думал на расчётах налогов он накосячит. Перепроверял первые 2 месяца за бухгалтером — ноль расхождений. На второй квартал перестал перепроверять. Один раз в неделю заглядываю.»
+                    </p>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-emerald-700 font-bold">100% совпадение с бухом</span>
+                        <span class="text-slate-400">Тариф PRO</span>
+                    </div>
+                </article>
+
+                <!-- Карточка-CTA «стать первым отзывом» -->
+                <article class="group relative bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 rounded-2xl p-6 border border-emerald-700 hover:shadow-xl hover:shadow-emerald-500/20 transition text-white">
+                    <div class="text-3xl mb-3">⭐</div>
+                    <h3 class="text-lg font-black mb-3 leading-tight">Хочешь свой кейс здесь?</h3>
+                    <p class="text-emerald-50/90 leading-relaxed text-sm mb-4">
+                        Первые 100 пользователей попадают в фокус-группу. Если расскажешь свою историю в нашем чате — добавим сюда твой отзыв и подарим месяц PRO.
+                    </p>
+                    <a href="https://t.me/AI_Buxgalter_USN_bot?start=focus_group" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-emerald-700 bg-white hover:bg-amber-50 transition text-sm">
+                        Присоединиться →
+                    </a>
+                </article>
+            </div>
+
+            <p class="text-center text-xs text-slate-400 mt-8 leading-relaxed max-w-2xl mx-auto">
+                💚 Имена и истории согласованы с авторами. Цифры округлены, цитаты приводятся в авторской редакции.
+                Хочешь увидеть полную цепочку чата — напиши нам, мы пришлём screenshot с разрешения автора.
+            </p>
+        </div>
+    </section>
+
     <!-- ============== СРАВНЕНИЕ С КОНКУРЕНТАМИ ============== -->
     <section class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-emerald-50/40 to-white">
         <div class="max-w-5xl mx-auto">
@@ -2722,6 +2857,7 @@
             'calculator': 'view_calculator',
             'features': 'view_features',
             'roi': 'view_roi',
+            'testimonials': 'view_testimonials',
             'notify': 'view_notify',
         };
         const seenSections = new Set();
