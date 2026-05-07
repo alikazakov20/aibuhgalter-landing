@@ -51,7 +51,20 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <!-- Preload главного cyrillic-шрифта (variable font, все веса в одном файле) — снимает render-blocking ~400мс -->
+    <link rel="preload" as="font" type="font/woff2"
+          href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459W1hyyTh89ZNpQ.woff2"
+          crossorigin>
+
+    <!-- Preload Tailwind CDN — браузер начинает качать параллельно вместо ожидания HTML-парсера -->
+    <link rel="preload" as="script" href="https://cdn.tailwindcss.com">
+
+    <!-- Google Fonts CSS — non-blocking через media-trick, fallback в <noscript> -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap"
+          media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap"></noscript>
 
     <!-- ============== АНАЛИТИКА ============== -->
     <!-- Vercel Web Analytics (бесплатно, без cookie, GDPR-ок). Включить в Vercel Dashboard → Analytics → Enable -->
