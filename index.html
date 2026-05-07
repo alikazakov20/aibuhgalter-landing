@@ -1295,6 +1295,22 @@
                             </button>
                         </form>
 
+                        <label class="flex items-start gap-2 mt-3 cursor-pointer text-xs text-emerald-50/90 leading-relaxed">
+                            <input type="checkbox"
+                                   id="notify-consent"
+                                   form="notify-form"
+                                   name="consent"
+                                   value="given"
+                                   required
+                                   checked
+                                   class="mt-0.5 w-4 h-4 accent-white cursor-pointer flex-shrink-0">
+                            <span>
+                                Согласен с обработкой персональных данных по
+                                <a href="/legal#privacy" target="_blank" rel="noopener" class="underline hover:text-white">Политике конфиденциальности</a>
+                                (152-ФЗ).
+                            </span>
+                        </label>
+
                         <div id="notify-success"
                              class="hidden bg-white/20 backdrop-blur border border-white/40 rounded-xl px-6 py-5 text-white font-medium"
                              role="status"
@@ -1333,7 +1349,16 @@
                 </div>
             </div>
 
-            <div class="mt-8 pt-6 border-t border-slate-100 text-xs text-slate-500 text-center max-w-3xl mx-auto leading-relaxed">
+            <!-- Юр-ссылки -->
+            <div class="mt-6 pt-6 border-t border-slate-100 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
+                <a href="/legal#privacy" class="hover:text-emerald-700 transition">Политика конфиденциальности</a>
+                <a href="/legal#terms" class="hover:text-emerald-700 transition">Условия использования</a>
+                <a href="/legal#offer" class="hover:text-emerald-700 transition">Публичная оферта</a>
+                <a href="/legal#consent" class="hover:text-emerald-700 transition">Согласие на обработку ПДн</a>
+                <a href="/legal#about" class="hover:text-emerald-700 transition">О продавце</a>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-slate-100 text-xs text-slate-500 text-center max-w-3xl mx-auto leading-relaxed">
                 AI-Бухгалтер не заменяет профессионального бухгалтера. Сервис носит справочный характер. Для юридически значимых решений рекомендуем проконсультироваться с квалифицированным специалистом. Все расчёты соответствуют Налоговому кодексу РФ на 2026 год.
             </div>
         </div>
@@ -1728,6 +1753,144 @@
 
         // Первый расчёт если поля заполнены (например 14 348 в contrib по умолчанию)
         recalc();
+    })();
+    </script>
+
+    <!-- ============== Расширенный tracking событий (Vercel Analytics + Я.Метрика) ============== -->
+    <script>
+    (function() {
+        'use strict';
+
+        // Унифицированная отправка события в обе системы аналитики
+        function track(name, data = {}) {
+            try {
+                if (window.va) window.va('event', { name, ...data });
+                if (window.ym) window.ym(window.YM_COUNTER_ID || 0, 'reachGoal', name, data);
+            } catch (e) { /* silent — аналитика не должна ломать UX */ }
+        }
+        // Экспорт для использования из других скриптов
+        window.aibuhTrack = track;
+
+        // ===== view_section через IntersectionObserver =====
+        // Когда секция попадает в viewport на 50% — фиксируем просмотр (один раз)
+        const sectionMap = {
+            'calculator': 'view_calculator',
+            'features': 'view_features',
+            'notify': 'view_notify',
+        };
+        const seenSections = new Set();
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting || entry.intersectionRatio < 0.5) return;
+                const id = entry.target.id;
+                if (seenSections.has(id)) return;
+                const eventName = sectionMap[id];
+                if (eventName) {
+                    track(eventName);
+                    seenSections.add(id);
+                }
+            });
+        }, { threshold: [0.5] });
+
+        Object.keys(sectionMap).forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+
+        // Также трекаем секции без id — по содержимому h2 (Pricing, FAQ)
+        const namedSectionMap = [
+            { selector: 'h2', text: /тариф/i, event: 'view_pricing' },
+            { selector: 'h2', text: /сомнев|сначала/i, event: 'view_faq' },
+            { selector: 'h2', text: /сравнение|чем мы лучше/i, event: 'view_comparison' },
+        ];
+        namedSectionMap.forEach(({ selector, text, event }) => {
+            const heading = Array.from(document.querySelectorAll(selector))
+                .find((el) => text.test(el.textContent));
+            if (!heading) return;
+            const section = heading.closest('section');
+            if (!section || seenSections.has(event)) return;
+            const obs = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && entries[0].intersectionRatio >= 0.5) {
+                    if (!seenSections.has(event)) {
+                        track(event);
+                        seenSections.add(event);
+                    }
+                }
+            }, { threshold: [0.5] });
+            obs.observe(section);
+        });
+
+        // ===== Click events =====
+        // Делегирование через document — ловим клики на любые ссылки
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href]');
+            if (!link) return;
+            const href = link.getAttribute('href') || '';
+
+            // Telegram CTA
+            if (href.includes('t.me/AI_Buxgalter_USN_bot')) {
+                const placement = link.closest('section')?.id ||
+                                  link.closest('header') ? 'header' :
+                                  link.closest('footer') ? 'footer' : 'unknown';
+                track('cta_telegram_clicked', { placement, href });
+            }
+
+            // Email-ссылка
+            if (href.startsWith('mailto:')) {
+                track('cta_email_clicked', { href });
+            }
+
+            // Юр-ссылки в футере
+            if (href.startsWith('/legal')) {
+                const section = href.split('#')[1] || 'top';
+                track('legal_link_clicked', { section });
+            }
+
+            // Якорь на калькулятор
+            if (href === '#calculator') {
+                track('cta_calculator_clicked');
+            }
+        });
+
+        // ===== FAQ — какие вопросы открывают =====
+        document.querySelectorAll('details').forEach((details) => {
+            details.addEventListener('toggle', () => {
+                if (details.open) {
+                    const question = details.querySelector('summary span')?.textContent?.trim() || '?';
+                    track('faq_opened', { question: question.slice(0, 80) });
+                }
+            });
+        });
+
+        // ===== Scroll depth — 25/50/75/100% =====
+        let maxScroll = 0;
+        const scrollMilestones = [25, 50, 75, 100];
+        const trackedScrolls = new Set();
+        function checkScroll() {
+            const h = document.documentElement;
+            const pct = Math.round((h.scrollTop + window.innerHeight) / h.scrollHeight * 100);
+            if (pct <= maxScroll) return;
+            maxScroll = pct;
+            scrollMilestones.forEach((m) => {
+                if (pct >= m && !trackedScrolls.has(m)) {
+                    trackedScrolls.add(m);
+                    track('scroll_depth', { percent: m });
+                }
+            });
+        }
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(checkScroll, 200);
+        }, { passive: true });
+
+        // ===== Time on page (отметки 30 / 60 / 180 сек) =====
+        [30, 60, 180].forEach((sec) => {
+            setTimeout(() => track('time_on_page', { seconds: sec }), sec * 1000);
+        });
+
+        // Initial pageview
+        track('pageview', { path: location.pathname });
     })();
     </script>
 
