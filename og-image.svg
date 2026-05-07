@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#ecfdf5"/>
+    </linearGradient>
+    <linearGradient id="logo" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="700" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#047857"/>
+      <stop offset="0.5" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <circle cx="1050" cy="120" r="220" fill="#10b981" opacity="0.08"/>
+  <circle cx="150" cy="540" r="180" fill="#10b981" opacity="0.06"/>
+
+  <rect x="80" y="90" width="180" height="180" rx="40" fill="url(#logo)"/>
+  <text x="170" y="226" font-size="118" text-anchor="middle" font-family="Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji">🧮</text>
+
+  <text x="290" y="180" font-family="Montserrat,Helvetica,Arial,sans-serif" font-weight="800" font-size="48" fill="#0f172a">AI-Бухгалтер</text>
+  <text x="290" y="232" font-family="Montserrat,Helvetica,Arial,sans-serif" font-weight="500" font-size="26" fill="#475569">нейропомощник по налогам для ИП на УСН</text>
+
+  <text x="80" y="380" font-family="Montserrat,Helvetica,Arial,sans-serif" font-weight="900" font-size="78" fill="url(#accent)">УСН без бухгалтера</text>
+  <text x="80" y="455" font-family="Montserrat,Helvetica,Arial,sans-serif" font-weight="800" font-size="78" fill="#0f172a">за 290 ₽/мес</text>
+
+  <rect x="80" y="510" width="320" height="68" rx="34" fill="#047857"/>
+  <text x="240" y="554" font-family="Montserrat,Helvetica,Arial,sans-serif" font-weight="700" font-size="26" fill="#ffffff" text-anchor="middle">aibuhgalter.com</text>
+
+  <text x="440" y="555" font-family="Montserrat,Helvetica,Arial,sans-serif" font-weight="600" font-size="22" fill="#475569">Голос • OCR • AI-чат • КУДиР</text>
+</svg>

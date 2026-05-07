@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Запрещаем индексацию служебных файлов и dev-артефактов
+Disallow: /.git/
+Disallow: /.vercel/
+Disallow: /PROMPT_FULL_PROJECT.md
+
+Sitemap: https://aibuhgalter.com/sitemap.xml
