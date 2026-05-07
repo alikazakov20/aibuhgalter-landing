@@ -501,6 +501,13 @@
             }
         }
 
+        /* Sticky-nav: якоря секций не должны уезжать под фиксированную панель */
+        section[id] { scroll-margin-top: 80px; }
+        #top { scroll-margin-top: 0; }
+        /* Прячем скроллбар горизонтального меню в sticky-nav */
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
         /* Калькулятор УСН — активный таб */
         .calc-tab[aria-selected="true"] {
             background: #ffffff;
@@ -896,6 +903,40 @@
         <span id="sound-icon">🔇</span>
         <span class="pulse-ring"></span>
     </button>
+
+    <!-- ============== Sticky-нав (появляется при скролле вниз) ============== -->
+    <div id="sticky-nav"
+         class="fixed top-0 left-0 right-0 z-40 bg-white/85 backdrop-blur-md border-b border-slate-200/60 shadow-sm transform -translate-y-full transition-transform duration-300"
+         aria-label="Навигация">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <a href="#top" class="flex items-center gap-2 hover:opacity-80 transition flex-shrink-0">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-base">🧮</div>
+                <span class="text-sm font-bold text-slate-900 hidden sm:inline">AI-Бухгалтер</span>
+            </a>
+            <nav class="flex items-center gap-1 sm:gap-3 text-xs sm:text-sm overflow-x-auto whitespace-nowrap scrollbar-none">
+                <a href="#how-it-looks" class="sticky-link px-2 py-1 rounded font-bold text-slate-600 hover:text-emerald-700 transition">Как работает</a>
+                <a href="#calculator" class="sticky-link px-2 py-1 rounded font-bold text-slate-600 hover:text-emerald-700 transition">Калькулятор</a>
+                <a href="#roi" class="sticky-link px-2 py-1 rounded font-bold text-slate-600 hover:text-emerald-700 transition hidden sm:inline">Экономия</a>
+                <a href="#testimonials" class="sticky-link px-2 py-1 rounded font-bold text-slate-600 hover:text-emerald-700 transition hidden md:inline">Отзывы</a>
+            </nav>
+            <a href="https://t.me/AI_Buxgalter_USN_bot?start=stickynav" target="_blank" rel="noopener"
+               class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white text-xs sm:text-sm font-bold transition shadow-lg shadow-emerald-500/20">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.643.135-.953l11.566-4.458c.538-.196 1.006.128.832.941z"/></svg>
+                <span>Открыть бота</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ============== Кнопка «Наверх» (плавающая) ============== -->
+    <button id="back-to-top"
+            type="button"
+            aria-label="Вернуться наверх страницы"
+            class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white shadow-2xl shadow-emerald-700/30 flex items-center justify-center text-xl font-black opacity-0 pointer-events-none transition-all duration-300 hover:-translate-y-1">
+        ↑
+    </button>
+
+    <!-- якорь для возврата наверх -->
+    <span id="top" aria-hidden="true"></span>
 
     <!-- Шапка -->
     <header class="relative z-10 px-4 sm:px-6 py-5">
@@ -3064,6 +3105,82 @@
                 interactedOnce = true;
             }
         });
+    })();
+    </script>
+
+    <!-- ============== Sticky-nav + Back-to-top ============== -->
+    <script>
+    (function() {
+        'use strict';
+        const stickyNav = document.getElementById('sticky-nav');
+        const backTop = document.getElementById('back-to-top');
+        if (!stickyNav || !backTop) return;
+
+        const SHOW_AFTER = 500; // пиксели прокрутки
+
+        function update() {
+            const y = window.scrollY || document.documentElement.scrollTop;
+            const show = y > SHOW_AFTER;
+            stickyNav.style.transform = show ? 'translateY(0)' : 'translateY(-100%)';
+            if (show) {
+                backTop.style.opacity = '1';
+                backTop.style.pointerEvents = 'auto';
+            } else {
+                backTop.style.opacity = '0';
+                backTop.style.pointerEvents = 'none';
+            }
+        }
+
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    update();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        backTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.aibuhTrack) window.aibuhTrack('back_to_top_clicked');
+        });
+
+        // Подсветка активного линка по текущей секции (через IntersectionObserver)
+        const links = document.querySelectorAll('.sticky-link');
+        const linkMap = {};
+        links.forEach(l => { const id = l.getAttribute('href').slice(1); if (id) linkMap[id] = l; });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting && e.intersectionRatio >= 0.4) {
+                    const id = e.target.id;
+                    Object.values(linkMap).forEach(l => {
+                        l.classList.remove('text-emerald-700', 'bg-emerald-50');
+                        l.classList.add('text-slate-600');
+                    });
+                    if (linkMap[id]) {
+                        linkMap[id].classList.remove('text-slate-600');
+                        linkMap[id].classList.add('text-emerald-700', 'bg-emerald-50');
+                    }
+                }
+            });
+        }, { threshold: [0.4] });
+
+        Object.keys(linkMap).forEach(id => {
+            const sec = document.getElementById(id);
+            if (sec) observer.observe(sec);
+        });
+
+        // Tracking sticky-nav кликов
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('.sticky-link');
+            if (!link || !window.aibuhTrack) return;
+            window.aibuhTrack('stickynav_clicked', { target: link.getAttribute('href') });
+        });
+
+        update();
     })();
     </script>
 
