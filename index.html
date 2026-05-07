@@ -3479,8 +3479,13 @@
     </script>
 
     <!-- ============== Cookie Banner (152-ФЗ + GDPR) ============== -->
-    <!-- Показываем при первом визите. Сохраняем выбор в localStorage. -->
-    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-[60] hidden px-3 sm:px-4 pb-3 sm:pb-4">
+    <!-- Показываем при первом визите. Сохраняем выбор в localStorage.
+         z-[100] — выше всех остальных fixed элементов (sticky-nav z-40, back-to-top z-40).
+         pb с env(safe-area-inset-bottom) — на iPhone Safari URL bar внизу
+         перехватывает тапы в bottom-0, поэтому отступаем от края. -->
+    <div id="cookie-banner"
+         class="fixed left-0 right-0 z-[100] hidden px-3 sm:px-4"
+         style="bottom: max(0.75rem, env(safe-area-inset-bottom)); pointer-events: auto;">
         <div class="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-2xl p-4 sm:p-5 animate-fade-up">
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <div class="flex-1 text-sm text-gray-700">
