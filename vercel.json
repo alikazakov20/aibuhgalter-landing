@@ -2,6 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "framework": null,
+  "buildCommand": "npm run build:css",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/sw.js",
