@@ -1033,6 +1033,12 @@
                 🆓 Бесплатный тариф навсегда · 💚 От 290 ₽/мес · ⚡ Без оплаты за год
             </p>
 
+            <!-- Live-индикатор статуса бота — обновляется каждые 60с через /api/bot-health -->
+            <p id="bot-status" class="mt-2 inline-flex items-center gap-2 text-xs text-slate-400 animate-fade-up" style="animation-delay: 0.22s;" aria-live="polite">
+                <span id="bot-status-dot" class="inline-block w-2 h-2 rounded-full bg-slate-300 transition-colors duration-300"></span>
+                <span id="bot-status-text">проверяем статус бота…</span>
+            </p>
+
             <!-- Stat-bar (доверие) -->
             <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto animate-fade-up" style="animation-delay: 0.25s;">
                 <div class="p-5 rounded-2xl bg-white border border-slate-100" data-reveal>
@@ -3540,6 +3546,49 @@
 
         // Initial pageview
         track('pageview', { path: location.pathname });
+    })();
+    </script>
+
+    <!-- ============== Live-индикатор статуса бота ============== -->
+    <script>
+    (function () {
+        const dot = document.getElementById('bot-status-dot');
+        const text = document.getElementById('bot-status-text');
+        if (!dot || !text) return;
+
+        async function check() {
+            try {
+                const res = await fetch('/api/bot-health', { cache: 'no-store' });
+                if (!res.ok) throw new Error('fetch failed');
+                const json = await res.json();
+                if (json.online) {
+                    dot.className = 'inline-block w-2 h-2 rounded-full bg-emerald-500 transition-colors duration-300 animate-pulse-soft';
+                    text.textContent = `Бот онлайн · ответ за ${Math.round(json.latency || 0)} мс`;
+                    text.classList.remove('text-slate-400');
+                    text.classList.add('text-emerald-700');
+                } else {
+                    dot.className = 'inline-block w-2 h-2 rounded-full bg-rose-400 transition-colors duration-300';
+                    text.textContent = 'Бот временно недоступен — попробуй через минуту';
+                    text.classList.remove('text-slate-400', 'text-emerald-700');
+                    text.classList.add('text-rose-600');
+                }
+            } catch {
+                // На сетевых ошибках — оставляем серый "проверяем"
+                dot.className = 'inline-block w-2 h-2 rounded-full bg-slate-300 transition-colors duration-300';
+                text.textContent = 'не удалось проверить статус';
+            }
+        }
+
+        // Первый запрос — после первого кадра отрисовки чтобы не блочить LCP
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(check, { timeout: 2000 });
+        } else {
+            setTimeout(check, 1500);
+        }
+        // Периодическая проверка раз в 60с пока вкладка активна
+        setInterval(() => {
+            if (!document.hidden) check();
+        }, 60000);
     })();
     </script>
 
