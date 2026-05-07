@@ -914,14 +914,15 @@
             </div>
 
             <!-- H1 -->
-            <h1 class="hero-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-7 text-slate-900 animate-fade-up" style="animation-delay: 0.05s;">
-                Налоги ИП на УСН —<br>
-                <span class="gradient-text">просто, как чат</span>
+            <h1 class="hero-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 sm:mb-7 text-slate-900 animate-fade-up text-balance" style="animation-delay: 0.05s;">
+                Налоги ИП на УСН —
+                <span class="gradient-text block sm:inline">просто, как чат</span>
             </h1>
 
             <!-- Подзаголовок -->
-            <p class="hero-subtitle text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto mb-10 font-medium animate-fade-up" style="animation-delay: 0.1s;">
-                Нейропомощник, который рассчитает налог за тебя, напомнит о сроках и ответит голосом на любой вопрос по бухгалтерии.<br><br><span class="text-slate-900 font-semibold">Без таблиц. Без бумажек. Без бухгалтера.</span>
+            <p class="hero-subtitle text-base sm:text-xl md:text-2xl max-w-3xl mx-auto mb-8 sm:mb-10 font-medium animate-fade-up text-balance" style="animation-delay: 0.1s;">
+                Нейропомощник, который рассчитает налог за тебя, напомнит о сроках и ответит голосом на любой вопрос по бухгалтерии.
+                <span class="block mt-3 sm:mt-4 text-slate-900 font-semibold">Без таблиц. Без бумажек. Без бухгалтера.</span>
             </p>
 
             <!-- CTA -->
@@ -1049,78 +1050,82 @@
     </section>
 
     <!-- ============== ФИЧИ ============== -->
-    <section id="features" class="relative z-10 px-4 sm:px-6 py-20">
+    <section id="features" class="relative z-10 px-4 sm:px-6 py-16 sm:py-20">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-14">
-                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Что умеет нейропомощник</p>
-                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight">
+            <div class="text-center mb-10 sm:mb-14">
+                <p class="section-eyebrow text-xs sm:text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Что умеет нейропомощник</p>
+                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight text-balance">
                     Бот уже работает. <span class="gradient-text">Вот его суперсилы</span>
                 </h2>
+                <p class="sm:hidden mt-3 text-xs text-slate-400">← свайп карточек →</p>
             </div>
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🎙️</div>
-                    <h3 class="card-title text-lg mb-2">Голосовой ввод</h3>
-                    <p class="body-card">
-                        Скажи в микрофон: «получил 50 тысяч от ООО Ромашка» — бот разберёт и запишет. Локальное распознавание, голос остаётся у тебя.
-                    </p>
-                </div>
+            <!-- Mobile: горизонтальная карусель со scroll-snap. Desktop: grid 4 колонки -->
+            <div class="-mx-4 sm:mx-0 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div class="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 px-4 sm:px-0 pr-8 sm:pr-0">
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🎙️</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Голосовой ввод</h3>
+                        <p class="body-card text-sm">
+                            «Получил 50 тыс от Ромашки» — бот сам разберёт и запишет. Голос остаётся у тебя.
+                        </p>
+                    </div>
 
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📸</div>
-                    <h3 class="card-title text-lg mb-2">OCR чеков и счетов</h3>
-                    <p class="body-card">
-                        Сфотографировал чек — AI распознал сумму, дату, продавца. Подсказывает категорию для УСН «Доходы минус Расходы».
-                    </p>
-                </div>
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">📸</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">OCR чеков и счетов</h3>
+                        <p class="body-card text-sm">
+                            Фото чека → AI узнаёт сумму, дату, продавца. Подскажет категорию для Д−Р.
+                        </p>
+                    </div>
 
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🏦</div>
-                    <h3 class="card-title text-lg mb-2">Импорт из любого банка</h3>
-                    <p class="body-card">
-                        Выписка из Т-Банк, Сбер, Альфа — операции автоматически разбиваются на доходы и расходы. Без ручного ввода.
-                    </p>
-                </div>
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🏦</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Импорт из любого банка</h3>
+                        <p class="body-card text-sm">
+                            Т-Банк, Сбер, Альфа — выписка автоматом разбивается на доходы и расходы.
+                        </p>
+                    </div>
 
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🧠</div>
-                    <h3 class="card-title text-lg mb-2">AI-чат на твоих данных</h3>
-                    <p class="body-card">
-                        «Сколько мне платить за Q2?» — AI знает твой режим, регион, доходы и считает прямо для тебя. По НК РФ 2026.
-                    </p>
-                </div>
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🧠</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">AI-чат на твоих данных</h3>
+                        <p class="body-card text-sm">
+                            «Сколько платить за Q2?» — AI знает режим, регион, цифры. Считает по НК РФ 2026.
+                        </p>
+                    </div>
 
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📅</div>
-                    <h3 class="card-title text-lg mb-2">Налоговый календарь</h3>
-                    <p class="body-card">
-                        Все ключевые даты 2026 — авансы, взносы, декларация. Напомним за 14/7/3/1 день до каждой.
-                    </p>
-                </div>
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">📅</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Налоговый календарь</h3>
+                        <p class="body-card text-sm">
+                            Авансы, взносы, декларация — напомним за 14/7/3/1 день до каждой даты.
+                        </p>
+                    </div>
 
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">📄</div>
-                    <h3 class="card-title text-lg mb-2">Декларация и КУДиР</h3>
-                    <p class="body-card">
-                        Автозаполнение формы КНД 1152017 и книги учёта. Экспорт в PDF и Excel. Подаёшь сам через ЛК ФНС.
-                    </p>
-                </div>
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">📄</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Декларация и КУДиР</h3>
+                        <p class="body-card text-sm">
+                            Автозаполнение КНД 1152017 + книги учёта. Экспорт PDF/Excel. Подаёшь сам.
+                        </p>
+                    </div>
 
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🧾</div>
-                    <h3 class="card-title text-lg mb-2">ЕНП-уведомления</h3>
-                    <p class="body-card">
-                        Сформируем XML-уведомление по ЕНС. Просто загружаешь в ЛК ФНС — налог распределится правильно.
-                    </p>
-                </div>
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🧾</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">ЕНП-уведомления</h3>
+                        <p class="body-card text-sm">
+                            Готовый XML для ЕНС. Загружаешь в ЛК ФНС — налог распределится правильно.
+                        </p>
+                    </div>
 
-                <div class="card p-6 rounded-2xl">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl mb-4">🛡️</div>
-                    <h3 class="card-title text-lg mb-2">Никаких чужих банков</h3>
-                    <p class="body-card">
-                        Работаем с любым банком через CSV. Не привязываем к Сберу или Контуру — твои данные у тебя.
-                    </p>
+                    <div class="card p-5 sm:p-6 rounded-2xl shrink-0 w-[78%] sm:w-auto snap-center">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4">🛡️</div>
+                        <h3 class="card-title text-base sm:text-lg mb-1.5 sm:mb-2">Любой банк через CSV</h3>
+                        <p class="body-card text-sm">
+                            Не привязываем к Сберу/Контуру. Твои данные — только у тебя.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1319,11 +1324,11 @@
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-12">
                 <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Попробуй прямо сейчас</p>
-                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
-                    Бесплатный<br><span class="gradient-text">калькулятор УСН 2026</span>
+                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight text-balance">
+                    Бесплатный <span class="gradient-text">калькулятор УСН 2026</span>
                 </h2>
-                <p class="text-lg text-slate-600 mt-5 max-w-xl mx-auto">
-                    Точный расчёт с учётом региона, авансов, ОС, переноса убытков и минимального налога. Без регистрации. По формулам НК РФ.
+                <p class="text-sm sm:text-lg text-slate-600 mt-3 sm:mt-5 max-w-xl mx-auto text-balance">
+                    Точный расчёт с учётом региона, авансов, ОС и переноса убытков. Без регистрации. По формулам НК РФ.
                 </p>
             </div>
 
@@ -1732,23 +1737,25 @@
     <!-- TODO: заменить placeholder-кейсы на реальные отзывы. Найди 3-5 знакомых ИП,
          попроси протестировать бот неделю и дать короткий отзыв (имя+город+сфера+результат).
          Каждый — карточка ниже. Цитаты согласовывай с авторами. -->
-    <section id="testimonials" class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-emerald-50/30 to-white">
+    <section id="testimonials" class="relative z-10 px-4 sm:px-6 py-16 sm:py-20 bg-gradient-to-b from-emerald-50/30 to-white">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-14">
-                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Истории клиентов</p>
-                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight">
-                    Что говорят первые<br><span class="gradient-text">пользователи</span>
+            <div class="text-center mb-10 sm:mb-14">
+                <p class="section-eyebrow text-xs sm:text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Истории клиентов</p>
+                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight text-balance">
+                    Что говорят первые <span class="gradient-text">пользователи</span>
                 </h2>
-                <p class="text-lg text-slate-600 mt-5 max-w-2xl mx-auto">
-                    Реальные ИП, которые тестируют бот в фокус-группе. Цитаты согласованы с авторами.
+                <p class="text-sm sm:text-lg text-slate-600 mt-3 sm:mt-5 max-w-2xl mx-auto">
+                    Реальные ИП из фокус-группы. Цитаты согласованы с авторами.
                 </p>
+                <p class="md:hidden mt-3 text-xs text-slate-400">← свайп карточек →</p>
             </div>
 
-            <!-- Сетка отзывов -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Mobile: горизонтальная карусель. Desktop: grid 2-3 колонки -->
+            <div class="-mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div class="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 px-4 sm:px-0 pr-8 sm:pr-0">
 
                 <!-- Кейс 1 -->
-                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                <article class="card group relative bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition shrink-0 w-[85%] md:w-auto snap-center" data-testimonial>
                     <div class="flex items-start gap-3 mb-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">Д</div>
                         <div class="min-w-0 flex-1">
@@ -1767,7 +1774,7 @@
                 </article>
 
                 <!-- Кейс 2 -->
-                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                <article class="card group relative bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition shrink-0 w-[85%] md:w-auto snap-center" data-testimonial>
                     <div class="flex items-start gap-3 mb-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-black text-lg flex-shrink-0">А</div>
                         <div class="min-w-0 flex-1">
@@ -1786,7 +1793,7 @@
                 </article>
 
                 <!-- Кейс 3 -->
-                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                <article class="card group relative bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition shrink-0 w-[85%] md:w-auto snap-center" data-testimonial>
                     <div class="flex items-start gap-3 mb-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">С</div>
                         <div class="min-w-0 flex-1">
@@ -1805,7 +1812,7 @@
                 </article>
 
                 <!-- Кейс 4 -->
-                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                <article class="card group relative bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition shrink-0 w-[85%] md:w-auto snap-center" data-testimonial>
                     <div class="flex items-start gap-3 mb-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">Е</div>
                         <div class="min-w-0 flex-1">
@@ -1824,7 +1831,7 @@
                 </article>
 
                 <!-- Кейс 5 -->
-                <article class="card group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition" data-testimonial>
+                <article class="card group relative bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/5 transition shrink-0 w-[85%] md:w-auto snap-center" data-testimonial>
                     <div class="flex items-start gap-3 mb-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">М</div>
                         <div class="min-w-0 flex-1">
@@ -1843,20 +1850,21 @@
                 </article>
 
                 <!-- Карточка-CTA «стать первым отзывом» -->
-                <article class="group relative bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 rounded-2xl p-6 border border-emerald-700 hover:shadow-xl hover:shadow-emerald-500/20 transition text-white">
+                <article class="group relative bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 rounded-2xl p-5 sm:p-6 border border-emerald-700 hover:shadow-xl hover:shadow-emerald-500/20 transition text-white shrink-0 w-[85%] md:w-auto snap-center">
                     <div class="text-3xl mb-3">⭐</div>
                     <h3 class="text-lg font-black mb-3 leading-tight">Хочешь свой кейс здесь?</h3>
                     <p class="text-emerald-50/90 leading-relaxed text-sm mb-4">
-                        Первые 100 пользователей попадают в фокус-группу. Если расскажешь свою историю в нашем чате — добавим сюда твой отзыв и подарим месяц PRO.
+                        Первые 100 пользователей попадают в фокус-группу. Расскажи историю в нашем чате — добавим отзыв и подарим месяц PRO.
                     </p>
                     <a href="https://t.me/AI_Buxgalter_USN_bot?start=focus_group" target="_blank" rel="noopener"
                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-emerald-700 bg-white hover:bg-amber-50 transition text-sm">
                         Присоединиться →
                     </a>
                 </article>
+                </div>
             </div>
 
-            <p class="text-center text-xs text-slate-400 mt-8 leading-relaxed max-w-2xl mx-auto">
+            <p class="text-center text-xs text-slate-400 mt-6 sm:mt-8 leading-relaxed max-w-2xl mx-auto">
                 💚 Имена и истории согласованы с авторами. Цифры округлены, цитаты приводятся в авторской редакции.
                 Хочешь увидеть полную цепочку чата — напиши нам, мы пришлём screenshot с разрешения автора.
             </p>
@@ -1868,8 +1876,8 @@
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-14">
                 <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Честное сравнение</p>
-                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight">
-                    Чем мы лучше<br><span class="gradient-text">Эльбы и Моего Дела</span>
+                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mx-auto leading-tight text-balance">
+                    Чем мы лучше <span class="gradient-text">Эльбы и Моего Дела</span>
                 </h2>
             </div>
 
@@ -1936,75 +1944,79 @@
     </section>
 
     <!-- ============== ТАРИФЫ ============== -->
-    <section class="relative z-10 px-4 sm:px-6 py-20">
+    <section class="relative z-10 px-4 sm:px-6 py-16 sm:py-20">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-14">
-                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Тарифы</p>
-                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+            <div class="text-center mb-10 sm:mb-14">
+                <p class="section-eyebrow text-xs sm:text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Тарифы</p>
+                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight text-balance">
                     Без подвохов. <span class="gradient-text">Ежемесячно.</span>
                 </h2>
-                <p class="text-base sm:text-lg text-slate-600 mt-5 max-w-2xl mx-auto">Никаких годовых обязательств. Никаких скрытых лимитов. Сменить или отменить тариф можно в любой момент.</p>
+                <p class="text-sm sm:text-lg text-slate-600 mt-3 sm:mt-5 max-w-2xl mx-auto">Никаких годовых обязательств. Сменить или отменить — в любой момент.</p>
+                <p class="md:hidden mt-3 text-xs text-slate-400">← свайп тарифов →</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-5">
-                <!-- PRO -->
-                <div class="card p-7 rounded-3xl">
-                    <div class="text-3xl mb-4">💎</div>
-                    <div class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-2">PRO для ИП</div>
-                    <div class="flex items-baseline gap-2 mb-2">
-                        <span class="price-large text-5xl font-black text-slate-900">290</span>
-                        <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+            <!-- Mobile: горизонтальная карусель. Desktop: grid 3 колонки -->
+            <div class="-mx-4 sm:mx-0 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div class="flex md:grid md:grid-cols-3 gap-4 md:gap-5 px-4 sm:px-0 pr-8 sm:pr-0 md:pt-3">
+                    <!-- PRO -->
+                    <div class="card p-6 sm:p-7 rounded-3xl shrink-0 w-[85%] md:w-auto snap-center">
+                        <div class="text-3xl mb-4">💎</div>
+                        <div class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-2">PRO для ИП</div>
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="price-large text-5xl font-black text-slate-900">290</span>
+                            <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+                        </div>
+                        <p class="text-slate-500 text-sm mb-6">Для самостоятельных ИП на УСН</p>
+                        <ul class="space-y-3 text-sm text-slate-700">
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Безлимит AI-чата</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Импорт банка без лимитов</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> OCR чеков и счетов</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Декларация УСН в PDF</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> КУДиР автоматически</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Умные напоминания</li>
+                        </ul>
                     </div>
-                    <p class="text-slate-500 text-sm mb-6">Для самостоятельных ИП на УСН</p>
-                    <ul class="space-y-3 text-sm text-slate-700">
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Безлимит AI-чата</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Импорт банка без лимитов</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> OCR чеков и счетов</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Декларация УСН в PDF</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> КУДиР автоматически</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Умные напоминания</li>
-                    </ul>
-                </div>
 
-                <!-- PRO+ -->
-                <div class="p-7 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white relative shadow-2xl shadow-emerald-500/30 transform md:-translate-y-3">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-400 text-slate-900 text-xs font-black uppercase tracking-wider whitespace-nowrap">⭐ Популярный</div>
-                    <div class="text-3xl mb-4">👑</div>
-                    <div class="text-sm font-bold text-emerald-100 uppercase tracking-wider mb-2">PRO для бухгалтерии</div>
-                    <div class="flex items-baseline gap-2 mb-2">
-                        <span class="price-large text-5xl font-black">990</span>
-                        <span class="text-lg text-emerald-200 font-medium">₽/мес</span>
+                    <!-- PRO+ -->
+                    <div class="p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white relative shadow-2xl shadow-emerald-500/30 md:-translate-y-3 shrink-0 w-[85%] md:w-auto snap-center">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-400 text-slate-900 text-xs font-black uppercase tracking-wider whitespace-nowrap">⭐ Популярный</div>
+                        <div class="text-3xl mb-4">👑</div>
+                        <div class="text-sm font-bold text-emerald-100 uppercase tracking-wider mb-2">PRO для бухгалтерии</div>
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="price-large text-5xl font-black">990</span>
+                            <span class="text-lg text-emerald-200 font-medium">₽/мес</span>
+                        </div>
+                        <p class="text-emerald-100 text-sm mb-6">Для бухгалтеров с несколькими ИП</p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-2"><span class="font-bold">✓</span> До 30 клиентов в аккаунте</li>
+                            <li class="flex gap-2"><span class="font-bold">✓</span> Всё из тарифа PRO</li>
+                            <li class="flex gap-2"><span class="font-bold">✓</span> Брендинг (имя/логотип)</li>
+                            <li class="flex gap-2"><span class="font-bold">✓</span> Реферальная программа</li>
+                            <li class="flex gap-2"><span class="font-bold">✓</span> Premium поддержка</li>
+                        </ul>
                     </div>
-                    <p class="text-emerald-100 text-sm mb-6">Для бухгалтеров с несколькими ИП</p>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex gap-2"><span class="font-bold">✓</span> До 30 клиентов в одном аккаунте</li>
-                        <li class="flex gap-2"><span class="font-bold">✓</span> Всё из тарифа PRO</li>
-                        <li class="flex gap-2"><span class="font-bold">✓</span> Брендинг (имя/логотип)</li>
-                        <li class="flex gap-2"><span class="font-bold">✓</span> Реферальная программа</li>
-                        <li class="flex gap-2"><span class="font-bold">✓</span> Premium поддержка</li>
-                    </ul>
-                </div>
 
-                <!-- MAX -->
-                <div class="card p-7 rounded-3xl">
-                    <div class="text-3xl mb-4">🚀</div>
-                    <div class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-2">MAX</div>
-                    <div class="flex items-baseline gap-2 mb-2">
-                        <span class="price-large text-5xl font-black text-slate-900">1990</span>
-                        <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+                    <!-- MAX -->
+                    <div class="card p-6 sm:p-7 rounded-3xl shrink-0 w-[85%] md:w-auto snap-center">
+                        <div class="text-3xl mb-4">🚀</div>
+                        <div class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-2">MAX</div>
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="price-large text-5xl font-black text-slate-900">1990</span>
+                            <span class="text-lg text-slate-500 font-medium">₽/мес</span>
+                        </div>
+                        <p class="text-slate-500 text-sm mb-6">Для бухгалтерских команд</p>
+                        <ul class="space-y-3 text-sm text-slate-700">
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Безлимит клиентов</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Всё из PRO+</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Ранний доступ к фичам</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Приоритет в очереди AI</li>
+                            <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Личный менеджер</li>
+                        </ul>
                     </div>
-                    <p class="text-slate-500 text-sm mb-6">Для бухгалтерских команд</p>
-                    <ul class="space-y-3 text-sm text-slate-700">
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Безлимит клиентов</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Всё из PRO+</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Ранний доступ к новым фичам</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Приоритет в очереди AI</li>
-                        <li class="flex gap-2"><span class="text-emerald-500 font-bold">✓</span> Индивидуальный менеджер</li>
-                    </ul>
                 </div>
             </div>
 
-            <div class="text-center mt-10 space-y-3">
+            <div class="text-center mt-8 sm:mt-10 space-y-3">
                 <p class="text-slate-600 text-sm">🆓 Также есть <strong class="text-emerald-700">бесплатный тариф навсегда</strong> — 5 AI-вопросов в день, базовый расчёт УСН, налоговый календарь</p>
                 <p class="text-xs text-slate-500 leading-relaxed max-w-2xl mx-auto">
                     💚 <strong>Возврат 14 дней:</strong> если в первые 2 недели сделал не больше 5 запросов — вернём деньги полностью. После — пропорциональный возврат за неоплаченные дни. Подробности в <a href="/legal#offer" class="text-emerald-700 hover:underline font-medium">Публичной Оферте</a>.
@@ -2017,137 +2029,137 @@
     </section>
 
     <!-- ============== FAQ ============== -->
-    <section class="relative z-10 px-4 sm:px-6 py-20 bg-slate-50/40">
+    <section class="relative z-10 px-4 sm:px-6 py-16 sm:py-20 bg-slate-50/40">
         <div class="max-w-3xl mx-auto">
-            <div class="text-center mb-14">
-                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Частые вопросы</p>
-                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+            <div class="text-center mb-8 sm:mb-14">
+                <p class="section-eyebrow text-xs sm:text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Частые вопросы</p>
+                <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight text-balance">
                     Сначала <span class="gradient-text">сомневаешься?</span>
                 </h2>
             </div>
 
-            <div class="space-y-3">
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+            <div class="space-y-2 sm:space-y-3">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>А не накосячит ли AI с моими налогами?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">AI считает по чётким формулам из НК РФ — это не «угадайка». Все цифры ты видишь до уплаты и можешь пересчитать. Важно: для юридически значимых решений рекомендуем подтвердить у бухгалтера. Но для рутины — AI справляется как опытный спец.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">AI считает по чётким формулам из НК РФ — это не «угадайка». Все цифры ты видишь до уплаты и можешь пересчитать. Важно: для юридически значимых решений рекомендуем подтвердить у бухгалтера. Но для рутины — AI справляется как опытный спец.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Чем вы отличаетесь от Эльбы и Моего Дела?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">У нас есть AI-чат — спрашиваешь голосом или текстом, получаешь ответ за 3 секунды с твоими цифрами. У них только формы и таблицы. Плюс мы дешевле в 5–17 раз и без обязательств платить за год вперёд.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">У нас есть AI-чат — спрашиваешь голосом или текстом, получаешь ответ за 3 секунды с твоими цифрами. У них только формы и таблицы. Плюс мы дешевле в 5–17 раз и без обязательств платить за год вперёд.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Что если я открыл ИП недавно и ничего не понимаю?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Это твой кейс на 100%. Бот проведёт по 3-минутной настройке, объяснит что такое УСН простым языком, покажет какие сроки тебя касаются и сколько платить в этом квартале. Никакой подготовки и налоговых знаний не требуется.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Это твой кейс на 100%. Бот проведёт по 3-минутной настройке, объяснит что такое УСН простым языком, покажет какие сроки тебя касаются и сколько платить в этом квартале. Никакой подготовки и налоговых знаний не требуется.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Безопасно ли делиться доходами с ботом?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Данные хранятся на наших серверах (РФ), в зашифрованном виде. Голосовые сообщения распознаются локально и не передаются в облако. Мы не делимся данными ни с банками, ни с налоговой — только ты решаешь что и куда выгружать.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Данные хранятся на наших серверах (РФ), в зашифрованном виде. Голосовые сообщения распознаются локально и не передаются в облако. Мы не делимся данными ни с банками, ни с налоговой — только ты решаешь что и куда выгружать.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Я бухгалтер, веду 10 ИП. Подходит ли мне?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Тариф «PRO для бухгалтерии» за 990 ₽ — до 30 клиентов в одном аккаунте, плюс брендинг твоего имени/логотипа и реферальная программа. AI помогает быстрее реагировать на клиентские вопросы. Если клиентов больше 30 — есть тариф MAX без лимита.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Тариф «PRO для бухгалтерии» за 990 ₽ — до 30 клиентов в одном аккаунте, плюс брендинг твоего имени/логотипа и реферальная программа. AI помогает быстрее реагировать на клиентские вопросы. Если клиентов больше 30 — есть тариф MAX без лимита.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Когда полный сайт и приложение?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Веб-сайт с полноценным дашбордом — через 4 недели. Telegram-бот уже работает. Мобильное приложение (iOS+Android) — Q3 2026. Подпишись на бота — пришлём личное уведомление как только запустимся.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Веб-сайт с полноценным дашбордом — через 4 недели. Telegram-бот уже работает. Мобильное приложение (iOS+Android) — Q3 2026. Подпишись на бота — пришлём личное уведомление как только запустимся.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>А если бот ошибётся в расчёте — кто заплатит штраф?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">По <a href="/legal#terms" class="text-emerald-700 hover:underline font-medium">условиям использования</a> сервис носит справочный характер — итоговая ответственность за поданную декларацию на тебе. Но бот считает по чётким формулам НК РФ, и все цифры ты видишь до уплаты. На практике точность 99,9%+. Перед подачей крупных сумм (от 100к) рекомендуем перепроверить у бухгалтера за 500–1000 ₽.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">По <a href="/legal#terms" class="text-emerald-700 hover:underline font-medium">условиям использования</a> сервис носит справочный характер — итоговая ответственность за поданную декларацию на тебе. Но бот считает по чётким формулам НК РФ, и все цифры ты видишь до уплаты. На практике точность 99,9%+. Перед подачей крупных сумм (от 100к) рекомендуем перепроверить у бухгалтера за 500–1000 ₽.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Можно ли вернуть деньги если не подойдёт?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Да. В первые <strong>14 дней</strong> с первой оплаты — полный возврат, если ты сделал не больше 5 запросов в боте. После — пропорциональный возврат за неоплаченные дни месяца. Подробности в <a href="/legal#offer" class="text-emerald-700 hover:underline font-medium">Публичной Оферте</a>.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Да. В первые <strong>14 дней</strong> с первой оплаты — полный возврат, если ты сделал не больше 5 запросов в боте. После — пропорциональный возврат за неоплаченные дни месяца. Подробности в <a href="/legal#offer" class="text-emerald-700 hover:underline font-medium">Публичной Оферте</a>.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Что с НДС если у меня доход больше 20 млн в год?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">С 2025 года ИП на УСН с годовым доходом >20 млн ₽ в предыдущем году обязаны платить НДС. Бот поддерживает выбор ставки: 5% / 7% (без вычета входного НДС) или 22% (с вычетом). Команда <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">/nds</code> покажет какая выгоднее именно тебе с учётом доли закупок с НДС.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">С 2025 года ИП на УСН с годовым доходом >20 млн ₽ в предыдущем году обязаны платить НДС. Бот поддерживает выбор ставки: 5% / 7% (без вычета входного НДС) или 22% (с вычетом). Команда <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">/nds</code> покажет какая выгоднее именно тебе с учётом доли закупок с НДС.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Как переключиться с «Доходы» на «Доходы−Расходы» и наоборот?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Смена объекта налогообложения возможна только с 1 января следующего года. Подаётся заявление по форме 26.2-6 до 31 декабря текущего. Бот в декабре сам напомнит, посчитает что выгоднее на основе твоих данных за год и сгенерирует заявление готовое к подаче в ЛК ФНС.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Смена объекта налогообложения возможна только с 1 января следующего года. Подаётся заявление по форме 26.2-6 до 31 декабря текущего. Бот в декабре сам напомнит, посчитает что выгоднее на основе твоих данных за год и сгенерирует заявление готовое к подаче в ЛК ФНС.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>А если у меня патент / самозанятость / ОСНО — поддерживается?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Сейчас фокус — УСН (95% наших клиентов). <strong>Самозанятость (НПД)</strong> — поддерживаем базово: расчёт НПД 4%/6%, чеки в «Мой Налог». <strong>Патент</strong> — на этапе beta. <strong>ОСНО</strong> — пока не планируем (там нужен отдельный бухгалтер). Если у тебя комбинация (УСН+патент или УСН+самозанятость) — бот корректно разделит доходы.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Сейчас фокус — УСН (95% наших клиентов). <strong>Самозанятость (НПД)</strong> — поддерживаем базово: расчёт НПД 4%/6%, чеки в «Мой Налог». <strong>Патент</strong> — на этапе beta. <strong>ОСНО</strong> — пока не планируем (там нужен отдельный бухгалтер). Если у тебя комбинация (УСН+патент или УСН+самозанятость) — бот корректно разделит доходы.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Кто видит мои данные? Передаёте ли вы их банкам или ФНС?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Никому. Серверы в РФ, данные шифруются. Голосовые сообщения распознаются локально (whisper.cpp на сервере, не в облаке Google/OpenAI). В ФНС, банк или налоговую <strong>ничего не уходит автоматически</strong> — ты сам решаешь когда выгрузить декларацию или ЕНП-уведомление и сам грузишь в ЛК ФНС. Подробности — в <a href="/legal#privacy" class="text-emerald-700 hover:underline font-medium">Политике конфиденциальности</a>.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Никому. Серверы в РФ, данные шифруются. Голосовые сообщения распознаются локально (whisper.cpp на сервере, не в облаке Google/OpenAI). В ФНС, банк или налоговую <strong>ничего не уходит автоматически</strong> — ты сам решаешь когда выгрузить декларацию или ЕНП-уведомление и сам грузишь в ЛК ФНС. Подробности — в <a href="/legal#privacy" class="text-emerald-700 hover:underline font-medium">Политике конфиденциальности</a>.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Можно ли оплатить юр-лицом / по безналу / для нескольких ИП?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Да. Для бухгалтерских компаний (тариф 990 ₽/мес — до 30 клиентов) и MAX (1990 ₽/мес — безлимит) принимаем оплату по реквизитам. Договор + счёт + закрывающие документы — на запрос. Просто напиши на <a href="mailto:alikazakov9@gmail.com" class="text-emerald-700 hover:underline font-medium">alikazakov9@gmail.com</a> с темой «Безнал» и количеством клиентов.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Да. Для бухгалтерских компаний (тариф 990 ₽/мес — до 30 клиентов) и MAX (1990 ₽/мес — безлимит) принимаем оплату по реквизитам. Договор + счёт + закрывающие документы — на запрос. Просто напиши на <a href="mailto:alikazakov9@gmail.com" class="text-emerald-700 hover:underline font-medium">alikazakov9@gmail.com</a> с темой «Безнал» и количеством клиентов.</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Как связаться с поддержкой если что-то сломалось?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">3 способа:<br>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">3 способа:<br>
                     1️⃣ В боте — команда <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">/help</code>, ответ за минуты в рабочее время<br>
                     2️⃣ Email <a href="mailto:alikazakov9@gmail.com" class="text-emerald-700 hover:underline font-medium">alikazakov9@gmail.com</a> — ответ в течение 24 часов<br>
                     3️⃣ Тариф MAX — приоритетная поддержка с гарантией 1 час в рабочее время МСК</p>
                 </details>
 
-                <details class="group p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
-                    <summary class="flex justify-between items-center font-bold text-slate-900 text-base sm:text-lg">
+                <details class="group p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 transition">
+                    <summary class="flex justify-between items-start gap-3 cursor-pointer font-bold text-slate-900 text-sm sm:text-base leading-snug">
                         <span>Что насчёт ОФД и онлайн-кассы?</span>
-                        <svg class="faq-arrow w-5 h-5 text-emerald-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="faq-arrow w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <p class="mt-4 text-slate-600 leading-relaxed">Прямой интеграции с ОФД пока нет — но если у тебя онлайн-касса, ты можешь экспортировать чеки CSV/Excel и загрузить в бот. Бот распознает суммы, даты, контрагентов и автоматически разнесёт по доходам. Поддерживаем форматы: АТОЛ, Эвотор, Штрих-М, МойСклад. Если касса не поддерживается — пришли пример CSV, добавим.</p>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Прямой интеграции с ОФД пока нет — но если у тебя онлайн-касса, ты можешь экспортировать чеки CSV/Excel и загрузить в бот. Бот распознает суммы, даты, контрагентов и автоматически разнесёт по доходам. Поддерживаем форматы: АТОЛ, Эвотор, Штрих-М, МойСклад. Если касса не поддерживается — пришли пример CSV, добавим.</p>
                 </details>
             </div>
         </div>
@@ -2167,8 +2179,8 @@
                         <span class="text-sm font-bold">⚡ Бонус для первых 100</span>
                     </div>
 
-                    <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black mb-5 leading-tight">
-                        Будь первым —<br>получи <span class="text-amber-300">месяц PRO бесплатно</span>
+                    <h2 class="section-heading text-2xl sm:text-4xl md:text-5xl font-black mb-5 leading-tight text-balance">
+                        Будь первым — получи <span class="text-amber-300">месяц PRO бесплатно</span>
                     </h2>
                     <p class="text-lg sm:text-xl text-emerald-50 mb-10 max-w-2xl mx-auto leading-relaxed">
                         Подпишись на канал бота. Когда сайт откроется через 4 недели — пришлём личное уведомление. Первые 100 пользователей получат месяц PRO в подарок.
