@@ -1135,6 +1135,194 @@
         </div>
     </section>
 
+    <!-- ============== КАК ЭТО ВЫГЛЯДИТ НА ПРАКТИКЕ ============== -->
+    <!-- TODO: заменить mock-чаты на реальные screenshots из бота через <img src="/screens/voice.png">
+         Когда сделаешь скрины — клади их в /public/screens/ и подменяй .mock-screen блоки -->
+    <section id="how-it-looks" class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-white via-emerald-50/20 to-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-14">
+                <p class="section-eyebrow text-sm font-bold text-emerald-700 uppercase tracking-widest mb-3">Как это работает</p>
+                <h2 class="section-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                    Бот в деле — <span class="gradient-text">3 реальных диалога</span>
+                </h2>
+                <p class="text-lg text-slate-600 mt-5 max-w-2xl mx-auto">
+                    Так выглядит общение с ботом в Telegram. Никаких форм, таблиц или сложных интерфейсов — просто чат.
+                </p>
+            </div>
+
+            <!-- 3 сценария -->
+            <div class="space-y-12">
+
+                <!-- Сценарий 1: голосовой ввод -->
+                <div class="grid md:grid-cols-2 gap-8 items-center" data-reveal>
+                    <!-- Mock-чат -->
+                    <div class="rounded-3xl bg-gradient-to-br from-slate-50 to-emerald-50/40 border border-slate-200 p-5 shadow-xl shadow-emerald-500/5">
+                        <!-- Шапка чата -->
+                        <div class="flex items-center gap-3 pb-3 mb-3 border-b border-slate-200">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm">🧮</div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-900 text-sm">AI-Бухгалтер</p>
+                                <p class="text-xs text-emerald-600">в сети</p>
+                            </div>
+                        </div>
+                        <!-- Сообщения -->
+                        <div class="space-y-2.5">
+                            <div class="flex justify-end">
+                                <div class="max-w-[85%] px-4 py-2 rounded-2xl rounded-br-md bg-emerald-500 text-white text-sm">
+                                    🎙️ <span class="italic opacity-90">«Получил пятьдесят тысяч от ООО Ромашка двадцать второго марта»</span>
+                                    <span class="block text-[10px] opacity-70 mt-1">0:04 · голосовое</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-start">
+                                <div class="max-w-[85%] px-4 py-2.5 rounded-2xl rounded-bl-md bg-white border border-slate-200 text-sm text-slate-800">
+                                    ✅ <strong>Записал доход:</strong><br>
+                                    50 000 ₽ от <strong>ООО «Ромашка»</strong><br>
+                                    Дата: 22 марта 2026<br>
+                                    <span class="block mt-1.5 text-xs text-slate-500">Налог УСН 6% = 3 000 ₽ (отложу на квартальный)</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <div class="max-w-[80%] px-4 py-2 rounded-2xl rounded-br-md bg-emerald-500 text-white text-sm">
+                                    Отлично 👍
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Описание -->
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-3">🎙️ Голосовой ввод</div>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight">
+                            Скажи в микрофон —<br><span class="gradient-text">бот всё запишет</span>
+                        </h3>
+                        <p class="text-slate-600 leading-relaxed mb-4">
+                            Распознавание происходит <strong class="text-slate-900">локально на сервере</strong> — голос не уходит в Google или OpenAI. AI понимает суммы прописью, даты в любом формате и названия контрагентов.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> «получил 30к от Иванова вчера» — поймёт</li>
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> «потратил 5 тысяч 200 на хостинг» — поймёт</li>
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> «сколько мне платить за квартал» — посчитает</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Сценарий 2: OCR чеков (zigzag — описание слева) -->
+                <div class="grid md:grid-cols-2 gap-8 items-center" data-reveal>
+                    <!-- Описание -->
+                    <div class="md:order-1 order-2">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider mb-3">📸 OCR чеков</div>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight">
+                            Сфотографировал чек —<br><span class="gradient-text">AI распознал всё</span>
+                        </h3>
+                        <p class="text-slate-600 leading-relaxed mb-4">
+                            Сумма, дата, продавец, ИНН — извлекаются автоматически. AI <strong class="text-slate-900">подсказывает категорию</strong> для УСН «Доходы−Расходы» (расходы на канцтовары / связь / транспорт / ...).
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> Поддерживает кассовые чеки и счета-фактуры</li>
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> Распознаёт чеки в плохом качестве</li>
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> Группирует по контрагенту автоматом</li>
+                        </ul>
+                    </div>
+                    <!-- Mock-чат -->
+                    <div class="md:order-2 order-1 rounded-3xl bg-gradient-to-br from-slate-50 to-amber-50/40 border border-slate-200 p-5 shadow-xl shadow-amber-500/5">
+                        <div class="flex items-center gap-3 pb-3 mb-3 border-b border-slate-200">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm">🧮</div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-900 text-sm">AI-Бухгалтер</p>
+                                <p class="text-xs text-emerald-600">в сети</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2.5">
+                            <div class="flex justify-end">
+                                <div class="max-w-[80%] px-3 py-2 rounded-2xl rounded-br-md bg-emerald-500 text-white text-sm flex items-center gap-2">
+                                    <span class="text-2xl">🧾</span>
+                                    <span class="text-xs">фото чека</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-start">
+                                <div class="max-w-[88%] px-4 py-2.5 rounded-2xl rounded-bl-md bg-white border border-slate-200 text-sm text-slate-800">
+                                    ✅ <strong>Распознал чек:</strong><br>
+                                    <span class="block py-1.5 mt-1.5 px-3 rounded-lg bg-slate-50 font-mono text-xs leading-relaxed">
+                                        ООО «СВЯЗЬ-ТЕЛЕКОМ»<br>
+                                        ИНН: 7714123456<br>
+                                        Сумма: <strong>1 250 ₽</strong><br>
+                                        Дата: 15.03.2026
+                                    </span>
+                                    <span class="block mt-2 text-xs text-emerald-700">→ Категория: <strong>Связь и интернет</strong></span>
+                                </div>
+                            </div>
+                            <div class="flex justify-start">
+                                <div class="max-w-[80%] px-4 py-2 rounded-2xl rounded-bl-md bg-white border border-slate-200 text-sm text-slate-800">
+                                    Добавить как расход? <strong class="text-emerald-700">Да</strong> / Изменить категорию
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Сценарий 3: AI-чат «сколько мне платить?» -->
+                <div class="grid md:grid-cols-2 gap-8 items-center" data-reveal>
+                    <div class="rounded-3xl bg-gradient-to-br from-slate-50 to-sky-50/40 border border-slate-200 p-5 shadow-xl shadow-sky-500/5">
+                        <div class="flex items-center gap-3 pb-3 mb-3 border-b border-slate-200">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm">🧮</div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-900 text-sm">AI-Бухгалтер</p>
+                                <p class="text-xs text-emerald-600">печатает...</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2.5">
+                            <div class="flex justify-end">
+                                <div class="max-w-[85%] px-4 py-2 rounded-2xl rounded-br-md bg-emerald-500 text-white text-sm">
+                                    Сколько мне платить за Q2?
+                                </div>
+                            </div>
+                            <div class="flex justify-start">
+                                <div class="max-w-[90%] px-4 py-2.5 rounded-2xl rounded-bl-md bg-white border border-slate-200 text-sm text-slate-800">
+                                    📊 <strong>Аванс УСН за полугодие:</strong>
+                                    <div class="mt-2 space-y-1 text-xs">
+                                        <div class="flex justify-between"><span>Доход (Q1+Q2):</span><strong class="tabular-nums">1 200 000 ₽</strong></div>
+                                        <div class="flex justify-between"><span>Налог 6%:</span><strong class="tabular-nums">72 000 ₽</strong></div>
+                                        <div class="flex justify-between text-emerald-700"><span>Минус взносы:</span><strong class="tabular-nums">−28 696 ₽</strong></div>
+                                        <div class="flex justify-between text-emerald-700"><span>Минус Q1:</span><strong class="tabular-nums">−15 652 ₽</strong></div>
+                                        <div class="flex justify-between border-t border-slate-200 pt-1 mt-1"><span class="font-bold">К доплате:</span><strong class="text-emerald-700 text-base tabular-nums">27 652 ₽</strong></div>
+                                    </div>
+                                    <span class="block mt-2 text-xs text-slate-500">⏰ Срок: до <strong>28 июля 2026</strong></span>
+                                </div>
+                            </div>
+                            <div class="flex justify-start">
+                                <div class="max-w-[80%] px-4 py-2 rounded-2xl rounded-bl-md bg-white border border-slate-200 text-sm text-slate-800">
+                                    Сформировать <strong class="text-emerald-700">ЕНП-уведомление</strong>?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-xs font-bold uppercase tracking-wider mb-3">🧠 AI на твоих данных</div>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight">
+                            Спросил налог —<br><span class="gradient-text">получил расчёт за 3 секунды</span>
+                        </h3>
+                        <p class="text-slate-600 leading-relaxed mb-4">
+                            AI знает <strong class="text-slate-900">твой режим, регион, доходы и взносы</strong>. Считает по тем же формулам что и наш калькулятор сверху, но с учётом ВСЕХ твоих данных за всё время.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> «А если я открою ещё один ОКВЭД?» — посчитает</li>
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> «Что если перейти на Д−Р?» — сравнит выгоду</li>
+                            <li class="flex gap-2"><span class="text-emerald-600 font-bold">→</span> «Найми за 50к/мес — посчитай нагрузку» — сделает</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA внизу -->
+            <div class="text-center mt-14">
+                <a href="https://t.me/AI_Buxgalter_USN_bot?start=how_it_looks" target="_blank" rel="noopener"
+                   class="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-base">
+                    Открыть бота в Telegram →
+                </a>
+                <p class="text-xs text-slate-400 mt-3">Без регистрации · Бесплатно навсегда · Работает в любом мессенджере</p>
+            </div>
+        </div>
+    </section>
+
     <!-- ============== БЕСПЛАТНЫЙ КАЛЬКУЛЯТОР УСН ============== -->
     <section id="calculator" class="relative z-10 px-4 sm:px-6 py-20 bg-gradient-to-b from-white to-emerald-50/30">
         <div class="max-w-3xl mx-auto">
@@ -2899,6 +3087,7 @@
         const sectionMap = {
             'calculator': 'view_calculator',
             'features': 'view_features',
+            'how-it-looks': 'view_how_it_looks',
             'roi': 'view_roi',
             'testimonials': 'view_testimonials',
             'notify': 'view_notify',
