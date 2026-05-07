@@ -512,6 +512,123 @@
             background: rgba(255, 255, 255, 0.5);
         }
         .calc-input::placeholder { color: #94a3b8; font-weight: 500; }
+
+        /* ============== Announcement Bar (промо-плашка) ============== */
+        .ann-bar {
+            position: relative;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.65rem 3rem 0.65rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #ffffff;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease, max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 200px;
+            overflow: hidden;
+        }
+        .ann-bar.ann-hidden {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            opacity: 0;
+        }
+        .ann-bar.ann-sticky {
+            position: sticky;
+            top: 0;
+        }
+
+        /* Типы — цвета */
+        .ann-info     { background: linear-gradient(90deg, #1e293b, #334155); }
+        .ann-promo    { background: linear-gradient(90deg, #047857, #10b981, #047857); background-size: 200% 100%; }
+        .ann-warning  { background: linear-gradient(90deg, #b45309, #f59e0b, #b45309); background-size: 200% 100%; }
+        .ann-emergency { background: linear-gradient(90deg, #b91c1c, #ef4444, #b91c1c); background-size: 200% 100%; }
+
+        /* Подсветка — медленная анимация градиента */
+        .ann-highlight {
+            animation: annGradientShift 8s ease-in-out infinite;
+        }
+        @keyframes annGradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+        /* Отключаем анимацию для пользователей с prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            .ann-highlight { animation: none; }
+        }
+
+        .ann-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .ann-text {
+            flex: 0 1 auto;
+            min-width: 0;
+        }
+        .ann-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            margin-left: 0.5rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(4px);
+            color: #ffffff;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .ann-cta:hover {
+            background: rgba(255, 255, 255, 0.28);
+            transform: translateX(2px);
+        }
+        .ann-cta::after { content: '→'; font-weight: 900; }
+
+        .ann-close {
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            transform: translateY(-50%);
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+            font-size: 1rem;
+            line-height: 1;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            border: none;
+        }
+        .ann-close:hover {
+            background: rgba(255, 255, 255, 0.28);
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        /* Mobile: убираем CTA-кнопку, плашка вся кликабельная */
+        @media (max-width: 640px) {
+            .ann-bar {
+                padding-right: 2.5rem;
+                font-size: 0.8125rem;
+            }
+            .ann-cta {
+                display: none;
+            }
+            .ann-bar.ann-has-cta {
+                cursor: pointer;
+            }
+        }
     </style>
 
     <!-- ============== JSON-LD: Organization + WebSite ============== -->
@@ -732,6 +849,15 @@
     </script>
 </head>
 <body class="antialiased">
+
+    <!-- ============== Announcement Bar (промо-плашка) ============== -->
+    <!-- Скрыта по умолчанию, инициализируется JS из /announcement.json -->
+    <div id="announcement-bar" class="ann-bar ann-hidden" role="region" aria-label="Информационное сообщение" aria-live="polite">
+        <span class="ann-icon" id="ann-icon" aria-hidden="true">⚡</span>
+        <span class="ann-text" id="ann-text"></span>
+        <a id="ann-cta" class="ann-cta" href="#" target="_blank" rel="noopener"></a>
+        <button class="ann-close" id="ann-close" aria-label="Закрыть сообщение" type="button">×</button>
+    </div>
 
     <!-- Фон с тонкой нейросеткой -->
     <div class="fixed inset-0 neural-bg pointer-events-none opacity-60"></div>
@@ -2026,6 +2152,101 @@
 
         // Первый расчёт если поля заполнены (например 14 348 в contrib по умолчанию)
         recalc();
+    })();
+    </script>
+
+    <!-- ============== Announcement Bar (управление) ============== -->
+    <script>
+    (function() {
+        'use strict';
+        const bar = document.getElementById('announcement-bar');
+        const elIcon = document.getElementById('ann-icon');
+        const elText = document.getElementById('ann-text');
+        const elCta = document.getElementById('ann-cta');
+        const elClose = document.getElementById('ann-close');
+        if (!bar) return;
+
+        const STORAGE_KEY = 'aibuh_ann_dismissed_v';
+
+        async function load() {
+            try {
+                const res = await fetch('/announcement.json?t=' + Date.now(), { cache: 'no-store' });
+                if (!res.ok) return;
+                const cfg = await res.json();
+                render(cfg);
+            } catch (e) { /* silent — плашка не критична для UX */ }
+        }
+
+        function render(cfg) {
+            if (!cfg || !cfg.active) return;
+
+            // Проверка expiresAt
+            if (cfg.expiresAt) {
+                const expires = new Date(cfg.expiresAt).getTime();
+                if (!isNaN(expires) && Date.now() > expires) return;
+            }
+
+            // Проверка dismissed-state по версии
+            const dismissedVersion = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+            if (cfg.dismissible !== false && cfg.version === dismissedVersion) return;
+
+            // Применяем тип
+            const validTypes = ['info', 'promo', 'warning', 'emergency'];
+            const type = validTypes.includes(cfg.type) ? cfg.type : 'info';
+            bar.classList.add('ann-' + type);
+            if (cfg.highlight) bar.classList.add('ann-highlight');
+            if (cfg.sticky) bar.classList.add('ann-sticky');
+
+            // Контент
+            elIcon.textContent = cfg.icon || '⚡';
+            elIcon.style.display = cfg.icon ? '' : 'none';
+            elText.textContent = cfg.text || '';
+
+            if (cfg.ctaText && cfg.ctaLink) {
+                elCta.textContent = cfg.ctaText;
+                elCta.href = cfg.ctaLink;
+                elCta.style.display = '';
+                bar.classList.add('ann-has-cta');
+            } else {
+                elCta.style.display = 'none';
+            }
+
+            // Закрываемость
+            if (cfg.dismissible === false) {
+                elClose.style.display = 'none';
+            } else {
+                elClose.style.display = '';
+                elClose.addEventListener('click', () => {
+                    localStorage.setItem(STORAGE_KEY, String(cfg.version || 1));
+                    bar.classList.add('ann-hidden');
+                    if (window.aibuhTrack) window.aibuhTrack('announcement_dismissed', { version: cfg.version });
+                });
+            }
+
+            // Mobile click — вся плашка ведёт на CTA
+            if (cfg.ctaLink) {
+                bar.addEventListener('click', (e) => {
+                    if (e.target === elClose || elClose.contains(e.target)) return;
+                    if (e.target.tagName !== 'A' && window.matchMedia('(max-width: 640px)').matches) {
+                        window.open(cfg.ctaLink, '_blank', 'noopener');
+                        if (window.aibuhTrack) window.aibuhTrack('announcement_clicked', { version: cfg.version });
+                    }
+                });
+            }
+
+            // CTA tracking
+            elCta.addEventListener('click', () => {
+                if (window.aibuhTrack) window.aibuhTrack('announcement_clicked', { version: cfg.version });
+            });
+
+            // Показываем
+            requestAnimationFrame(() => bar.classList.remove('ann-hidden'));
+            if (window.aibuhTrack) window.aibuhTrack('announcement_shown', { version: cfg.version, type });
+        }
+
+        // Загрузка при старте + повторно каждые 5 минут (если страница долго открыта — увидит обновление)
+        load();
+        setInterval(load, 5 * 60 * 1000);
     })();
     </script>
 

@@ -1,9 +1,14 @@
 User-agent: *
 Allow: /
 
-# Запрещаем индексацию служебных файлов и dev-артефактов
+# Запрещаем индексацию служебных файлов, админки и dev-артефактов
+Disallow: /admin
+Disallow: /admin/
 Disallow: /.git/
 Disallow: /.vercel/
+Disallow: /api/
 Disallow: /PROMPT_FULL_PROJECT.md
+Disallow: /DEVELOPMENT_PLAN.md
+Disallow: /announcement.json
 
 Sitemap: https://aibuhgalter.com/sitemap.xml

@@ -1,0 +1,14 @@
+{
+  "$schema": "Конфиг промо-плашки наверху сайта. Меняется через админку или git push.",
+  "active": false,
+  "type": "promo",
+  "icon": "⚡",
+  "text": "Скидка 30% на PRO до конца недели — для первых 100 подписчиков",
+  "ctaText": "Получить",
+  "ctaLink": "https://t.me/AI_Buxgalter_USN_bot?start=promo30",
+  "highlight": true,
+  "dismissible": true,
+  "sticky": false,
+  "expiresAt": null,
+  "version": 1
+}

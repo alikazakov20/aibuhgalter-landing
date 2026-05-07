@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10b981">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Админка — AI-Бухгалтер</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background: #f8fafc; }
+        input[type="text"], input[type="url"], textarea, select {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .preview-bar { transition: all 0.3s ease; }
+        .ann-promo    { background: linear-gradient(90deg, #047857, #10b981, #047857); background-size: 200% 100%; }
+        .ann-info     { background: linear-gradient(90deg, #1e293b, #334155); }
+        .ann-warning  { background: linear-gradient(90deg, #b45309, #f59e0b, #b45309); background-size: 200% 100%; }
+        .ann-emergency { background: linear-gradient(90deg, #b91c1c, #ef4444, #b91c1c); background-size: 200% 100%; }
+        @keyframes annGradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+        .ann-highlight { animation: annGradientShift 8s ease-in-out infinite; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+<!-- ============== Login Gate ============== -->
+<div id="login-gate" class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
+        <div class="text-center mb-6">
+            <div class="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 items-center justify-center text-2xl mb-3">🔐</div>
+            <h1 class="text-2xl font-black text-slate-900">Админка</h1>
+            <p class="text-sm text-slate-500 mt-1">AI-Бухгалтер</p>
+        </div>
+        <form id="login-form" class="space-y-3">
+            <label class="block">
+                <span class="block text-sm font-bold text-slate-700 mb-2">PIN-код</span>
+                <input type="password"
+                       id="login-pin"
+                       autocomplete="current-password"
+                       autofocus
+                       class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-semibold tracking-widest text-center"
+                       placeholder="••••">
+            </label>
+            <button type="submit"
+                    class="w-full px-4 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 transition shadow-lg">
+                Войти
+            </button>
+        </form>
+        <p id="login-error" class="hidden mt-3 text-sm text-rose-600 text-center font-medium">Неверный PIN</p>
+        <p class="mt-6 text-xs text-slate-400 text-center leading-relaxed">
+            ⚠️ Каркас админки. Авторизация через клиентский PIN (временное решение).
+            В следующей итерации — server-side auth через Vercel Edge.
+        </p>
+    </div>
+</div>
+
+<!-- ============== Admin Panel (скрыта до login) ============== -->
+<div id="admin-panel" class="hidden min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white">🧮</div>
+                <div>
+                    <h1 class="font-black text-slate-900">Админка AI-Бухгалтер</h1>
+                    <p class="text-xs text-slate-500">aibuhgalter.com</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="/" target="_blank" class="text-sm text-slate-600 hover:text-emerald-700 font-medium">↗ Сайт</a>
+                <button id="logout-btn" class="text-sm text-slate-500 hover:text-rose-600 font-medium">Выйти</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+
+        <!-- Tabs -->
+        <div role="tablist" class="flex gap-1 p-1 bg-slate-200/60 rounded-2xl mb-8 max-w-md">
+            <button role="tab" data-tab="announcement" class="admin-tab flex-1 px-4 py-2 rounded-xl font-bold text-sm transition" aria-selected="true">📢 Промо-плашка</button>
+            <button role="tab" data-tab="metrics" class="admin-tab flex-1 px-4 py-2 rounded-xl font-bold text-sm transition" aria-selected="false">📊 Метрики</button>
+            <button role="tab" data-tab="settings" class="admin-tab flex-1 px-4 py-2 rounded-xl font-bold text-sm transition" aria-selected="false">⚙️ Настройки</button>
+        </div>
+
+        <!-- ============== TAB: Announcement ============== -->
+        <section id="tab-announcement" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Форма -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h2 class="text-xl font-black text-slate-900 mb-1">Управление плашкой</h2>
+                <p class="text-sm text-slate-500 mb-6">Сообщение в самом верху сайта. Меняется без редеплоя.</p>
+
+                <form id="ann-form" class="space-y-5">
+                    <!-- Active toggle -->
+                    <label class="flex items-center justify-between p-4 rounded-xl border-2 border-slate-200 hover:border-emerald-300 transition cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/40">
+                        <div>
+                            <span class="block font-bold text-slate-900">Показывать плашку</span>
+                            <span class="block text-xs text-slate-500 mt-0.5">Если выключено — плашка не отображается</span>
+                        </div>
+                        <input type="checkbox" id="ann-active" class="w-5 h-5 accent-emerald-600 cursor-pointer">
+                    </label>
+
+                    <!-- Type -->
+                    <label class="block">
+                        <span class="block text-sm font-bold text-slate-700 mb-2">Тип</span>
+                        <select id="ann-type" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-medium bg-white">
+                            <option value="promo">💚 Promo (зелёная) — акции, скидки, бонусы</option>
+                            <option value="info">💼 Info (тёмная) — нейтральная информация</option>
+                            <option value="warning">⚠️ Warning (жёлтая) — важные изменения</option>
+                            <option value="emergency">🚨 Emergency (красная) — критичные инциденты</option>
+                        </select>
+                    </label>
+
+                    <!-- Icon -->
+                    <label class="block">
+                        <span class="block text-sm font-bold text-slate-700 mb-2">Иконка (emoji)</span>
+                        <input type="text" id="ann-icon" maxlength="4" placeholder="⚡"
+                               class="w-24 px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-semibold text-center text-lg">
+                    </label>
+
+                    <!-- Text -->
+                    <label class="block">
+                        <span class="block text-sm font-bold text-slate-700 mb-2">Текст сообщения</span>
+                        <textarea id="ann-text" rows="2"
+                                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-medium resize-none"
+                                  placeholder="Например: Скидка 30% на PRO до конца недели"></textarea>
+                        <p class="text-xs text-slate-400 mt-1">Совет: коротко и конкретно. До 80 символов.</p>
+                    </label>
+
+                    <!-- CTA -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="block">
+                            <span class="block text-sm font-bold text-slate-700 mb-2">Текст кнопки</span>
+                            <input type="text" id="ann-cta-text" maxlength="20" placeholder="Получить"
+                                   class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-semibold">
+                        </label>
+                        <label class="block">
+                            <span class="block text-sm font-bold text-slate-700 mb-2">Ссылка кнопки</span>
+                            <input type="url" id="ann-cta-link" placeholder="https://t.me/…"
+                                   class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-medium text-sm">
+                        </label>
+                    </div>
+
+                    <!-- Toggles -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <label class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-200 hover:border-emerald-300 transition cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/40 text-sm">
+                            <input type="checkbox" id="ann-highlight" class="w-4 h-4 accent-emerald-600 cursor-pointer">
+                            <span class="font-bold text-slate-700">Подсветка</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-200 hover:border-emerald-300 transition cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/40 text-sm">
+                            <input type="checkbox" id="ann-dismissible" class="w-4 h-4 accent-emerald-600 cursor-pointer" checked>
+                            <span class="font-bold text-slate-700">Закрываемая</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-200 hover:border-emerald-300 transition cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/40 text-sm">
+                            <input type="checkbox" id="ann-sticky" class="w-4 h-4 accent-emerald-600 cursor-pointer">
+                            <span class="font-bold text-slate-700">Sticky</span>
+                        </label>
+                    </div>
+
+                    <!-- Expires -->
+                    <label class="block">
+                        <span class="block text-sm font-bold text-slate-700 mb-2">Авто-скрыть после (необязательно)</span>
+                        <input type="datetime-local" id="ann-expires"
+                               class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 font-medium">
+                    </label>
+                </form>
+            </div>
+
+            <!-- Preview + Export -->
+            <div class="space-y-6">
+                <!-- Live preview -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <h2 class="text-xl font-black text-slate-900 mb-1">Превью</h2>
+                    <p class="text-sm text-slate-500 mb-6">Как плашка будет выглядеть на сайте</p>
+
+                    <div id="preview-frame" class="rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                        <div id="preview-bar" class="preview-bar relative flex items-center justify-center gap-3 px-4 py-2.5 text-white text-sm font-semibold text-center" style="display: none;">
+                            <span id="preview-icon" class="text-base flex-shrink-0"></span>
+                            <span id="preview-text"></span>
+                            <span id="preview-cta" class="hidden inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/20 text-white font-bold text-xs ml-2">Кнопка →</span>
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/15 text-white text-xs font-bold flex items-center justify-center" type="button" tabindex="-1">×</button>
+                        </div>
+                        <div id="preview-empty" class="text-center text-sm text-slate-400 py-8 font-medium">
+                            Включи «Показывать плашку» — увидишь превью
+                        </div>
+                        <!-- Mock-шапка сайта -->
+                        <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <div class="w-5 h-5 rounded bg-gradient-to-br from-emerald-500 to-emerald-700"></div>
+                                <span class="font-bold">AI-Бухгалтер</span>
+                            </div>
+                            <span>Telegram-бот</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JSON export -->
+                <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-black text-white">JSON для деплоя</h2>
+                        <button id="copy-json-btn" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">📋 Скопировать</button>
+                    </div>
+                    <pre id="json-output" class="text-xs font-mono whitespace-pre-wrap break-all bg-slate-800 rounded-lg p-4 max-h-80 overflow-y-auto leading-relaxed"></pre>
+                    <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                        <p class="text-sm text-amber-200 leading-relaxed">
+                            <strong>Текущий процесс (каркас):</strong> скопируй JSON → замени содержимое
+                            <code class="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">announcement.json</code> в репо →
+                            <code class="bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">git push</code> →
+                            плашка обновится через ~30 сек.
+                        </p>
+                        <p class="text-xs text-amber-300/70 mt-2">
+                            В следующей итерации — добавлю API endpoint для записи без git push.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============== TAB: Metrics (placeholder) ============== -->
+        <section id="tab-metrics" class="hidden">
+            <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
+                <div class="text-5xl mb-4">📊</div>
+                <h2 class="text-xl font-black text-slate-900 mb-2">Метрики и аналитика</h2>
+                <p class="text-slate-500 max-w-md mx-auto">
+                    Будет в следующей итерации: visitors, воронка, источники, топ-FAQ, конверсии.
+                    Обсудили в DEVELOPMENT_PLAN.md раздел 5.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============== TAB: Settings (placeholder) ============== -->
+        <section id="tab-settings" class="hidden">
+            <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
+                <div class="text-5xl mb-4">⚙️</div>
+                <h2 class="text-xl font-black text-slate-900 mb-2">Настройки</h2>
+                <p class="text-slate-500 max-w-md mx-auto">
+                    Скоро: смена PIN, юр-данные, A/B тесты, управление контентом.
+                </p>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    // ============== Login Gate ==============
+    // Простая клиентская проверка PIN. Хеш SHA-256 — НЕ надёжная защита,
+    // только защита от случайных глаз. Реальная защита: server-side в след. итерации.
+    // PIN по умолчанию: 4747 (поменяй в коде или в localStorage 'aibuh_admin_pin_hash')
+    const DEFAULT_PIN_HASH = '822a8e0aad6a68a99ee9db27651f1f6115414b7a772984b3f6609246ffbe3ef5'; // SHA-256("4747") — поменяй на свой
+    const SESSION_KEY = 'aibuh_admin_session';
+    const ANN_DRAFT_KEY = 'aibuh_admin_ann_draft';
+
+    async function sha256(str) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function isLoggedIn() {
+        const s = sessionStorage.getItem(SESSION_KEY);
+        if (!s) return false;
+        const expires = parseInt(s, 10);
+        return Date.now() < expires;
+    }
+
+    function showAdminPanel() {
+        document.getElementById('login-gate').style.display = 'none';
+        document.getElementById('admin-panel').classList.remove('hidden');
+        loadAnnouncement();
+    }
+
+    function showLoginGate() {
+        document.getElementById('admin-panel').classList.add('hidden');
+        document.getElementById('login-gate').style.display = '';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pin = document.getElementById('login-pin').value.trim();
+        const hash = await sha256(pin);
+        const storedHash = localStorage.getItem('aibuh_admin_pin_hash') || DEFAULT_PIN_HASH;
+
+        if (hash === storedHash) {
+            // Сессия 24 часа
+            sessionStorage.setItem(SESSION_KEY, String(Date.now() + 24 * 60 * 60 * 1000));
+            showAdminPanel();
+        } else {
+            const errEl = document.getElementById('login-error');
+            errEl.classList.remove('hidden');
+            document.getElementById('login-pin').value = '';
+            setTimeout(() => errEl.classList.add('hidden'), 3000);
+        }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        sessionStorage.removeItem(SESSION_KEY);
+        showLoginGate();
+    });
+
+    if (isLoggedIn()) showAdminPanel();
+
+    // ============== Tabs ==============
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
+            document.querySelectorAll('.admin-tab').forEach(t => {
+                t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+            });
+            ['announcement', 'metrics', 'settings'].forEach(name => {
+                document.getElementById('tab-' + name).classList.toggle('hidden', name !== target);
+            });
+        });
+    });
+
+    // Стили активного таба
+    const tabStyle = document.createElement('style');
+    tabStyle.textContent = `
+        .admin-tab[aria-selected="true"] { background: #ffffff; color: #047857; box-shadow: 0 2px 6px rgba(15,23,42,0.08); }
+        .admin-tab[aria-selected="false"] { color: #475569; }
+        .admin-tab[aria-selected="false"]:hover { color: #047857; }
+    `;
+    document.head.appendChild(tabStyle);
+
+    // ============== Announcement Form ==============
+    const fields = ['active', 'type', 'icon', 'text', 'cta-text', 'cta-link', 'highlight', 'dismissible', 'sticky', 'expires'];
+    const fieldsToId = (f) => 'ann-' + f;
+
+    async function loadAnnouncement() {
+        // Сначала пробуем localStorage draft, потом боевой config
+        const draft = localStorage.getItem(ANN_DRAFT_KEY);
+        if (draft) {
+            try { fillForm(JSON.parse(draft)); return; } catch {}
+        }
+        try {
+            const res = await fetch('/announcement.json?t=' + Date.now(), { cache: 'no-store' });
+            if (res.ok) {
+                const cfg = await res.json();
+                fillForm(cfg);
+            }
+        } catch {}
+    }
+
+    function fillForm(cfg) {
+        document.getElementById('ann-active').checked = !!cfg.active;
+        document.getElementById('ann-type').value = cfg.type || 'promo';
+        document.getElementById('ann-icon').value = cfg.icon || '';
+        document.getElementById('ann-text').value = cfg.text || '';
+        document.getElementById('ann-cta-text').value = cfg.ctaText || '';
+        document.getElementById('ann-cta-link').value = cfg.ctaLink || '';
+        document.getElementById('ann-highlight').checked = !!cfg.highlight;
+        document.getElementById('ann-dismissible').checked = cfg.dismissible !== false;
+        document.getElementById('ann-sticky').checked = !!cfg.sticky;
+        document.getElementById('ann-expires').value = cfg.expiresAt
+            ? new Date(cfg.expiresAt).toISOString().slice(0, 16)
+            : '';
+        updatePreview();
+    }
+
+    function getFormData() {
+        const expires = document.getElementById('ann-expires').value;
+        return {
+            active: document.getElementById('ann-active').checked,
+            type: document.getElementById('ann-type').value,
+            icon: document.getElementById('ann-icon').value || null,
+            text: document.getElementById('ann-text').value,
+            ctaText: document.getElementById('ann-cta-text').value || null,
+            ctaLink: document.getElementById('ann-cta-link').value || null,
+            highlight: document.getElementById('ann-highlight').checked,
+            dismissible: document.getElementById('ann-dismissible').checked,
+            sticky: document.getElementById('ann-sticky').checked,
+            expiresAt: expires ? new Date(expires).toISOString() : null,
+            version: Math.floor(Date.now() / 1000), // увеличиваем при каждой правке
+        };
+    }
+
+    function updatePreview() {
+        const cfg = getFormData();
+        const bar = document.getElementById('preview-bar');
+        const empty = document.getElementById('preview-empty');
+
+        if (!cfg.active || !cfg.text) {
+            bar.style.display = 'none';
+            empty.style.display = '';
+            updateJSON(cfg);
+            return;
+        }
+
+        empty.style.display = 'none';
+        bar.style.display = '';
+
+        // Reset classes
+        bar.className = 'preview-bar relative flex items-center justify-center gap-3 px-4 py-2.5 text-white text-sm font-semibold text-center ann-' + cfg.type;
+        if (cfg.highlight) bar.classList.add('ann-highlight');
+
+        document.getElementById('preview-icon').textContent = cfg.icon || '';
+        document.getElementById('preview-icon').style.display = cfg.icon ? '' : 'none';
+        document.getElementById('preview-text').textContent = cfg.text;
+
+        const ctaEl = document.getElementById('preview-cta');
+        if (cfg.ctaText && cfg.ctaLink) {
+            ctaEl.textContent = cfg.ctaText + ' →';
+            ctaEl.classList.remove('hidden');
+        } else {
+            ctaEl.classList.add('hidden');
+        }
+
+        updateJSON(cfg);
+        // Сохраняем draft локально на случай F5
+        localStorage.setItem(ANN_DRAFT_KEY, JSON.stringify(cfg));
+    }
+
+    function updateJSON(cfg) {
+        document.getElementById('json-output').textContent = JSON.stringify(cfg, null, 2);
+    }
+
+    // Live update on every change
+    document.getElementById('ann-form').addEventListener('input', updatePreview);
+    document.getElementById('ann-form').addEventListener('change', updatePreview);
+
+    // Copy JSON to clipboard
+    document.getElementById('copy-json-btn').addEventListener('click', async () => {
+        const text = document.getElementById('json-output').textContent;
+        try {
+            await navigator.clipboard.writeText(text);
+            const btn = document.getElementById('copy-json-btn');
+            const orig = btn.textContent;
+            btn.textContent = '✅ Скопировано';
+            setTimeout(() => { btn.textContent = orig; }, 2000);
+        } catch {
+            alert('Не удалось скопировать. Выдели текст вручную.');
+        }
+    });
+
+    // Initial render (если открылся без login — не вызовется)
+})();
+</script>
+
+</body>
+</html>
