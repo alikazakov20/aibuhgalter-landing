@@ -88,10 +88,12 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
 
         <!-- Tabs -->
-        <div role="tablist" class="flex gap-1 p-1 bg-slate-200/60 rounded-2xl mb-8 max-w-md">
-            <button role="tab" data-tab="announcement" class="admin-tab flex-1 px-4 py-2 rounded-xl font-bold text-sm transition" aria-selected="true">📢 Промо-плашка</button>
-            <button role="tab" data-tab="metrics" class="admin-tab flex-1 px-4 py-2 rounded-xl font-bold text-sm transition" aria-selected="false">📊 Метрики</button>
-            <button role="tab" data-tab="settings" class="admin-tab flex-1 px-4 py-2 rounded-xl font-bold text-sm transition" aria-selected="false">⚙️ Настройки</button>
+        <div role="tablist" class="flex gap-1 p-1 bg-slate-200/60 rounded-2xl mb-8 max-w-3xl overflow-x-auto whitespace-nowrap">
+            <button role="tab" data-tab="announcement" class="admin-tab flex-shrink-0 px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition" aria-selected="true">📢 Плашка</button>
+            <button role="tab" data-tab="metrics" class="admin-tab flex-shrink-0 px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition" aria-selected="false">📊 Метрики</button>
+            <button role="tab" data-tab="users" class="admin-tab flex-shrink-0 px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition" aria-selected="false">👥 Юзеры</button>
+            <button role="tab" data-tab="payments" class="admin-tab flex-shrink-0 px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition" aria-selected="false">💳 Платежи</button>
+            <button role="tab" data-tab="settings" class="admin-tab flex-shrink-0 px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition" aria-selected="false">⚙️ Настройки</button>
         </div>
 
         <!-- ============== TAB: Announcement ============== -->
@@ -227,26 +229,301 @@
             </div>
         </section>
 
-        <!-- ============== TAB: Metrics (placeholder) ============== -->
-        <section id="tab-metrics" class="hidden">
-            <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
-                <div class="text-5xl mb-4">📊</div>
-                <h2 class="text-xl font-black text-slate-900 mb-2">Метрики и аналитика</h2>
-                <p class="text-slate-500 max-w-md mx-auto">
-                    Будет в следующей итерации: visitors, воронка, источники, топ-FAQ, конверсии.
-                    Обсудили в DEVELOPMENT_PLAN.md раздел 5.
+        <!-- ============== TAB: Metrics ============== -->
+        <section id="tab-metrics" class="hidden space-y-6">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                    <h2 class="text-xl font-black text-slate-900">📊 Метрики и аналитика</h2>
+                    <p class="text-sm text-slate-500">Данные с лендинга, бота и платёжной системы</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="metrics-period" class="px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-emerald-500 focus:outline-none font-medium text-sm bg-white">
+                        <option value="today">Сегодня</option>
+                        <option value="7d" selected>7 дней</option>
+                        <option value="30d">30 дней</option>
+                        <option value="90d">90 дней</option>
+                    </select>
+                    <button id="metrics-refresh" type="button" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-bold text-slate-700 transition">↻</button>
+                </div>
+            </div>
+
+            <!-- Сводка одной строкой (Heatbar) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Visitors</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums" data-metric="visitors">—</p>
+                    <p class="text-xs text-slate-400 mt-1" data-metric-delta="visitors">vs прошлая неделя</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Email-подписки</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums" data-metric="emails">—</p>
+                    <p class="text-xs text-slate-400 mt-1" data-metric-delta="emails">—</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Калькулятор</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums" data-metric="calc">—</p>
+                    <p class="text-xs text-slate-400 mt-1" data-metric-delta="calc">использований</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">TG-кликов</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums" data-metric="tg">—</p>
+                    <p class="text-xs text-slate-400 mt-1" data-metric-delta="tg">→ бот</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Подписки бота</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums" data-metric="bot">—</p>
+                    <p class="text-xs text-slate-400 mt-1" data-metric-delta="bot">всего</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">MRR</p>
+                    <p class="text-2xl font-black text-emerald-700 tabular-nums" data-metric="mrr">— ₽</p>
+                    <p class="text-xs text-slate-400 mt-1" data-metric-delta="mrr">платящих: 0</p>
+                </div>
+            </div>
+
+            <!-- Воронка конверсии -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-black text-slate-900 mb-1">Воронка конверсии</h3>
+                <p class="text-sm text-slate-500 mb-5">От захода на сайт до оплаты</p>
+                <div class="space-y-3" id="funnel-rows">
+                    <!-- placeholder rows, заполнятся из API -->
+                    <div class="flex items-center gap-3" data-funnel="visit">
+                        <span class="text-sm font-bold text-slate-700 w-40">Зашли на сайт</span>
+                        <div class="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden relative">
+                            <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-lg" style="width: 100%"></div>
+                            <span class="absolute inset-0 flex items-center px-3 text-xs font-bold text-white tabular-nums" data-funnel-value="visit">—</span>
+                        </div>
+                        <span class="text-xs text-slate-400 w-12 text-right tabular-nums">100%</span>
+                    </div>
+                    <div class="flex items-center gap-3" data-funnel="calc">
+                        <span class="text-sm font-bold text-slate-700 w-40">Доскроллили до калькулятора</span>
+                        <div class="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden relative">
+                            <div class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-lg" style="width: 0%" data-funnel-bar="calc"></div>
+                            <span class="absolute inset-0 flex items-center px-3 text-xs font-bold text-slate-700 tabular-nums" data-funnel-value="calc">—</span>
+                        </div>
+                        <span class="text-xs text-slate-400 w-12 text-right tabular-nums" data-funnel-pct="calc">—%</span>
+                    </div>
+                    <div class="flex items-center gap-3" data-funnel="cta">
+                        <span class="text-sm font-bold text-slate-700 w-40">Кликнули в Telegram</span>
+                        <div class="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden relative">
+                            <div class="h-full bg-gradient-to-r from-emerald-300 to-emerald-500 rounded-lg" style="width: 0%" data-funnel-bar="cta"></div>
+                            <span class="absolute inset-0 flex items-center px-3 text-xs font-bold text-slate-700 tabular-nums" data-funnel-value="cta">—</span>
+                        </div>
+                        <span class="text-xs text-slate-400 w-12 text-right tabular-nums" data-funnel-pct="cta">—%</span>
+                    </div>
+                    <div class="flex items-center gap-3" data-funnel="bot">
+                        <span class="text-sm font-bold text-slate-700 w-40">Зарегались в боте</span>
+                        <div class="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden relative">
+                            <div class="h-full bg-gradient-to-r from-amber-300 to-amber-500 rounded-lg" style="width: 0%" data-funnel-bar="bot"></div>
+                            <span class="absolute inset-0 flex items-center px-3 text-xs font-bold text-slate-700 tabular-nums" data-funnel-value="bot">—</span>
+                        </div>
+                        <span class="text-xs text-slate-400 w-12 text-right tabular-nums" data-funnel-pct="bot">—%</span>
+                    </div>
+                    <div class="flex items-center gap-3" data-funnel="paid">
+                        <span class="text-sm font-bold text-slate-700 w-40">Оплатили подписку</span>
+                        <div class="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden relative">
+                            <div class="h-full bg-gradient-to-r from-rose-400 to-rose-600 rounded-lg" style="width: 0%" data-funnel-bar="paid"></div>
+                            <span class="absolute inset-0 flex items-center px-3 text-xs font-bold text-slate-700 tabular-nums" data-funnel-value="paid">—</span>
+                        </div>
+                        <span class="text-xs text-slate-400 w-12 text-right tabular-nums" data-funnel-pct="paid">—%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Топ-события + Источники -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <h3 class="text-lg font-black text-slate-900 mb-1">Топ-события</h3>
+                    <p class="text-sm text-slate-500 mb-4">Что юзеры делают чаще всего</p>
+                    <div id="top-events" class="space-y-2 text-sm text-slate-600">
+                        <p class="text-center py-4 text-slate-400">Данные появятся после активации Vercel Analytics</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <h3 class="text-lg font-black text-slate-900 mb-1">Источники трафика</h3>
+                    <p class="text-sm text-slate-500 mb-4">Откуда приходят посетители</p>
+                    <div id="top-sources" class="space-y-2 text-sm text-slate-600">
+                        <p class="text-center py-4 text-slate-400">Данные появятся после активации Vercel Analytics</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Setup banner -->
+            <div id="metrics-setup-hint" class="p-5 rounded-2xl bg-amber-50 border border-amber-200">
+                <p class="text-sm text-amber-900 leading-relaxed">
+                    <strong>⚙️ Чтобы метрики ожили:</strong>
+                    1) Включи <a href="https://vercel.com/alikazakov1999s-projects/aibuhgalter-landing/analytics" target="_blank" class="font-bold underline">Vercel Analytics</a>
+                    2) Создай <a href="https://vercel.com/account/tokens" target="_blank" class="font-bold underline">API Token</a>
+                    3) Пришли мне токен — добавлю в env и подключу.
                 </p>
             </div>
         </section>
 
-        <!-- ============== TAB: Settings (placeholder) ============== -->
-        <section id="tab-settings" class="hidden">
-            <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
-                <div class="text-5xl mb-4">⚙️</div>
-                <h2 class="text-xl font-black text-slate-900 mb-2">Настройки</h2>
-                <p class="text-slate-500 max-w-md mx-auto">
-                    Скоро: смена PIN, юр-данные, A/B тесты, управление контентом.
+        <!-- ============== TAB: Users ============== -->
+        <section id="tab-users" class="hidden space-y-6">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                    <h2 class="text-xl font-black text-slate-900">👥 Пользователи</h2>
+                    <p class="text-sm text-slate-500">Подписчики Telegram-бота и email-форм</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="search" id="users-search" placeholder="Поиск (email, ID, имя)" class="px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-emerald-500 focus:outline-none text-sm w-48 sm:w-64">
+                    <button id="users-export" type="button" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-bold text-slate-700 transition">📥 CSV</button>
+                </div>
+            </div>
+
+            <!-- Quick stats -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Всего юзеров бота</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums" data-users-stat="total">—</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Активные за 7д</p>
+                    <p class="text-2xl font-black text-emerald-700 tabular-nums" data-users-stat="active">—</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Email-подписки</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums" data-users-stat="emails">—</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Платящие</p>
+                    <p class="text-2xl font-black text-emerald-700 tabular-nums" data-users-stat="paying">0</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-bold text-slate-700">ID</th>
+                            <th class="text-left px-4 py-3 font-bold text-slate-700">Имя / Email</th>
+                            <th class="text-left px-4 py-3 font-bold text-slate-700">Тариф</th>
+                            <th class="text-left px-4 py-3 font-bold text-slate-700">Регистрация</th>
+                            <th class="text-left px-4 py-3 font-bold text-slate-700">Последний вход</th>
+                            <th class="text-right px-4 py-3 font-bold text-slate-700">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table">
+                        <tr>
+                            <td colspan="6" class="px-4 py-12 text-center text-slate-400 text-sm">
+                                Подключение к Railway PostgreSQL не настроено. Дай DATABASE_URL → подключу.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-amber-50 border border-amber-200">
+                <p class="text-sm text-amber-900 leading-relaxed">
+                    <strong>⚙️ Что нужно для подключения:</strong>
+                    Railway → проект бота → Variables → скопируй <code class="bg-amber-200/40 px-1 rounded">DATABASE_URL</code>.
+                    Пришли его мне (Claude скрывает в env vars Vercel — он не светится в UI).
+                    Я создам Edge Function с read-only доступом к таблице <code class="bg-amber-200/40 px-1 rounded">users</code>.
                 </p>
+            </div>
+        </section>
+
+        <!-- ============== TAB: Payments ============== -->
+        <section id="tab-payments" class="hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-black text-slate-900">💳 Платежи</h2>
+                <p class="text-sm text-slate-500">Транзакции через Prodamus, подписки, возвраты</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Платежи сегодня</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums">0</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Доход сегодня</p>
+                    <p class="text-2xl font-black text-emerald-700 tabular-nums">0 ₽</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">MRR</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums">0 ₽</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <p class="text-xs text-slate-500 mb-1">Активных подписок</p>
+                    <p class="text-2xl font-black text-slate-900 tabular-nums">0</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
+                <div class="text-5xl mb-4">💳</div>
+                <h3 class="text-lg font-black text-slate-900 mb-2">Prodamus ещё не подключён</h3>
+                <p class="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+                    После регистрации на <a href="https://prodamus.ru" target="_blank" class="text-emerald-700 font-bold hover:underline">prodamus.ru</a>
+                    и получения API-токена — подключим автоматически.
+                    Backend skeleton (<code class="bg-slate-100 px-1 rounded">api/checkout.js</code> + <code class="bg-slate-100 px-1 rounded">api/prodamus-webhook.js</code>) уже готов.
+                </p>
+                <div class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100 text-amber-900 text-sm">
+                    ⚠️ Шаги: 1) Открой самозанятость → 2) Регистрация Prodamus → 3) API token → 4) Пришли мне
+                </div>
+            </div>
+        </section>
+
+        <!-- ============== TAB: Settings ============== -->
+        <section id="tab-settings" class="hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-black text-slate-900">⚙️ Настройки</h2>
+                <p class="text-sm text-slate-500">Управление админкой и общие параметры</p>
+            </div>
+
+            <!-- Информация о сессии -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-black text-slate-900 mb-3">Текущая сессия</h3>
+                <dl class="space-y-2 text-sm">
+                    <div class="flex justify-between gap-4">
+                        <dt class="text-slate-500">Юзер</dt>
+                        <dd class="font-bold text-slate-900" data-session="sub">—</dd>
+                    </div>
+                    <div class="flex justify-between gap-4">
+                        <dt class="text-slate-500">Истекает</dt>
+                        <dd class="font-bold text-slate-900 tabular-nums" data-session="exp">—</dd>
+                    </div>
+                    <div class="flex justify-between gap-4">
+                        <dt class="text-slate-500">Auth</dt>
+                        <dd class="font-bold text-emerald-700">Server-side JWT (HttpOnly cookie)</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <!-- Смена PIN -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-black text-slate-900 mb-2">Смена PIN-кода</h3>
+                <p class="text-sm text-slate-500 mb-4">PIN хранится в env vars Vercel. Смена пока через CLI.</p>
+                <div class="bg-slate-900 text-slate-100 rounded-lg p-4 font-mono text-xs leading-relaxed overflow-x-auto whitespace-pre">vercel env rm ADMIN_PIN_HASH production
+echo -n "НОВЫЙ_PIN" | shasum -a 256 | awk '{print $1}'
+# вставь хеш
+printf 'ВСТАВЬ_ХЕШ\n' | vercel env add ADMIN_PIN_HASH production
+vercel deploy --prod --yes</div>
+                <p class="text-xs text-slate-500 mt-3">Скоро: смена через UI этой страницы (требует доп. endpoint).</p>
+            </div>
+
+            <!-- Юр-данные -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-black text-slate-900 mb-2">Юр-данные продавца</h3>
+                <p class="text-sm text-slate-500 mb-4">Используется в footer лендинга и в JSON-LD</p>
+                <dl class="space-y-2 text-sm">
+                    <div class="flex justify-between gap-4">
+                        <dt class="text-slate-500">ФИО</dt>
+                        <dd class="font-bold text-slate-900">Казаков Али Рафаилович</dd>
+                    </div>
+                    <div class="flex justify-between gap-4">
+                        <dt class="text-slate-500">ИНН</dt>
+                        <dd class="font-bold text-slate-900 tabular-nums">400306329403</dd>
+                    </div>
+                    <div class="flex justify-between gap-4">
+                        <dt class="text-slate-500">Статус</dt>
+                        <dd class="font-bold text-slate-900">Самозанятый (НПД)</dd>
+                    </div>
+                    <div class="flex justify-between gap-4">
+                        <dt class="text-slate-500">Email</dt>
+                        <dd class="font-bold text-slate-900">alikazakov9@gmail.com</dd>
+                    </div>
+                </dl>
             </div>
         </section>
 
@@ -334,17 +611,36 @@
     });
 
     // ============== Tabs ==============
+    const TAB_NAMES = ['announcement', 'metrics', 'users', 'payments', 'settings'];
     document.querySelectorAll('.admin-tab').forEach(tab => {
         tab.addEventListener('click', () => {
             const target = tab.dataset.tab;
             document.querySelectorAll('.admin-tab').forEach(t => {
                 t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
             });
-            ['announcement', 'metrics', 'settings'].forEach(name => {
+            TAB_NAMES.forEach(name => {
                 document.getElementById('tab-' + name).classList.toggle('hidden', name !== target);
             });
+            // Lazy-load данных таба
+            if (target === 'settings') fillSessionInfo();
         });
     });
+
+    // Заполнение информации о сессии (вкладка Settings)
+    async function fillSessionInfo() {
+        try {
+            const res = await fetch('/api/admin/me', { credentials: 'same-origin' });
+            if (!res.ok) return;
+            const data = await res.json();
+            const subEl = document.querySelector('[data-session="sub"]');
+            const expEl = document.querySelector('[data-session="exp"]');
+            if (subEl) subEl.textContent = data.sub || '—';
+            if (expEl && data.exp) {
+                const expDate = new Date(data.exp * 1000);
+                expEl.textContent = expDate.toLocaleString('ru-RU', { dateStyle: 'short', timeStyle: 'short' });
+            }
+        } catch {}
+    }
 
     // Стили активного таба
     const tabStyle = document.createElement('style');
