@@ -162,10 +162,15 @@
             background-size: 200% 200%;
             animation: gradient 12s ease infinite;
         }
-        /* Hero — крупный шрифт, обводка работает корректно, добавляет импакт */
+        /* Hero gradient-text — на mobile чисто градиент без обводки.
+           На desktop (≥768px) — добавляем обводку для импакта на крупном шрифте */
         .hero-heading .gradient-text {
-            -webkit-text-stroke: 1.5px #0f172a;
             paint-order: stroke fill;
+        }
+        @media (min-width: 768px) {
+            .hero-heading .gradient-text {
+                -webkit-text-stroke: 1.5px #0f172a;
+            }
         }
 
         /* Нейро-сетка на фоне */
