@@ -563,32 +563,58 @@
             }
         }
 
-        /* Анимированный chevron «›» справа на каруселях — кликабельный визуальный индикатор */
+        /* Кликабельный chevron «›» справа на каруселях — плавно прокручивает карусель */
         .carousel-chevron {
             position: absolute;
-            right: 4px;
+            right: 8px;
             top: 50%;
             transform: translateY(-50%);
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             border-radius: 9999px;
             background: linear-gradient(135deg, #10b981, #047857);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 26px;
             font-weight: 900;
             line-height: 1;
-            pointer-events: none;
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45), 0 0 0 4px rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45), 0 0 0 4px rgba(255, 255, 255, 0.7);
             animation: chevronNudge 1.6s ease-in-out infinite;
             z-index: 5;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.18s, box-shadow 0.18s;
+        }
+        .carousel-chevron:active {
+            transform: translateY(-50%) scale(0.92);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.7);
+        }
+        .carousel-chevron.is-end {
+            /* Когда карусель прокручена до конца — иконка переворачивается и направление обратное */
+            background: linear-gradient(135deg, #475569, #1e293b);
+            box-shadow: 0 4px 14px rgba(30, 41, 59, 0.35), 0 0 0 4px rgba(255, 255, 255, 0.7);
+        }
+        .carousel-chevron.is-end::before {
+            content: '‹';
+        }
+        .carousel-chevron:not(.is-end)::before {
+            content: '›';
         }
         @keyframes chevronNudge {
             0%, 100% { transform: translateY(-50%) translateX(0); }
             50%      { transform: translateY(-50%) translateX(5px); }
+        }
+        .carousel-chevron.is-end {
+            animation: chevronNudgeBack 1.6s ease-in-out infinite;
+        }
+        @keyframes chevronNudgeBack {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50%      { transform: translateY(-50%) translateX(-5px); }
         }
         @media (min-width: 768px) {
             .carousel-chevron { display: none; }
@@ -1195,7 +1221,7 @@
                 </div>
             </div>
             <!-- Анимированный chevron — намёк «свайпни вправо», скрыт на desktop через @media -->
-            <span class="carousel-chevron" aria-hidden="true">›</span>
+            <button type="button" class="carousel-chevron" aria-label="Прокрутить к следующим карточкам"></button>
             </div>
         </div>
     </section>
@@ -1938,7 +1964,7 @@
                 </div>
             </div>
             <!-- Анимированный chevron — намёк «свайпни вправо» -->
-            <span class="carousel-chevron" aria-hidden="true">›</span>
+            <button type="button" class="carousel-chevron" aria-label="Прокрутить к следующим карточкам"></button>
             </div>
 
             <p class="text-center text-xs text-slate-400 mt-6 sm:mt-8 leading-relaxed max-w-2xl mx-auto">
@@ -2099,7 +2125,7 @@
                 </div>
             </div>
             <!-- Анимированный chevron — намёк «свайпни вправо» -->
-            <span class="carousel-chevron" aria-hidden="true">›</span>
+            <button type="button" class="carousel-chevron" aria-label="Прокрутить к следующим карточкам"></button>
             </div>
 
             <div class="text-center mt-8 sm:mt-10 space-y-3">
@@ -3530,6 +3556,56 @@
                 });
         });
     }
+    </script>
+
+    <!-- ============== Кликабельные стрелки каруселей ============== -->
+    <!-- При клике плавно прокручивает карусель: до конца → обратно в начало.
+         Также следит за scroll и переключает иконку «›» / «‹» автоматически. -->
+    <script>
+    (function () {
+        'use strict';
+        const chevrons = document.querySelectorAll('.carousel-chevron');
+        if (!chevrons.length) return;
+
+        chevrons.forEach((btn) => {
+            const wrapper = btn.parentElement;
+            const scroll = wrapper.querySelector('.carousel-scroll-mask');
+            if (!scroll) return;
+
+            // Определяем «в конце ли карусель» — допускаем 4px погрешность
+            const isAtEnd = () => {
+                return scroll.scrollLeft >= (scroll.scrollWidth - scroll.clientWidth - 4);
+            };
+            // Обновляем визуал кнопки в зависимости от позиции
+            const syncBtn = () => {
+                btn.classList.toggle('is-end', isAtEnd());
+                btn.setAttribute('aria-label',
+                    isAtEnd() ? 'Прокрутить к началу' : 'Прокрутить к следующим карточкам');
+            };
+
+            btn.addEventListener('click', () => {
+                if (isAtEnd()) {
+                    scroll.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    scroll.scrollTo({ left: scroll.scrollWidth, behavior: 'smooth' });
+                }
+                if (window.aibuhTrack) window.aibuhTrack('carousel_chevron_click');
+            });
+
+            // Throttled scroll listener — обновляем иконку при ручном свайпе
+            let raf = null;
+            scroll.addEventListener('scroll', () => {
+                if (raf) return;
+                raf = requestAnimationFrame(() => {
+                    syncBtn();
+                    raf = null;
+                });
+            }, { passive: true });
+
+            // Изначальный sync (вдруг scrollLeft не 0)
+            syncBtn();
+        });
+    })();
     </script>
 
     <!-- ============== Cookie Banner (152-ФЗ + GDPR) ============== -->
