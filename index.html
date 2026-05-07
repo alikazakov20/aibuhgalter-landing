@@ -644,6 +644,7 @@
             margin-left: 0.5rem;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.18);
+            -webkit-backdrop-filter: blur(4px);
             backdrop-filter: blur(4px);
             color: #ffffff;
             font-weight: 700;
@@ -2407,6 +2408,19 @@
                 </div>
             </div>
 
+            <!-- Status badge — обновляется через /api/bot-health -->
+            <div class="mt-6 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs">
+                <span id="footer-status" class="inline-flex items-center gap-2 text-slate-500" aria-live="polite" title="Статус подсистем">
+                    <span id="footer-status-dot" class="inline-block w-2 h-2 rounded-full bg-slate-300 transition-colors"></span>
+                    <span id="footer-status-text">проверяем статус…</span>
+                </span>
+                <span class="text-slate-300" aria-hidden="true">•</span>
+                <span class="text-slate-500 inline-flex items-center gap-1.5">
+                    <span aria-hidden="true">🇷🇺</span>
+                    <span>Размещено в РФ через Cloudflare</span>
+                </span>
+            </div>
+
             <!-- Юр-ссылки -->
             <div class="mt-6 pt-6 border-t border-slate-100 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
                 <a href="/legal#privacy" class="hover:text-emerald-700 transition">Политика конфиденциальности</a>
@@ -3556,6 +3570,10 @@
         const text = document.getElementById('bot-status-text');
         if (!dot || !text) return;
 
+        // Также обновляем footer-индикатор (если есть)
+        const footerDot = document.getElementById('footer-status-dot');
+        const footerText = document.getElementById('footer-status-text');
+
         async function check() {
             try {
                 const res = await fetch('/api/bot-health', { cache: 'no-store' });
@@ -3566,16 +3584,22 @@
                     text.textContent = `Бот онлайн · ответ за ${Math.round(json.latency || 0)} мс`;
                     text.classList.remove('text-slate-400');
                     text.classList.add('text-emerald-700');
+                    if (footerDot) footerDot.className = 'inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse-soft';
+                    if (footerText) footerText.textContent = 'Все системы работают';
                 } else {
                     dot.className = 'inline-block w-2 h-2 rounded-full bg-rose-400 transition-colors duration-300';
                     text.textContent = 'Бот временно недоступен — попробуй через минуту';
                     text.classList.remove('text-slate-400', 'text-emerald-700');
                     text.classList.add('text-rose-600');
+                    if (footerDot) footerDot.className = 'inline-block w-2 h-2 rounded-full bg-rose-400';
+                    if (footerText) footerText.textContent = 'Бот временно недоступен';
                 }
             } catch {
                 // На сетевых ошибках — оставляем серый "проверяем"
                 dot.className = 'inline-block w-2 h-2 rounded-full bg-slate-300 transition-colors duration-300';
                 text.textContent = 'не удалось проверить статус';
+                if (footerDot) footerDot.className = 'inline-block w-2 h-2 rounded-full bg-slate-300';
+                if (footerText) footerText.textContent = 'не удалось проверить статус';
             }
         }
 
