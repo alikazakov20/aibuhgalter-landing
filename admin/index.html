@@ -79,6 +79,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-4">
+                <span id="admin-health-pill" class="hidden sm:inline-block text-xs text-slate-600 px-2.5 py-1 rounded-full bg-slate-100" title="Статус подсистем">⏳ Проверка…</span>
                 <a href="/" target="_blank" class="text-sm text-slate-600 hover:text-emerald-700 font-medium">↗ Сайт</a>
                 <button id="logout-btn" class="text-sm text-slate-500 hover:text-rose-600 font-medium">Выйти</button>
             </div>
@@ -551,6 +552,8 @@ vercel deploy --prod --yes</div>
         document.getElementById('login-gate').style.display = 'none';
         document.getElementById('admin-panel').classList.remove('hidden');
         loadAnnouncement();
+        // Старт фонового health-check + загрузка вкладок lazy при клике
+        if (typeof startHealthPolling === 'function') startHealthPolling();
     }
 
     function showLoginGate() {
@@ -612,6 +615,7 @@ vercel deploy --prod --yes</div>
 
     // ============== Tabs ==============
     const TAB_NAMES = ['announcement', 'metrics', 'users', 'payments', 'settings'];
+    const tabLoadedOnce = {}; // чтобы не делать повторные запросы при повторном клике
     document.querySelectorAll('.admin-tab').forEach(tab => {
         tab.addEventListener('click', () => {
             const target = tab.dataset.tab;
@@ -621,8 +625,11 @@ vercel deploy --prod --yes</div>
             TAB_NAMES.forEach(name => {
                 document.getElementById('tab-' + name).classList.toggle('hidden', name !== target);
             });
-            // Lazy-load данных таба
+            // Lazy-load данных таба (один раз)
             if (target === 'settings') fillSessionInfo();
+            if (target === 'metrics' && !tabLoadedOnce.metrics) { loadMetrics(); tabLoadedOnce.metrics = true; }
+            if (target === 'users' && !tabLoadedOnce.users) { loadUsers(); tabLoadedOnce.users = true; }
+            if (target === 'payments' && !tabLoadedOnce.payments) { loadPayments(); tabLoadedOnce.payments = true; }
         });
     });
 
@@ -640,6 +647,112 @@ vercel deploy --prod --yes</div>
                 expEl.textContent = expDate.toLocaleString('ru-RU', { dateStyle: 'short', timeStyle: 'short' });
             }
         } catch {}
+    }
+
+    // ============== Lazy loaders для tabs ==============
+    // Все эндпоинты возвращают { ok, isMock, dataSource, data, ... }
+    // Mock-режим показывается badge'ем, реальные данные — без него.
+
+    const fmtNum = (n) => new Intl.NumberFormat('ru-RU').format(n || 0);
+    const fmtRub = (n) => fmtNum(n) + ' ₽';
+
+    function setText(selector, val) {
+        const el = document.querySelector(selector);
+        if (el) el.textContent = val;
+    }
+
+    function showSourceBadge(tabId, isMock, source) {
+        const tab = document.getElementById('tab-' + tabId);
+        if (!tab) return;
+        let badge = tab.querySelector('[data-source-badge]');
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.setAttribute('data-source-badge', '');
+            badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-2';
+            // Вставляем после первого header'а вкладки
+            const insertBefore = tab.firstElementChild;
+            tab.insertBefore(badge, insertBefore);
+        }
+        if (isMock) {
+            badge.textContent = '⚠️ Mock-данные · подключи API в Vercel env vars';
+            badge.className = badge.className.replace(/bg-\S+|text-\S+/g, '') + ' bg-amber-100 text-amber-800';
+        } else {
+            badge.textContent = `✓ Real-time · ${source}`;
+            badge.className = badge.className.replace(/bg-\S+|text-\S+/g, '') + ' bg-emerald-100 text-emerald-800';
+        }
+    }
+
+    async function loadMetrics() {
+        try {
+            const res = await fetch('/api/admin/metrics', { credentials: 'same-origin' });
+            if (!res.ok) return;
+            const json = await res.json();
+            const d = json.data || {};
+            const k = d.kpi || {};
+            setText('[data-metric="visitors"]', fmtNum(k.visits7d));
+            setText('[data-metric="emails"]', fmtNum(k.emailSubs));
+            setText('[data-metric="calc"]', fmtNum(k.calcUsed));
+            setText('[data-metric="tg"]', fmtNum(k.ctaClicks7d));
+            setText('[data-metric="bot"]', fmtNum(k.botSubscribers));
+            setText('[data-metric="mrr"]', fmtRub(k.mrr));
+            // Воронка
+            const f = d.funnel || {};
+            const total = f.visit || 0;
+            setText('[data-funnel-value="visit"]', fmtNum(total));
+            ['calc', 'cta', 'bot', 'paid'].forEach((stage) => {
+                const cnt = f[stage] || 0;
+                const pct = total > 0 ? Math.round((cnt / total) * 100) : 0;
+                setText(`[data-funnel-value="${stage}"]`, fmtNum(cnt));
+                setText(`[data-funnel-pct="${stage}"]`, pct + '%');
+                const bar = document.querySelector(`[data-funnel-bar="${stage}"]`);
+                if (bar) bar.style.width = pct + '%';
+            });
+            showSourceBadge('metrics', json.isMock, json.dataSource);
+        } catch (e) { console.warn('loadMetrics:', e); }
+    }
+
+    async function loadUsers() {
+        try {
+            const res = await fetch('/api/admin/users', { credentials: 'same-origin' });
+            if (!res.ok) return;
+            const json = await res.json();
+            const s = (json.data && json.data.stats) || {};
+            setText('[data-users-stat="total"]', fmtNum(s.totalBotUsers));
+            setText('[data-users-stat="active"]', fmtNum(s.active7d));
+            setText('[data-users-stat="emails"]', fmtNum(s.emailSubs));
+            setText('[data-users-stat="paying"]', fmtNum(s.paying));
+            showSourceBadge('users', json.isMock, json.dataSource);
+        } catch (e) { console.warn('loadUsers:', e); }
+    }
+
+    async function loadPayments() {
+        try {
+            const res = await fetch('/api/admin/payments', { credentials: 'same-origin' });
+            if (!res.ok) return;
+            const json = await res.json();
+            showSourceBadge('payments', json.isMock, json.dataSource);
+        } catch (e) { console.warn('loadPayments:', e); }
+    }
+
+    // ============== Health-check (фоновый) ==============
+    async function loadHealth() {
+        try {
+            const res = await fetch('/api/admin/health', { credentials: 'same-origin' });
+            if (!res.ok) return;
+            const json = await res.json();
+            const el = document.getElementById('admin-health-pill');
+            if (el) {
+                el.textContent = json.allOk ? '🟢 Все системы в строю' : '🟡 Есть проблемы';
+                el.title = (json.checks || []).map((c) => `${c.label}: ${c.ok ? 'OK' : 'FAIL'} (${c.latency}ms)`).join(' | ');
+            }
+        } catch {}
+    }
+
+    // Запускаем health сразу после показа панели + раз в 60с
+    function startHealthPolling() {
+        loadHealth();
+        if (window.__healthInt) return;
+        window.__healthInt = setInterval(loadHealth, 60000);
     }
 
     // Стили активного таба
