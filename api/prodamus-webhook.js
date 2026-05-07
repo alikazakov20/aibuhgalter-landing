@@ -21,7 +21,8 @@ export default async function handler(request) {
 
     // Проверка подписи — без неё подделать оплату легко
     const signature = request.headers.get('sign') || body.sign;
-    if (!verifyWebhook(body, signature, process.env.PRODAMUS_SECRET_KEY)) {
+    const isValid = await verifyWebhook(body, signature, process.env.PRODAMUS_SECRET_KEY);
+    if (!isValid) {
         // TODO: лог в админку для расследования
         return new Response('invalid signature', { status: 401 });
     }
