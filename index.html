@@ -1536,6 +1536,29 @@
                 </div>
             </div>
 
+            <!-- ============== История расчётов (localStorage) ============== -->
+            <!-- Показывается только если есть хотя бы 1 сохранённый расчёт -->
+            <div id="calc-history-wrap" class="hidden max-w-2xl mx-auto mt-6">
+                <details class="group bg-white rounded-2xl border border-slate-200 shadow-sm">
+                    <summary class="cursor-pointer list-none p-4 flex items-center justify-between gap-2 hover:bg-slate-50 rounded-2xl transition">
+                        <span class="font-bold text-sm text-slate-700 flex items-center gap-2">
+                            <span aria-hidden="true">📚</span>
+                            <span>Последние расчёты</span>
+                            <span id="calc-history-count" class="text-slate-400 font-normal">(0)</span>
+                        </span>
+                        <span class="text-slate-400 text-xs transition group-open:rotate-180" aria-hidden="true">▼</span>
+                    </summary>
+                    <div class="px-4 pb-3 pt-1">
+                        <p class="text-xs text-slate-500 mb-3">Клик по записи — восстановить значения. Хранится только в твоём браузере.</p>
+                        <div id="calc-history-list" class="space-y-2"></div>
+                        <button type="button" id="calc-history-clear"
+                                class="mt-3 text-xs text-slate-400 hover:text-rose-600 transition">
+                            Очистить историю
+                        </button>
+                    </div>
+                </details>
+            </div>
+
             <p class="text-center text-sm text-slate-500 mt-6">
                 💡 Калькулятор работает локально в браузере — твои цифры никуда не отправляются.
             </p>
@@ -2795,6 +2818,9 @@
 
             result.classList.remove('hidden');
 
+            // Сохраняем расчёт в историю (debounced — не пишем дубликаты подряд)
+            if (typeof pushHistory === 'function') pushHistory(r);
+
             // Tracking
             if (window.aibuhTrack) {
                 window.aibuhTrack('calc_used', {
@@ -2908,8 +2934,125 @@
             window.print();
         });
 
-        // Инициализация — показываем условные поля
+        // ─── История расчётов (localStorage) ─────────────────────────────────
+        // Хранит последние HISTORY_LIMIT расчётов. Сохраняет автоматически
+        // при каждом recalc(), позволяет одним кликом восстановить старые значения.
+        const HISTORY_KEY = 'aibuh_calc_history';
+        const HISTORY_LIMIT = 5;
+        const historyWrap = document.getElementById('calc-history-wrap');
+        const historyList = document.getElementById('calc-history-list');
+        const historyCount = document.getElementById('calc-history-count');
+        const historyClearBtn = document.getElementById('calc-history-clear');
+
+        function loadHistory() {
+            try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+        function saveHistoryItems(items) {
+            try { localStorage.setItem(HISTORY_KEY, JSON.stringify(items)); } catch (e) {}
+        }
+        // Уникальная сигнатура расчёта — чтобы не сохранять дубликаты при повторном recalc
+        function calcSignature(r) {
+            return [r.mode, r.period, r.region, r.rate, r.income, r.expense || 0, r.contrib || 0,
+                r.advances || 0, r.fixedAssets || 0, r.lossCarry || 0, r.noEmployees ? 1 : 0].join('|');
+        }
+        function pushHistory(r) {
+            if (!r || !r.income || r.income <= 0) return;
+            const items = loadHistory();
+            // Не дублировать если последний расчёт идентичен текущему
+            if (items[0] && calcSignature(items[0]) === calcSignature(r)) {
+                items[0].ts = Date.now(); // обновляем timestamp на свежий
+                items[0].payable = r.payable;
+            } else {
+                items.unshift({
+                    ts: Date.now(),
+                    mode: r.mode, period: r.period, region: r.region, rate: r.rate,
+                    income: r.income, expense: r.expense, contrib: r.contrib,
+                    advances: r.advances, fixedAssets: r.fixedAssets, lossCarry: r.lossCarry,
+                    noEmployees: r.noEmployees,
+                    payable: r.payable
+                });
+                if (items.length > HISTORY_LIMIT) items.length = HISTORY_LIMIT;
+            }
+            saveHistoryItems(items);
+            renderHistory();
+        }
+        function formatHistoryTime(ts) {
+            const d = new Date(ts);
+            const now = new Date();
+            const diffMs = now - d;
+            const diffMin = Math.floor(diffMs / 60000);
+            const diffHr = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            if (diffMin < 1) return 'только что';
+            if (diffMin < 60) return diffMin + ' мин назад';
+            if (diffHr < 24) return diffHr + ' ч назад';
+            if (diffDays === 1) return 'вчера';
+            if (diffDays < 7) return diffDays + ' дн назад';
+            return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+        }
+        function renderHistory() {
+            if (!historyWrap) return;
+            const items = loadHistory();
+            if (historyCount) historyCount.textContent = '(' + items.length + ')';
+            if (items.length === 0) {
+                historyWrap.classList.add('hidden');
+                return;
+            }
+            historyWrap.classList.remove('hidden');
+            historyList.innerHTML = '';
+            items.forEach((it) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'w-full text-left p-3 rounded-lg bg-slate-50 hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition';
+                const modeLabel = it.mode === 'income' ? 'УСН Доходы' : 'УСН Доходы−Расходы';
+                const periodLabel = (PERIOD[it.period] && PERIOD[it.period].label) || it.period;
+                btn.innerHTML =
+                    '<div class="flex items-center justify-between gap-3 mb-1">' +
+                        '<span class="font-bold text-sm text-slate-900 tabular-nums">' + formatRub(it.payable) + '</span>' +
+                        '<span class="text-xs text-slate-400">' + formatHistoryTime(it.ts) + '</span>' +
+                    '</div>' +
+                    '<div class="text-xs text-slate-500">' + modeLabel + ' · ' + periodLabel + ' · доход ' + formatRub(it.income) + '</div>';
+                btn.addEventListener('click', () => restoreCalc(it));
+                historyList.appendChild(btn);
+            });
+        }
+        function restoreCalc(it) {
+            // Переключаем режим если нужно
+            if (it.mode !== mode) {
+                const tabBtn = document.querySelector('[data-calc-mode="' + it.mode + '"]');
+                if (tabBtn) tabBtn.click();
+            }
+            // Восстанавливаем значения полей
+            periodSelect.value = it.period;
+            regionSelect.value = it.region || 'standard';
+            incomeInput.value = it.income || '';
+            expenseInput.value = it.expense || '';
+            contribInput.value = it.contrib || '';
+            advancesInput.value = it.advances || '';
+            faInput.value = it.fixedAssets || '';
+            lossInput.value = it.lossCarry || '';
+            noEmployeesCb.checked = !!it.noEmployees;
+            updateConditionalFields();
+            recalc();
+            // Прокрутка к результату
+            const resultEl = document.getElementById('calc-result');
+            if (resultEl) resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (window.aibuhTrack) window.aibuhTrack('calc_history_restored');
+        }
+        if (historyClearBtn) {
+            historyClearBtn.addEventListener('click', () => {
+                if (confirm('Удалить всю историю расчётов?')) {
+                    saveHistoryItems([]);
+                    renderHistory();
+                    if (window.aibuhTrack) window.aibuhTrack('calc_history_cleared');
+                }
+            });
+        }
+
+        // Инициализация — показываем условные поля + рендерим историю
         updateConditionalFields();
+        renderHistory();
         recalc();
     })();
     </script>
