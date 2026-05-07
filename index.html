@@ -1768,19 +1768,19 @@
                     </div>
                 </label>
 
-                <!-- Результат — flex с фиксированной высотой заголовка чтобы все цифры были на одной линии -->
+                <!-- Результат — grid с явными rows чтобы все цифры были на одной горизонтали -->
                 <div class="mt-7 grid grid-cols-3 gap-2 sm:gap-4 text-center">
-                    <div class="p-3 sm:p-5 rounded-2xl bg-white border border-rose-200/60 flex flex-col">
-                        <p class="text-[11px] sm:text-xs text-slate-500 leading-tight min-h-[2.4rem] sm:min-h-[2.6rem] flex items-center justify-center px-1">Платил бы за год</p>
-                        <p class="mt-1 text-base sm:text-2xl font-black text-slate-900 tabular-nums whitespace-nowrap" id="roi-old">60 000&nbsp;₽</p>
+                    <div class="p-3 sm:p-5 rounded-2xl bg-white border border-rose-200/60 grid grid-rows-[1fr_auto] gap-1 min-h-[6.5rem]">
+                        <p class="text-[11px] sm:text-xs text-slate-500 leading-tight flex items-center justify-center px-1">Сейчас за год</p>
+                        <p class="text-base sm:text-2xl font-black text-slate-900 tabular-nums whitespace-nowrap" id="roi-old">60 000&nbsp;₽</p>
                     </div>
-                    <div class="p-3 sm:p-5 rounded-2xl bg-white border border-emerald-200 flex flex-col">
-                        <p class="text-[11px] sm:text-xs text-slate-500 leading-tight min-h-[2.4rem] sm:min-h-[2.6rem] flex items-center justify-center px-1">AI-Бухгалтер за год</p>
-                        <p class="mt-1 text-base sm:text-2xl font-black text-emerald-700 tabular-nums whitespace-nowrap">3 480&nbsp;₽</p>
+                    <div class="p-3 sm:p-5 rounded-2xl bg-white border border-emerald-200 grid grid-rows-[1fr_auto] gap-1 min-h-[6.5rem]">
+                        <p class="text-[11px] sm:text-xs text-slate-500 leading-tight flex items-center justify-center px-1">AI&#8209;бот за год</p>
+                        <p class="text-base sm:text-2xl font-black text-emerald-700 tabular-nums whitespace-nowrap">3 480&nbsp;₽</p>
                     </div>
-                    <div class="p-3 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex flex-col">
-                        <p class="text-[11px] sm:text-xs text-emerald-100 leading-tight min-h-[2.4rem] sm:min-h-[2.6rem] flex items-center justify-center px-1">Сэкономишь</p>
-                        <p class="mt-1 text-base sm:text-2xl font-black tabular-nums whitespace-nowrap" id="roi-save">56 520&nbsp;₽</p>
+                    <div class="p-3 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white grid grid-rows-[1fr_auto] gap-1 min-h-[6.5rem]">
+                        <p class="text-[11px] sm:text-xs text-emerald-100 leading-tight flex items-center justify-center px-1">Экономия</p>
+                        <p class="text-base sm:text-2xl font-black tabular-nums whitespace-nowrap" id="roi-save">56 520&nbsp;₽</p>
                     </div>
                 </div>
 
