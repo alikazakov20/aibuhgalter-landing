@@ -10,6 +10,8 @@
       "source": "/sw.js",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "CDN-Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Cloudflare-CDN-Cache-Control", "value": "no-cache" },
         { "key": "Service-Worker-Allowed", "value": "/" }
       ]
     },
@@ -17,14 +19,29 @@
       "source": "/announcement.json",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "CDN-Cache-Control", "value": "public, max-age=60" },
         { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/dist/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" },
+        { "key": "CDN-Cache-Control", "value": "public, max-age=86400" }
       ]
     },
     {
       "source": "/admin/:path*",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" },
-        { "key": "Cache-Control", "value": "private, max-age=0, must-revalidate" }
+        { "key": "Cache-Control", "value": "private, max-age=0, must-revalidate" },
+        { "key": "Cloudflare-CDN-Cache-Control", "value": "no-cache" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cloudflare-CDN-Cache-Control", "value": "no-cache" }
       ]
     },
     {
@@ -37,7 +54,8 @@
     {
       "source": "/:asset(favicon|favicon-16|favicon-32|apple-touch-icon|icon-192|icon-512|og-image).:ext(png|svg)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=604800, immutable" },
+        { "key": "CDN-Cache-Control", "value": "public, max-age=2592000" }
       ]
     },
     {
